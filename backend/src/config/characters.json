@@ -1,0 +1,262 @@
+{
+  "characters": [
+    {
+      "genre": "モナー系",
+      "characters": [
+        "mona",
+        "marumimi",
+        "shodai",
+        "oomimi",
+        "kuromimi",
+        "polygon",
+        "agemona",
+        "anamona",
+        "mora",
+        "urara",
+        "fuun",
+        "iiajan",
+        "nida",
+        "gerara",
+        "sens",
+        "gari",
+        "yamazaki1",
+        "yamazaki2",
+        "boljoa3",
+        "boljoa4",
+        "puru",
+        "mosamosa1",
+        "mosamosa2",
+        "mosamosa3",
+        "mosamosa4",
+        "kamemona"
+      ]
+    },
+    {
+      "genre": "ﾜｼｮｰｲ系",
+      "characters": ["oni", "wachoi", "oniini", "tofu", "niku"]
+    },
+    {
+      "genre": "ω系",
+      "characters": ["iyou", "ppa2", "foppa", "charhan", "aramaki"]
+    },
+    {
+      "genre": ">>1 8頭身",
+      "characters": [
+        "ichi",
+        "ichi2",
+        "ichineko",
+        "hat2",
+        "hati4",
+        "hati",
+        "hati3"
+      ]
+    },
+    {
+      "genre": "女の子系",
+      "characters": [
+        "remona",
+        "monaka",
+        "riru",
+        "alice",
+        "batu",
+        "mina",
+        "miwa",
+        "kabin"
+      ]
+    },
+    {
+      "genre": "ギコしぃ系",
+      "characters": [
+        "giko",
+        "tatigiko",
+        "zuza",
+        "sugoi3",
+        "ging",
+        "maturi",
+        "usi",
+        "nezumi",
+        "abogado",
+        "bana",
+        "uma",
+        "sika",
+        "kato",
+        "haka",
+        "tokei",
+        "gyouza",
+        "papi",
+        "tibigiko",
+        "fusa",
+        "suwarifusa",
+        "tibifusa",
+        "sii2",
+        "tibisii",
+        "tuu",
+        "hokkyoku6"
+      ]
+    },
+    {
+      "genre": "顔文字系",
+      "characters": [
+        "jien",
+        "kita",
+        "haa",
+        "nyog",
+        "gaku",
+        "shob",
+        "shak",
+        "boljoa"
+      ]
+    },
+    {
+      "genre": "その他1",
+      "characters": [
+        "mouk",
+        "mouk1",
+        "mouk2",
+        "hikk",
+        "dokuo",
+        "dokuo2",
+        "hosh",
+        "sira",
+        "siranaiwa",
+        "tiraneyo",
+        "ginu",
+        "unko",
+        "kasiwa",
+        "kappappa",
+        "zonu",
+        "asou",
+        "hiyoko",
+        "nin3",
+        "kunoichi",
+        "osa",
+        "cock",
+        "coc2",
+        "ri_man",
+        "chichon",
+        "nanyo",
+        "tahara",
+        "maji",
+        "kikko2",
+        "sumaso2",
+        "niraneko",
+        "niraime",
+        "niraime2",
+        "niramusume"
+      ]
+    },
+    {
+      "genre": "その他2",
+      "characters": [
+        "chotto1",
+        "chotto2",
+        "chotto3",
+        "mossari",
+        "yokan",
+        "koit",
+        "koya",
+        "ranta",
+        "kyaku",
+        "taxi",
+        "moudamepo",
+        "sai",
+        "shaitama",
+        "welneco2",
+        "kagami",
+        "gakuri",
+        "unknown2"
+      ]
+    },
+    {
+      "genre": "いぬ・ねこ・うさ",
+      "characters": [
+        "inu1",
+        "inu2",
+        "chainu-s",
+        "chainu02s",
+        "neko1",
+        "neko2",
+        "neko3",
+        "neko4",
+        "chaneko-s",
+        "chaneko02s",
+        "chaneko04s",
+        "usagi1",
+        "usagi2",
+        "usa02s"
+      ]
+    },
+    {
+      "genre": "くま・チュ・ブー",
+      "characters": ["kuma1", "kuma2", "kuma2s", "nezu1", "buta1", "buu-s"]
+    },
+    {
+      "genre": "せいぎ",
+      "characters": [
+        "fruit1",
+        "fruit2",
+        "fruit3",
+        "fruit4",
+        "pman",
+        "daru01",
+        "daru02",
+        "daru03"
+      ]
+    },
+    {
+      "genre": "なぞ",
+      "characters": ["tensi1"]
+    },
+    {
+      "genre": "トリ・きんぎょ",
+      "characters": ["tori1", "tori2", "tori3", "tori4", "sakana1"]
+    },
+    {
+      "genre": "ケロ・もぐ・かた",
+      "characters": [
+        "kaeru1",
+        "kaeru2",
+        "kaeru3",
+        "kaeru4",
+        "kero-b",
+        "kero-b2",
+        "kero-b3",
+        "kero-b4",
+        "mogu1",
+        "katatsumu"
+      ]
+    },
+    {
+      "genre": "しょくぶつ",
+      "characters": ["hati1", "hati2", "happa1"]
+    },
+    {
+      "genre": "たべもの",
+      "characters": [
+        "suika01",
+        "suika02",
+        "koori",
+        "aisu01",
+        "aisu02",
+        "aisu03",
+        "aisu04"
+      ]
+    },
+    {
+      "genre": "どうぐ",
+      "characters": ["zou1", "syaberu", "baketsu"]
+    },
+    {
+      "genre": "いえ",
+      "characters": ["koya1"]
+    },
+    {
+      "genre": "てんき",
+      "characters": ["tenki-1", "tenki-2", "tenki-3", "tenki-4", "kasa", "snow"]
+    },
+    {
+      "genre": "☆ω",
+      "characters": ["poihorizon"]
+    }
+  ]
+}

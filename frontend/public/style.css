@@ -1,0 +1,16 @@
+.debug-frame {
+  box-sizing: border-box;
+  border: solid 1px red;
+}
+
+/* 吹き出しアニメーション */
+.bubble-enter {
+  transform: translateX(-50%) translateY(-30px);
+}
+
+.bubble-enter-active {
+  transition: transform 10s linear;
+}
+.bubble-enter-to {
+  transform: translateX(0%) translateY(-300px);
+}

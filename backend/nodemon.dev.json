@@ -1,0 +1,7 @@
+{
+  "watch": ["src"],
+  "ignore": ["**/*.test.ts"],
+  "ext": "ts,js,json",
+  "exec": "yarn start",
+  "verbose": false
+}

@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: monaback-dev
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: development
+    volumes:
+      - "./backend:/app"
+      - "/app/node_modules"
+    tty: true
+    stdin_open: true
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: monafront-dev
+    restart: always
+    ports:
+      - 2108:2108
+    environment:
+      NODE_ENV: development
+    volumes:
+      - "./frontend:/app"
+      - "/app/node_modules"
+    tty: true
+    stdin_open: true
+
+  storybook:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.storybook.dev
+    container_name: monafront-storybook-dev
+    restart: always
+    ports:
+      - 6006:6006
+    environment:
+      NODE_ENV: development
+    volumes:
+      - "./frontend:/app"
+      - "/app/node_modules"
+    tty: true
+    stdin_open: true

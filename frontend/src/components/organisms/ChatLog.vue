@@ -1,0 +1,177 @@
+<template>
+  <div
+    ref="wrapperEl"
+    :style="{
+      maxHeight: isScrollable ? '220px' : 'none',
+      overflowY: isScrollable ? 'scroll' : 'auto',
+    }"
+  >
+    <!-- ログの1行分 -->
+    <div
+      v-for="msg in messages"
+      :key="msg"
+      class="log-row"
+      :style="{
+        backgroundColor: msg.visibleOnReceived ? 'none' : invibisbleOnReceivedBackgroundColor,
+        /*rgbaが渡されているが、alphaの値が1.0でありrgbに変換されるため、rgbに0.4を新たに加える。そうすると勝手にrgbaに変換され、線が薄くなる*/
+        borderBottom: isDrawUnderLine ? `2px solid ${msg.color.replace(')', ', 0.4)')}` : 'none',
+      }"
+    >
+      <SpanText
+        @click.right.prevent="changeSelectedUsersColor(msg.ihash)"
+        @click="toggleUserSelecting(msg.ihash)"
+        @keydown.enter="toggleUserSelecting(msg.ihash)"
+        :text="msg.head"
+        :type="selectedUsersIhashes[msg.ihash]"
+      />
+      <!-- 本文をリンクと通常のテキストで分離 -->
+      <template v-for="(content, index) in splitToContentsArray(msg.content)" :key="content">
+        <SpanText v-if="index % 2 === 0" :text="content" :type="selectedUsersIhashes[msg.ihash]" />
+        <a v-if="index % 2 === 1" class="link" :href="content" target="_blank">
+          <SpanText :text="content" type="link" />
+        </a>
+      </template>
+      <SpanText :text="msg.foot" :type="selectedUsersIhashes[msg.ihash]" />
+    </div>
+    <div class="log-info-container" v-if="!isDecendingLog && messages.length !== 0">
+      <SpanText :text="`現在のログ: ${messages.length}件`" type="text" />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { onMounted, computed, watch, ref, nextTick, onUnmounted } from "vue";
+import { useStore } from "vuex";
+import SpanText from "@/components/atoms/SpanText.vue";
+
+const pageTitle = document.title;
+const wrapperEl = ref<HTMLDivElement>();
+
+// ストア
+const store = useStore();
+const isScrollable = computed(() => store.state.setting.scrollableLog);
+const isDecendingLog = computed(() => store.state.setting.descendingLog);
+const isDrawUnderLine = computed(() => store.state.setting.drawBorderBottomLog);
+const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
+const isDarkMode = computed(() => store.state.setting.darkMode);
+const messages = computed(() => store.getters.visibleLogMessages);
+
+// スクロール位置が下端にあるか
+const isLatestScrollPosition = ref(true);
+const unseenLogCounter = ref(0);
+
+// 画面を見ていなかった時の背景色
+const invibisbleOnReceivedBackgroundColor = computed(() =>
+  isDarkMode.value ? "#3A3A3A" : "gainsboro"
+);
+
+const splitToContentsArray = (msg: string): string[] => {
+  const urlPattern = /https?:\/\/[^\s$.?#].[^\s]*/gm;
+  const plainContents = msg.split(urlPattern) ?? [];
+  const urlContents = msg.match(urlPattern) ?? [];
+  const resultArray = [];
+  for (let i = 0; i < urlContents.length; i += 1) {
+    resultArray.push(plainContents[i] as string);
+    resultArray.push(urlContents[i] as string);
+  }
+  resultArray.push(plainContents[plainContents.length - 1] as string);
+  return resultArray;
+};
+
+const scrollToLatest = () => {
+  const elm = wrapperEl.value;
+  if (elm === undefined) {
+    return;
+  }
+  const destTop = store.state.setting.descendingLog ? elm.scrollHeight - elm.offsetHeight : 0;
+  elm.scrollTop = destTop;
+};
+const handleScroll = () => {
+  const elm = wrapperEl.value;
+  if (elm === undefined) {
+    return;
+  }
+  const scrollBottomPosition = elm.scrollTop + elm.offsetHeight;
+  // 1px分の誤差を許容する
+  const isLatestOnDesc =
+    scrollBottomPosition - 1 < elm.scrollHeight && elm.scrollHeight < scrollBottomPosition + 1;
+  const isOnLatestScrollPosition = store.state.setting.descendingLog
+    ? isLatestOnDesc
+    : elm.scrollTop === 0;
+  isLatestScrollPosition.value = isOnLatestScrollPosition;
+};
+
+const handleVisibilityChange = () => {
+  if (document.visibilityState === "visible") {
+    resetUnseenLogCounter();
+    document.title = pageTitle;
+  }
+};
+
+const toggleUserSelecting = (ihash: string) => {
+  store.dispatch("setting/toggleUserSelecting", { ihash });
+};
+const changeSelectedUsersColor = (ihash: string) => {
+  store.dispatch("setting/changeSelectedUsersColor", { ihash });
+};
+
+const increaseUnseenLogCounter = () => {
+  unseenLogCounter.value += 1;
+};
+const resetUnseenLogCounter = () => {
+  unseenLogCounter.value = 0;
+};
+
+onMounted(() => {
+  wrapperEl.value?.addEventListener("scroll", handleScroll);
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+});
+onUnmounted(() => {
+  wrapperEl.value?.removeEventListener("scroll", handleScroll);
+  document.removeEventListener("visibilitychange", handleVisibilityChange);
+});
+
+// When messages are updated,
+// fixes the scroll position to show latest message.
+// However, if the scroll position isn't on edge, doesn't that.
+watch(
+  () => [...messages.value],
+  () => {
+    if (isLatestScrollPosition.value) {
+      if (store.state.setting.descendingLog) {
+        nextTick(scrollToLatest);
+      }
+      scrollToLatest();
+    }
+    if (document.visibilityState === "hidden") {
+      increaseUnseenLogCounter();
+      document.title = `${pageTitle} (${
+        unseenLogCounter.value > 1000 ? "999+" : unseenLogCounter.value
+      })`;
+    }
+  }
+);
+// FIXME:
+// We cannot change the scroll position of the element
+// whose CSS prop 'display' is 'none'.
+watch(
+  () => store.state.setting.descendingLog,
+  () => {
+    scrollToLatest();
+  }
+);
+</script>
+
+<style lang="scss" scoped>
+.log-row {
+  padding-top: 1px;
+  padding-bottom: 1px;
+
+  .log-info-container {
+    padding-top: 16px;
+  }
+}
+.link {
+  text-decoration: none;
+}
+</style>
