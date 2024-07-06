@@ -53,6 +53,9 @@
     "vue-router": "^4.2.5",
     "vuex": "^4.1.0"
   },
+  "resolutions": {
+    "jackspeak": "2.1.1"
+  },
   "browserslist": [
     "> 1%",
     "last 2 versions",
