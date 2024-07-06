@@ -20,7 +20,7 @@ const props = withDefaults(
     isDark?: boolean;
     textSize?: number;
   }>(),
-  { disabled: undefined, isDark: undefined, textSize: 20 }
+  { disabled: undefined, isDark: undefined, textSize: 20 },
 );
 const emits = defineEmits<{ (e: "onClick", event: Event): void }>();
 
@@ -44,7 +44,6 @@ button {
   height: 100%;
   width: 100%;
   border: 1px solid;
-  margin-left: auto;
 
   &.light {
     color: black;
