@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useStore } from "vuex";
 import Button from "primevue/button";
 import SwitchField from "../molecules/SwitchField.vue";
@@ -81,6 +81,17 @@ export default {
     const isLogInfinite = computedSetting("logInfinite", "setting/updateLogInfinite");
     const isDarkMode = computedSetting("darkMode", "setting/updateDarkMode");
     const deleteLog = () => store.dispatch("resetLogStorage");
+
+    const bindPrimevueDarkMode = (isDark) => {
+      if (isDark) {
+        document.querySelector('html').classList.add("my-app-dark");
+      } else {
+        document.querySelector('html').classList.remove("my-app-dark");
+      }
+    }
+    watch(isDarkMode, (value) => {
+      bindPrimevueDarkMode(value);
+    }, { immediate: true });
 
     return {
       isKBMode,
