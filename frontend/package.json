@@ -12,6 +12,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@primevue/themes": "^4.0.0",
     "@storybook/addon-actions": "^8.1.11",
     "@storybook/addon-essentials": "^8.1.11",
     "@storybook/addon-interactions": "^8.1.11",

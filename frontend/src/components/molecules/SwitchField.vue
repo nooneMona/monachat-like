@@ -1,13 +1,13 @@
 <template>
   <div class="switch-field">
-    <InputSwitch v-model="valueComputed" :input-id="labelId" />
+    <ToggleSwitch v-model="valueComputed" :input-id="labelId" />
     <label :for="labelId"><SpanText :text="label" /></label>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import InputSwitch from "primevue/inputswitch";
+import ToggleSwitch from "primevue/toggleswitch";
 import SpanText from "../atoms/SpanText.vue";
 
 const emits = defineEmits<{ (e: "update:modelValue", value: boolean): void }>();

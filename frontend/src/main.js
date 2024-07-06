@@ -6,10 +6,8 @@ import { createRouter, createWebHashHistory } from "vue-router";
 
 // prime vue
 import PrimeVue from "primevue/config";
-import TabView from "primevue/tabview";
-import TabPanel from "primevue/tabpanel";
-import "primevue/resources/themes/lara-light-indigo/theme.css";
-import "primevue/resources/primevue.min.css";
+import { definePreset } from '@primevue/themes';
+import Lara from '@primevue/themes/lara';
 import "primeicons/primeicons.css";
 
 import store from "@/store";
@@ -20,13 +18,35 @@ export const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
+const LaraIndigo = definePreset(Lara, {
+    semantic: {
+        primary: {
+            50: '{indigo.50}',
+            100: '{indigo.100}',
+            200: '{indigo.200}',
+            300: '{indigo.300}',
+            400: '{indigo.400}',
+            500: '{indigo.500}',
+            600: '{indigo.600}',
+            700: '{indigo.700}',
+            800: '{indigo.800}',
+            900: '{indigo.900}',
+            950: '{indigo.950}'
+        }
+    }
+});
 
 const app = createApp(App);
 app.use(router);
 app.use(store);
-app.use(PrimeVue);
-app.component("TabView", TabView);
-app.component("TabPanel", TabPanel);
+app.use(PrimeVue, {
+  theme: {
+    preset: LaraIndigo,
+    options: {
+        darkModeSelector: '.my-app-dark',
+    }
+  }
+});
 
 app.mount("#app");
 
