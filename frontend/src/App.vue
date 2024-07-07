@@ -18,14 +18,16 @@ import InfoPanel from "@/components/pages/InfoPanel.vue";
 import Notice from "@/components/organisms/Notice.vue";
 import { useNoticeStore } from "./stores/notice";
 import { useUIStore } from "./stores/ui";
+import { useSettingStore } from "./stores/setting";
 
 const store = useStore();
 const noticeStore = useNoticeStore();
+const settingStore = useSettingStore();
 const uiStore = useUIStore();
 const router = useRouter();
 
 // ストア
-const isDark = computed(() => store.state.setting.darkMode);
+const isDark = computed(() => settingStore.isDarkMode);
 
 const backgroundColor = computed(() => (isDark.value ? "black" : "#d9d5da"));
 const panelBackgroundColor = computed(() => (isDark.value ? "#121212" : "white"));

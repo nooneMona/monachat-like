@@ -49,6 +49,7 @@ import { computed, watch } from "vue";
 import { useStore } from "vuex";
 import Button from "primevue/button";
 import SwitchField from "../molecules/SwitchField.vue";
+import { useSettingStore } from "../../stores/setting";
 
 export default {
   name: "SettingsFields",
@@ -58,6 +59,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const settingStore = useSettingStore();
     const computedSetting = (fieldName, updatorName) => {
       return computed({
         get: () => {
@@ -91,6 +93,7 @@ export default {
     }
     watch(isDarkMode, (value) => {
       bindPrimevueDarkMode(value);
+      settingStore.updateIsDarkMode(value);
     }, { immediate: true });
 
     return {
