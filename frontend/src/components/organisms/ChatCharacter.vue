@@ -67,6 +67,7 @@ import BubbleArea from "@/components/organisms/BubbleArea.vue";
 import CharacterImage from "@/components/organisms/CharacterImage.vue";
 import SpanText from "@/components/atoms/SpanText.vue";
 import { UIColor } from "../../ui/uiColor";
+import { useUIStore } from "../../stores/ui";
 
 const props = withDefaults(
   defineProps<{ user: any; messages: any[]; bubbleAreaHeight: number; isDark?: boolean }>(),
@@ -85,8 +86,8 @@ const typedCharacterEl: Ref<HTMLDivElement | undefined> = computed(
 
 // ストア
 const store = useStore();
+const uiStore = useUIStore();
 const isVisibleDebugFrame = computed(() => store.state.developer.isVisibleFrame);
-const height = computed(() => store.state.ui.size.height);
 const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
 const isKBMode = computed(() => store.state.setting.kbMode);
 const silentUsers = computed(() => store.getters.silentUsers);
@@ -102,7 +103,7 @@ const dispSubText = computed(() => {
   return `${dispTrip.value}${isMobile ? "ﾓ" : ""}`;
 });
 const depthRate = computed(() => {
-  let result = 1 - (height.value - props.user.dispY) / height.value;
+  let result = 1 - (uiStore.height - props.user.dispY) / uiStore.height;
   result = 0.6 + 0.4 * result + 0.1;
   return result;
 });

@@ -1,10 +1,10 @@
 <template>
   <div class="body">
     <Notice v-if="noticeStore.isRequiredRefresh" @click="onClickErrorTextButton" />
-    <div class="panel-container" :style="{ width: `${width}px`, height: `${height}px` }">
+    <div class="panel-container" :style="{ width: `${uiStore.width}px`, height: `${uiStore.height}px` }">
       <router-view></router-view>
     </div>
-    <div class="panel-container" :style="{ width: `${width}px` }">
+    <div class="panel-container" :style="{ width: `${uiStore.width}px` }">
       <InfoPanel />
     </div>
   </div>
@@ -17,14 +17,14 @@ import { useRouter } from "vue-router";
 import InfoPanel from "@/components/pages/InfoPanel.vue";
 import Notice from "@/components/organisms/Notice.vue";
 import { useNoticeStore } from "./stores/notice";
+import { useUIStore } from "./stores/ui";
 
 const store = useStore();
+const noticeStore = useNoticeStore();
+const uiStore = useUIStore();
 const router = useRouter();
 
 // ストア
-const noticeStore = useNoticeStore();
-const width = computed(() => store.state.ui.size.width);
-const height = computed(() => store.state.ui.size.height);
 const isDark = computed(() => store.state.setting.darkMode);
 
 const backgroundColor = computed(() => (isDark.value ? "black" : "#d9d5da"));
@@ -60,8 +60,6 @@ const onClickErrorTextButton = () => store.dispatch("reloadPage");
 
   min-width: fit-content;
   min-height: 100vh;
-
-  padding-bottom: 40px;
 
   background-color: v-bind(backgroundColor);
 

@@ -64,10 +64,6 @@ export default {
     // 要素
     const nameField = ref(null);
 
-    // ストア
-    const width = computed(() => store.state.ui.size.width);
-    const height = computed(() => store.state.ui.size.height);
-
     // リアクティブ
     const nameWithTrip = ref("");
     const notices = ref([]);
@@ -106,8 +102,6 @@ export default {
     };
 
     return {
-      width,
-      height,
       nameWithTrip,
       notices,
       submitName,
