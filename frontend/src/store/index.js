@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from "uuid";
 import io from "socket.io-client";
 import { indexGetters } from "@/store/getters";
 import user from "@/store/modules/user";
-import ui from "@/store/modules/ui";
 import setting from "@/store/modules/setting";
 import developer from "@/store/modules/developer";
 import Color from "./color";
@@ -18,7 +17,7 @@ const uiStore = useUIStore(piniaInstance);
 
 export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
-  modules: { user, setting, developer, ui },
+  modules: { user, setting, developer },
   state() {
     return {
       socket: null, // socket.ioのクライアント
@@ -145,8 +144,8 @@ export default createStore({
       }
       if (userRef.y < uiStore.height / 3) {
         userRef.dispY = uiStore.height / 3;
-      } else if (userRef.y > uiStore.height - userRef.height - state.ui.bottomBarHeight) {
-        userRef.dispY = uiStore.height - userRef.height - state.ui.bottomBarHeight;
+      } else if (userRef.y > uiStore.height - userRef.height - uiStore.bottomBarHeight) {
+        userRef.dispY = uiStore.height - userRef.height - uiStore.bottomBarHeight;
       } else {
         userRef.dispY = userRef.y;
       }
