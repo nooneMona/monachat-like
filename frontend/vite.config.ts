@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import path from "path";
 import vue from "@vitejs/plugin-vue";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
-import VitePluginFonts from "vite-plugin-fonts";
+import Unfonts from 'unplugin-fonts/vite'
 
 export default defineConfig({
   build: {
@@ -14,7 +14,7 @@ export default defineConfig({
   plugins: [
     vue(),
     cssInjectedByJsPlugin(),
-    VitePluginFonts({
+    Unfonts({
       google: {
         families: ["Noto Sans JP"],
       },

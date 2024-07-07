@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="room-selection"
-    :style="{ width: `${width}px`, height: `${height}px`, backgroundColor }"
-  >
+  <div class="room-selection">
     <div class="selection-top">
       <SpanText text="もなちゃと☆ω(β版)" :size="20" />
       <div class="top-right-text-area">
@@ -116,8 +113,6 @@ export default {
     const setting = computed(() => store.state.setting); // 設定値
     const myID = computed(() => store.getters["user/displayedMyID"](10)); // 自分のID
     const roomCount = computed(() => store.state.rooms); // 同期された部屋人数情報
-    const width = computed(() => store.state.ui.size.width);
-    const height = computed(() => store.state.ui.size.height);
     const userType = computed({
       // 画面で選択されているキャラタイプ
       get: () => store.state.setting.type,
@@ -233,8 +228,6 @@ export default {
       setting,
       myID,
       roomCount,
-      width,
-      height,
       disconnected,
       backgroundColor,
     };

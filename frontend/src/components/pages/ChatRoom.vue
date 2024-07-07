@@ -88,8 +88,10 @@ import Button from "@/components/atoms/Button.vue";
 import InvertButton from "@/components/molecules/InvertButton.vue";
 import SubmittableField from "@/components/molecules/SubmittableField.vue";
 import ChatCharacter from "@/components/organisms/ChatCharacter.vue";
+import { useUIStore } from "../../stores/ui";
 
 const store = useStore();
+const uiStore = useUIStore();
 const router = useRouter();
 const route = useRoute();
 
@@ -129,7 +131,7 @@ const currentRoom = computed({
   set: (value) => store.commit("user/updateCurrentRoom", { room: value }),
 });
 // TODO: キャラクターの配置範囲をdivで限定できれば、この処理を書く必要がない
-const bottomBarHeight = computed(() => `${store.state.ui.bottomBarHeight}px`);
+const bottomBarHeight = computed(() => `${uiStore.bottomBarHeight}px`);
 const disconnected = computed(() => store.state.user.disconnected);
 const totalUser = computed(() => {
   return Object.keys(store.getters.visibleUsers).length;

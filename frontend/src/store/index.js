@@ -5,14 +5,19 @@ import { v4 as uuidv4 } from "uuid";
 import io from "socket.io-client";
 import { indexGetters } from "@/store/getters";
 import user from "@/store/modules/user";
-import ui from "@/store/modules/ui";
 import setting from "@/store/modules/setting";
 import developer from "@/store/modules/developer";
 import Color from "./color";
+import { piniaInstance } from "../piniaInstance";
+import { useNoticeStore } from "@/stores/notice";
+import { useUIStore } from "../stores/ui";
+
+const noticeStore = useNoticeStore(piniaInstance);
+const uiStore = useUIStore(piniaInstance);
 
 export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
-  modules: { user, setting, developer, ui },
+  modules: { user, setting, developer },
   state() {
     return {
       socket: null, // socket.ioのクライアント
@@ -132,15 +137,15 @@ export default createStore({
       const userRef = state.users[id];
       if (userRef.x < 0) {
         userRef.dispX = 0;
-      } else if (userRef.x > state.ui.size.width - userRef.width) {
-        userRef.dispX = state.ui.size.width - userRef.width;
+      } else if (userRef.x > uiStore.width - userRef.width) {
+        userRef.dispX = uiStore.width - userRef.width;
       } else {
         userRef.dispX = userRef.x;
       }
-      if (userRef.y < state.ui.size.height / 3) {
-        userRef.dispY = state.ui.size.height / 3;
-      } else if (userRef.y > state.ui.size.height - userRef.height - state.ui.bottomBarHeight) {
-        userRef.dispY = state.ui.size.height - userRef.height - state.ui.bottomBarHeight;
+      if (userRef.y < uiStore.height / 3) {
+        userRef.dispY = uiStore.height / 3;
+      } else if (userRef.y > uiStore.height - userRef.height - uiStore.bottomBarHeight) {
+        userRef.dispY = uiStore.height - userRef.height - uiStore.bottomBarHeight;
       } else {
         userRef.dispY = userRef.y;
       }
@@ -344,8 +349,8 @@ export default createStore({
     enter({ state, commit }, { room }) {
       const hexColor = state.setting.color;
       const { r, g, b } = Color.hexToMonaRGB(hexColor);
-      const randomX = Math.floor(Math.random() * state.ui.size.width);
-      const defaultY = state.ui.size.height - 150;
+      const randomX = Math.floor(Math.random() * uiStore.width);
+      const defaultY = uiStore.height - 150;
       const x = state.user.x ?? randomX;
       const y = state.user.y ?? defaultY;
       state.socket.emit("ENTER", {
@@ -500,7 +505,7 @@ export default createStore({
           room: "/MONA8094",
         });
       }
-      commit("ui/turnOnRequiredRefresh");
+      noticeStore.requestRefresh();
     },
     removeChatMessagesIgnored(context, { id, ihash }) {
       if (id === context.state.user.myID) {

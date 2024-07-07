@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useStore } from "vuex";
+import { useSettingStore } from "@/stores/setting";
 import SpanText from "./SpanText.vue";
 
 const props = withDefaults(
@@ -20,18 +20,16 @@ const props = withDefaults(
     isDark?: boolean;
     textSize?: number;
   }>(),
-  { disabled: undefined, isDark: undefined, textSize: 20 }
+  { disabled: undefined, isDark: undefined, textSize: 20 },
 );
 const emits = defineEmits<{ (e: "onClick", event: Event): void }>();
 
-const store = useStore();
-
 const shouldBeDark = computed(() => {
-  const isDarkModeFromStore = store?.state?.setting?.darkMode;
-  if (isDarkModeFromStore !== undefined) {
-    return isDarkModeFromStore;
+  const isDarkModeFromStore = useSettingStore().isDarkMode;
+  if (props.isDark !== undefined) {
+    return props.isDark;
   }
-  return props.isDark ?? false;
+  return isDarkModeFromStore;
 });
 
 const onClick = (e: Event) => {
@@ -44,7 +42,6 @@ button {
   height: 100%;
   width: 100%;
   border: 1px solid;
-  margin-left: auto;
 
   &.light {
     color: black;

@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { computed, Ref, ref } from "vue";
-import { useStore } from "vuex";
+import { useSettingStore } from "../../stores/setting";
 
 const props = withDefaults(defineProps<{ modelValue: string; isDark?: boolean }>(), {
   isDark: undefined,
@@ -20,14 +20,12 @@ const emits = defineEmits<{
   (e: "typed", value: string): void;
 }>();
 
-const store = useStore();
-
 const shouldBeDark = computed(() => {
-  const isDarkModeFromStore = store?.state?.setting?.darkMode;
-  if (isDarkModeFromStore !== undefined) {
-    return isDarkModeFromStore;
+  const isDarkModeFromStore = useSettingStore().isDarkMode;
+  if (props.isDark !== undefined) {
+    return props.isDark;
   }
-  return props.isDark ?? false;
+  return isDarkModeFromStore
 });
 
 const inputEl = ref(null);
