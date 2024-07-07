@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <Notice v-if="noticeStore.isRequiredRefresh" @click="onClickErrorTextButton" />
+    <Notice v-if="isRequiredRefresh" @click="onClickErrorTextButton" />
     <div class="panel-container" :style="{ width: `${uiStore.width}px`, height: `${uiStore.height}px` }">
       <router-view></router-view>
     </div>
@@ -11,26 +11,23 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from "vue";
+import { onMounted } from "vue";
 import { useStore } from "vuex";
+import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import InfoPanel from "@/components/pages/InfoPanel.vue";
 import Notice from "@/components/organisms/Notice.vue";
 import { useNoticeStore } from "./stores/notice";
 import { useUIStore } from "./stores/ui";
-import { useSettingStore } from "./stores/setting";
 
 const store = useStore();
 const noticeStore = useNoticeStore();
-const settingStore = useSettingStore();
 const uiStore = useUIStore();
 const router = useRouter();
 
 // ストア
-const isDark = computed(() => settingStore.isDarkMode);
-
-const backgroundColor = computed(() => (isDark.value ? "black" : "#d9d5da"));
-const panelBackgroundColor = computed(() => (isDark.value ? "#121212" : "white"));
+const { backgroundColor, panelBackgroundColor } = storeToRefs(uiStore);
+const { isRequiredRefresh } = storeToRefs(noticeStore);
 
 // ライフサイクル
 onMounted(() => {
