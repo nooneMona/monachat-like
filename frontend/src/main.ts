@@ -15,6 +15,7 @@ import App from "@/App.vue";
 import ChatEntrance from "@/components/pages/ChatEntrance.vue";
 import RoomSelection from "@/components/pages/RoomSelection.vue";
 import ChatRoom from "@/components/pages/ChatRoom.vue";
+import { piniaInstance } from "./piniaInstance";
 
 export const router = createRouter({
   history: createWebHashHistory(),
@@ -46,6 +47,7 @@ const LaraIndigo = definePreset(Lara, {
 const app = createApp(App);
 app.use(router);
 app.use(store);
+app.use(piniaInstance);
 app.use(PrimeVue, {
   theme: {
     preset: LaraIndigo,

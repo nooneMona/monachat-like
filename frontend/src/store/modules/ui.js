@@ -11,14 +11,6 @@ const ui = {
     bottomBarHeight: 50, // 下部のバーの高さ
     requiredRefresh: false, // ブラウザの更新を呼びかけるメッセージの表示有無
   }),
-  mutations: {
-    turnOnRequiredRefresh(state) {
-      state.requiredRefresh = true;
-    },
-    turnOffRequiredRefresh(state) {
-      state.requiredRefresh = false;
-    },
-  },
   actions: {},
   getters: {},
 };

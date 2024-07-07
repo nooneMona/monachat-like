@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <Notice v-if="requiredRefresh" @click="onClickErrorTextButton" />
+    <Notice v-if="noticeStore.isRequiredRefresh" @click="onClickErrorTextButton" />
     <div class="panel-container" :style="{ width: `${width}px`, height: `${height}px` }">
       <router-view></router-view>
     </div>
@@ -16,12 +16,13 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import InfoPanel from "@/components/pages/InfoPanel.vue";
 import Notice from "@/components/organisms/Notice.vue";
+import { useNoticeStore } from "./stores/notice";
 
 const store = useStore();
 const router = useRouter();
 
 // ストア
-const requiredRefresh = computed(() => store.state.ui.requiredRefresh);
+const noticeStore = useNoticeStore();
 const width = computed(() => store.state.ui.size.width);
 const height = computed(() => store.state.ui.size.height);
 const isDark = computed(() => store.state.setting.darkMode);

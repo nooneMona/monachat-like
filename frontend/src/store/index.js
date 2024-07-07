@@ -9,6 +9,10 @@ import ui from "@/store/modules/ui";
 import setting from "@/store/modules/setting";
 import developer from "@/store/modules/developer";
 import Color from "./color";
+import { useNoticeStore } from "@/stores/notice";
+import { piniaInstance } from "../piniaInstance";
+
+const noticeStore = useNoticeStore(piniaInstance)
 
 export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
@@ -500,7 +504,7 @@ export default createStore({
           room: "/MONA8094",
         });
       }
-      commit("ui/turnOnRequiredRefresh");
+      noticeStore.requestRefresh();
     },
     removeChatMessagesIgnored(context, { id, ihash }) {
       if (id === context.state.user.myID) {
