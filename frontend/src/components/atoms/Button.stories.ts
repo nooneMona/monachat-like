@@ -9,6 +9,8 @@ export default {
 interface Args {
   title: string;
   isDark: boolean;
+  disabled: boolean;
+  textSize: number;
 }
 
 const Template: StoryFn<Args> = (args) => ({

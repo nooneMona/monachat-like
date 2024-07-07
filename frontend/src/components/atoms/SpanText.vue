@@ -11,8 +11,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { ColorType, UIColor } from "@/ui/uiColor";
+import { useSettingStore } from "../../stores/setting";
 
 const props = withDefaults(
   defineProps<{ text: string | undefined; type?: ColorType; size?: number; isDark?: boolean }>(),
@@ -23,14 +23,12 @@ const props = withDefaults(
   }
 );
 
-const store = useStore();
-
 const shouldBeDark = computed(() => {
-  const isDarkModeFromStore = store?.state?.setting?.darkMode;
-  if (isDarkModeFromStore !== undefined) {
-    return isDarkModeFromStore;
+  const isDarkModeFromStore = useSettingStore().isDarkMode;
+  if (props.isDark !== undefined) {
+    return props.isDark;
   }
-  return props.isDark ?? false;
+  return isDarkModeFromStore
 });
 
 const color = computed(() => {
