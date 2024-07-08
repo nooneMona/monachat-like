@@ -1,144 +1,143 @@
 <template>
   <div class="entrance">
-    <div :style="{ textAlign: 'center' }">
-      <SpanText text="もなちゃと☆ω(β版)" :size="40" />
-    </div>
-    <div :style="{ textAlign: 'center' }">
-      <SpanText text="Login" :size="20" />
-    </div>
-    <div :style="{ textAlign: 'center' }">
-      <SpanText text="なまえを入れてください" :size="20" />
-    </div>
+    <div><SpanText text="もなちゃと☆ω(β版)" :size="24" /></div>
+    <div><SpanText text="Login" :size="20" /></div>
+    <div class="field-space"></div>
+    <div><SpanText text="なまえを入れてください" :size="26" /></div>
     <div class="field-area">
       <SubmittableField ref="nameField" @submit="submitName" v-model="nameWithTrip" />
     </div>
 
     <div class="rule-area">
-      <div :style="{ textAlign: 'center' }">
+      <div class="rule-title">
         <SpanText text="もなちゃと☆ω(β版)のきまり" :size="20" />
       </div>
-      <ul class="notice-list">
-        <li
-          v-for="notice in notices"
-          :key="notice.day"
-          :style="{
-            color: notice.isNew ? 'red' : 'black',
-          }"
-        >
-          <SpanText
-            :text="`${notice.day !== undefined ? notice.day + ': ' : ''}${notice.info}`"
-            :size="16"
-            :type="notice.isNew ? 'notice' : 'text'"
-          />
-        </li>
-      </ul>
-      <div class="manner">
-        <div>
-          <SpanText text="いろいろな世代・地域の人が集まる場所です" :size="16" />
-        </div>
-        <div>
-          <SpanText text="マナーを守り、みんなで楽しく過ごせるようにしましょう" :size="16" />
+      <div class="scrollable-area">
+        <ul class="notice-list">
+          <li
+            v-for="notice in notices"
+            :key="notice.day"
+            :style="{
+              color: notice.isNew ? 'red' : 'black',
+            }"
+          >
+            <SpanText
+              :text="`${notice.day !== undefined ? notice.day + ': ' : ''}${notice.info}`"
+              :size="20"
+              :type="notice.isNew ? 'notice' : 'text'"
+            />
+          </li>
+        </ul>
+        <div class="manner">
+          <div><SpanText text="いろいろな世代・地域の人が集まる場所です" :size="20" /></div>
+          <div><SpanText text="マナーを守り、みんなで楽しく過ごせるようにしましょう" :size="20" /></div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import { onMounted, ref, computed, onUnmounted } from "vue";
+<script setup lang="ts">
+import { onMounted, ref, computed, onUnmounted, Ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import SpanText from "@/components/atoms/SpanText.vue";
 import SubmittableField from "@/components/molecules/SubmittableField.vue";
+import { useSettingStore } from "@/stores/setting";
 
-export default {
-  components: {
-    SpanText,
-    SubmittableField,
-  },
-  setup() {
-    const store = useStore();
-    const router = useRouter();
+type News = {
+  day: string;
+  info: string;
+  isNew: boolean;
+};
 
-    // 要素
-    const nameField = ref(null);
+const store = useStore();
+const settingStore = useSettingStore();
+const router = useRouter();
 
-    // リアクティブ
-    const nameWithTrip = ref("");
-    const notices = ref([]);
+// 要素
+const nameField = ref(null);
+const typedNameFieldEl: Ref<HTMLInputElement | undefined> = computed(
+  () => nameField.value as unknown as HTMLInputElement | undefined
+);
 
-    const onKeyDown = (e) => {
-      if (e.key === "Enter") {
-        nameField.value.focus();
-      }
-    };
-    const isDarkMode = computed(() => store.state.setting.darkMode);
-    const backgroundColor = computed(() => {
-      if (isDarkMode.value) {
-        return "#121212";
-      }
-      return "white";
-    });
+// リアクティブ
+const nameWithTrip = ref("");
+const notices = ref<News[]>([]);
 
-    // ライフサイクル
-    onMounted(async () => {
-      nameWithTrip.value = store.getters["setting/nameWithTrip"];
-      const res = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/news`);
-      notices.value = res.data.news;
-      window.addEventListener("keydown", onKeyDown);
-    });
+const onKeyDown = (e: KeyboardEvent) => {
+  if (e.key === "Enter") {
+    typedNameFieldEl.value?.focus();
+  }
+};
 
-    onUnmounted(() => window.removeEventListener("keydown", onKeyDown));
+const fetchNotices = async () => {
+  const res = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/news`);
+  notices.value = res.data.news;
+};
 
-    // メソッド
-    const submitName = async ({ text }) => {
-      // 解析が無事に終わってから移動しないと引き継がれないのでawaitする。
-      await store.dispatch("parseNameWithTrip", { text });
-      await store.dispatch("resetLogStorage");
-      router.push({
-        path: "/select",
-      });
-    };
+// ライフサイクル
+onMounted(async () => {
+  nameWithTrip.value = settingStore.savedNameWithTrip;
+  fetchNotices();
+  window.addEventListener("keydown", onKeyDown);
+});
 
-    return {
-      nameWithTrip,
-      notices,
-      submitName,
-      nameField,
-      backgroundColor,
-    };
-  },
+onUnmounted(() => window.removeEventListener("keydown", onKeyDown));
+
+// メソッド
+const submitName = async ({ text }: {text: string}) => {
+  // 解析が無事に終わってから移動しないと引き継がれないのでawaitする。
+  await store.dispatch("parseNameWithTrip", { text });
+  await store.dispatch("resetLogStorage");
+  router.push({
+    path: "/select",
+  });
 };
 </script>
-<style scoped>
+
+<style lang="scss" scoped>
 .entrance {
   height: 100%;
-}
+  display: flex;
+  flex-direction: column;
+  align-items: center;;
+  
+  .field-space {
+    height: 20px;
+  }
 
-.field-area {
-  margin: 0 auto;
-  height: 50px;
-  width: 50%;
-}
-.rule-area {
-  margin: 20px auto;
-  width: 70%;
-  height: 60%;
-  overflow: auto;
-  scrollbar-width: none; /* Firefox 対応 */
-}
-.rule-area::-webkit-scrollbar {
-  /* Chrome, Safari 対応 */
-  display: none;
-}
+  .field-area {
+    margin-top: 8px;
+    height: 50px;
+    width: 50%;
+  }
+  
+  .rule-area {
+    margin: 20px auto;
+    width: 70%;
+    height: 60%;
+    overflow: auto;
+    scrollbar-width: none; /* Firefox 対応 */
 
-.notice-list {
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
+    .rule-title {
+      padding-left: 20px;;
+    }
 
-.manner {
-  margin-top: 20px;
+    .notice-list {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+    .manner {
+      margin-left: 20px;
+      margin-top: 20px;
+    }
+  }
+  .rule-area::-webkit-scrollbar {
+    /* Chrome, Safari 対応 */
+    display: none;
+  }
 }
 </style>

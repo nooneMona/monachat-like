@@ -37,11 +37,8 @@ const setting = {
   namespaced: true,
   state: () => ({
     // 一時的に保持する値
-    tripResult: "", // トリップ
     selectedUsersIhashes: [],
     // 永久に保持する値
-    name: getValueWithDefault("name", ""), // 名前
-    trip: getValueWithDefault("trip", ""), // トリップの平文
     type: getValueWithDefault("type", "charhan"), // キャラタイプ
     color: getValueWithDefault("color", "#ffffff"), // キャラの色(hex6桁指定)
     sound: getValueWithDefault("sound", ""), // 音量
@@ -55,13 +52,6 @@ const setting = {
     log: getValueSessionStorageWithDefault("log", "[]"), // ログ
   }),
   mutations: {
-    updateSettingInEntrance(state, { name, trip }) {
-      updateValueWithPerpetuation(state, "name", name);
-      updateValueWithPerpetuation(state, "trip", trip ?? "");
-    },
-    updateTripResult(state, { tripResult }) {
-      state.tripResult = tripResult;
-    },
     addSelectedUsersIhash(state, { ihash }) {
       state.selectedUsersIhashes[ihash] = "red";
     },

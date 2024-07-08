@@ -1,10 +1,10 @@
 <template>
   <div class="body">
     <Notice v-if="isRequiredRefresh" @click="onClickErrorTextButton" />
-    <div class="panel-container" :style="{ width: `${uiStore.width}px`, height: `${uiStore.height}px` }">
+    <div class="panel-container" :style="{ width: `${width}px`, height: `${height}px` }">
       <router-view></router-view>
     </div>
-    <div class="panel-container" :style="{ width: `${uiStore.width}px` }">
+    <div class="panel-container" :style="{ width: `${width}px` }">
       <InfoPanel />
     </div>
   </div>
@@ -26,7 +26,7 @@ const uiStore = useUIStore();
 const router = useRouter();
 
 // ストア
-const { backgroundColor, panelBackgroundColor } = storeToRefs(uiStore);
+const { backgroundColor, panelBackgroundColor, width, height } = storeToRefs(uiStore);
 const { isRequiredRefresh } = storeToRefs(noticeStore);
 
 // ライフサイクル

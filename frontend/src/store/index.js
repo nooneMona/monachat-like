@@ -11,9 +11,11 @@ import Color from "./color";
 import { piniaInstance } from "../piniaInstance";
 import { useNoticeStore } from "@/stores/notice";
 import { useUIStore } from "../stores/ui";
+import { useSettingStore } from "@/stores/setting";
 
 const noticeStore = useNoticeStore(piniaInstance);
 const uiStore = useUIStore(piniaInstance);
+const settingStore = useSettingStore(piniaInstance);
 
 export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
@@ -312,10 +314,8 @@ export default createStore({
         name = text;
       }
       name = name.trim() === "" ? "名無しさん" : name;
-      commit("setting/updateSettingInEntrance", {
-        name,
-        trip,
-      });
+      settingStore.updateSavedName(name);
+      settingStore.updateSavedTrip(trip);
     },
     resetLogStorage({ state, commit }) {
       commit("resetLog");
@@ -323,8 +323,8 @@ export default createStore({
     },
     enterName({ state, commit }) {
       // ローカルストレージの内容に頼る
-      const { trip } = state.setting;
-      let { name } = state.setting;
+      const trip = settingStore.savedTrip
+      let name = settingStore.savedName;
       name = name.trim() === "" ? "名無しさん" : name;
       const enterParams = {
         room: "/MONA8094",
@@ -337,10 +337,8 @@ export default createStore({
         enterParams.token = state.user.myToken;
       }
       state.socket.emit("ENTER", enterParams);
-      commit("setting/updateSettingInEntrance", {
-        name,
-        trip,
-      });
+      settingStore.updateSavedName(name);
+      settingStore.updateSavedTrip(trip);
       const log = setting.getters.loadLog(state.setting);
       if (state.logMessages.length === 0 && log.length !== 0) {
         state.logMessages = log;
@@ -360,8 +358,8 @@ export default createStore({
         y,
         scl: 100,
         stat: "通常",
-        name: state.setting.name,
-        trip: state.setting.trip,
+        name: settingStore.savedName,
+        trip: settingStore.savedTrip,
         r,
         g,
         b,
@@ -458,9 +456,7 @@ export default createStore({
     receivedENTER(context, param) {
       context.commit("updateUserByEnter", param);
       if (param.id === context.state.user.myID) {
-        context.commit("setting/updateTripResult", {
-          tripResult: param.trip,
-        });
+        settingStore.updateTripResult(param.trip);
         context.commit("user/updateIhash", { ihash: param.ihash });
       }
       if (context.getters.visibleUsers[param.id] === undefined) return;
