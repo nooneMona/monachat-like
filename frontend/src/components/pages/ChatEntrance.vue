@@ -44,6 +44,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import SpanText from "@/components/atoms/SpanText.vue";
 import SubmittableField from "@/components/molecules/SubmittableField.vue";
+import { useSettingStore } from "@/stores/setting";
 
 type News = {
   day: string;
@@ -52,6 +53,7 @@ type News = {
 };
 
 const store = useStore();
+const settingStore = useSettingStore();
 const router = useRouter();
 
 // 要素
@@ -77,7 +79,7 @@ const fetchNotices = async () => {
 
 // ライフサイクル
 onMounted(async () => {
-  nameWithTrip.value = store.getters["setting/nameWithTrip"];
+  nameWithTrip.value = settingStore.savedNameWithTrip;
   fetchNotices();
   window.addEventListener("keydown", onKeyDown);
 });

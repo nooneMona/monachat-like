@@ -34,7 +34,7 @@
                 textAlign: 'center',
               }"
             >
-              <SpanText :text="setting.name" />
+              <SpanText :text="savedName" />
             </div>
             <div
               :style="{
@@ -79,9 +79,10 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
+import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import Color from "@/store/color";
@@ -92,147 +93,107 @@ import SeekBar from "@/components/molecules/SeekBar.vue";
 import ColorPalette from "@/components/molecules/ColorPalette.vue";
 import Dropdown from "@/components/molecules/Dropdown.vue";
 import Rooms from "@/components/organisms/Rooms.vue";
+import { useSettingStore } from "@/stores/setting";
 
-export default {
-  components: {
-    Text,
-    SpanText,
-    CharacterImage,
-    ColorPalette,
-    SeekBar,
-    Rooms,
-    Dropdown,
-    Button,
-  },
-  setup() {
-    const store = useStore();
-    const router = useRouter();
+const store = useStore();
+const settingStore = useSettingStore();
+const router = useRouter();
 
-    // ストア
-    const rooms = computed(() => store.state.roomMetadata); // APIから取得した部屋一覧
-    const setting = computed(() => store.state.setting); // 設定値
-    const myID = computed(() => store.getters["user/displayedMyID"](10)); // 自分のID
-    const roomCount = computed(() => store.state.rooms); // 同期された部屋人数情報
-    const userType = computed({
-      // 画面で選択されているキャラタイプ
-      get: () => store.state.setting.type,
-      set: (value) => store.commit("setting/updateType", value),
-    });
-    const userHexColor = computed({
-      // 画面で選択されているキャラ色
-      get: () => store.state.setting.color,
-      set: (value) => store.commit("setting/updateColor", value),
-    });
-    const disconnected = computed(() => store.state.user.disconnected);
+// ストア
+const { savedName, tripResult } = storeToRefs(settingStore);
+const rooms = computed(() => store.state.roomMetadata); // APIから取得した部屋一覧
+const myID = computed(() => store.getters["user/displayedMyID"](10)); // 自分のID
+const roomCount = computed(() => store.state.rooms); // 同期された部屋人数情報
+const userType = computed({
+  // 画面で選択されているキャラタイプ
+  get: () => store.state.setting.type,
+  set: (value) => store.commit("setting/updateType", value),
+});
+const userHexColor = computed({
+  // 画面で選択されているキャラ色
+  get: () => store.state.setting.color,
+  set: (value) => store.commit("setting/updateColor", value),
+});
+const disconnected = computed(() => store.state.user.disconnected);
 
-    // リアクティブ
-    const currentCharIndex = ref(0); // 画面で選択されているキャラのIndex
-    const colors = ref([]); // APIから取得した色一覧
-    const characters = ref([]); // APIから取得したキャラ一覧
+// リアクティブ
+const currentCharIndex = ref(0); // 画面で選択されているキャラのIndex
+const colors = ref([]); // APIから取得した色一覧
+const characters = ref([]); // APIから取得したキャラ一覧
 
-    const hexColors = computed(() =>
-      colors.value.map((e) => ({
-        id: e.id,
-        hexColor: Color.monaRGBToHex({ r: e.r, g: e.g, b: e.b }),
-      }))
-    );
-    const characterSequence = computed(() => characters.value.map((e) => e.characters).flat());
-    const characterOptions = computed(() =>
-      characters.value.map((e) => ({
-        value: e.genre,
-        text: e.genre,
-      }))
-    );
-    const dispTrip = computed(() => {
-      if (!setting.value.tripResult) {
-        return store.state.user.ihash ? `◇${store.state.user.ihash?.slice(0, 6)}` : "Loading...";
-      }
-      return `◆${setting.value.tripResult.slice(0, 11)}`;
-    });
-    const isDarkMode = computed(() => store.state.setting.darkMode);
-    const backgroundColor = computed(() => {
-      if (isDarkMode.value) {
-        return "#121212";
-      }
-      return "white";
-    });
+const hexColors = computed(() =>
+  colors.value.map((e) => ({
+    id: e.id,
+    hexColor: Color.monaRGBToHex({ r: e.r, g: e.g, b: e.b }),
+  }))
+);
+const characterSequence = computed(() => characters.value.map((e) => e.characters).flat());
+const characterOptions = computed(() =>
+  characters.value.map((e) => ({
+    value: e.genre,
+    text: e.genre,
+  }))
+);
+const dispTrip = computed(() => {
+  if (!tripResult.value) {
+    return store.state.user.ihash ? `◇${store.state.user.ihash?.slice(0, 6)}` : "Loading...";
+  }
+  return `◆${tripResult.value.slice(0, 11)}`;
+});
 
-    // ライフサイクル
-    onMounted(async () => {
-      const colorsRes = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/colors`);
-      colors.value = colorsRes.data.colors;
-      const charactersRes = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/characters`);
-      characters.value = charactersRes.data.characters;
+// ライフサイクル
+onMounted(async () => {
+  const colorsRes = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/colors`);
+  colors.value = colorsRes.data.colors;
+  const charactersRes = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/characters`);
+  characters.value = charactersRes.data.characters;
 
-      store.commit("user/updateCurrentRoom", { room: null });
-      store.commit("resetChatMessages");
-      await store.dispatch("enterName", { text: null });
-    });
+  store.commit("user/updateCurrentRoom", { room: null });
+  store.commit("resetChatMessages");
+  await store.dispatch("enterName", { text: null });
+});
 
-    const updateColor = (hexColor) => {
-      userHexColor.value = hexColor;
-    };
-    const onSelectGenre = (genre) => {
-      const targetCharacters = characters.value.find((e) => e.genre === genre).characters;
-      const type = targetCharacters[0];
-      userType.value = type;
-    };
-    const randomCharacter = async () => {
-      const res = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/character/random`);
-      userType.value = res.data.randomChar;
-    };
-    const submitEnter = async (room) => {
-      router.push({
-        path: `/room${room.id}`,
-      });
-    };
-    const backToHome = () => {
-      router.push({
-        path: "/",
-      });
-    };
-
-    // 初回でuserTypeが変更されるときにはまだcharacterSequenceの結果が返ってきてない。
-    // -> characterSequenceの変更を受け取って再計算を試みることで、シーケンスバーを初期化できる。
-    watch([userType, characterSequence], () => {
-      if (userType.value === undefined) {
-        return;
-      }
-      if (
-        characterSequence.value.indexOf(userType.value) !== -1 &&
-        // TODO: 存在しないタイプが入力されたときの対策でたまたまこれが動いてる可能性があるので、代替案を考える
-        userType.value !== characterSequence.value[currentCharIndex.value - 1]
-      ) {
-        currentCharIndex.value = characterSequence.value.indexOf(userType.value);
-      }
-    });
-
-    watch(currentCharIndex, () => {
-      userType.value = characterSequence.value[currentCharIndex.value];
-    });
-
-    return {
-      userType,
-      userHexColor,
-      updateColor,
-      submitEnter,
-      backToHome,
-      randomCharacter,
-      dispTrip,
-      rooms,
-      characterSequence,
-      characterOptions,
-      onSelectGenre,
-      currentCharIndex,
-      hexColors,
-      setting,
-      myID,
-      roomCount,
-      disconnected,
-      backgroundColor,
-    };
-  },
+const updateColor = (hexColor) => {
+  userHexColor.value = hexColor;
 };
+const onSelectGenre = (genre) => {
+  const targetCharacters = characters.value.find((e) => e.genre === genre).characters;
+  const type = targetCharacters[0];
+  userType.value = type;
+};
+const randomCharacter = async () => {
+  const res = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/character/random`);
+  userType.value = res.data.randomChar;
+};
+const submitEnter = async (room) => {
+  router.push({
+    path: `/room${room.id}`,
+  });
+};
+const backToHome = () => {
+  router.push({
+    path: "/",
+  });
+};
+
+// 初回でuserTypeが変更されるときにはまだcharacterSequenceの結果が返ってきてない。
+// -> characterSequenceの変更を受け取って再計算を試みることで、シーケンスバーを初期化できる。
+watch([userType, characterSequence], () => {
+  if (userType.value === undefined) {
+    return;
+  }
+  if (
+    characterSequence.value.indexOf(userType.value) !== -1 &&
+    // TODO: 存在しないタイプが入力されたときの対策でたまたまこれが動いてる可能性があるので、代替案を考える
+    userType.value !== characterSequence.value[currentCharIndex.value - 1]
+  ) {
+    currentCharIndex.value = characterSequence.value.indexOf(userType.value);
+  }
+});
+
+watch(currentCharIndex, () => {
+  userType.value = characterSequence.value[currentCharIndex.value];
+});
 </script>
 
 <style scoped>
