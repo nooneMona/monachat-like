@@ -1,4 +1,8 @@
 {
   "jest.jestCommandLine": "yarn run test",
-  "jest.rootPath": "backend"
+  "jest.rootPath": "backend",
+  "eslint.useFlatConfig": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  }
 }
