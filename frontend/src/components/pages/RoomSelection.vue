@@ -3,7 +3,7 @@
     <div class="selection-top">
       <SpanText text="もなちゃと☆ω(β版)" :size="20" />
       <div class="top-right-text-area">
-        <SpanText v-if="!disconnected" :text="`ID:${myID}...`" />
+        <SpanText v-if="!disconnected" :text="`ID:${displayingMyID}...`" />
         <SpanText v-else text="切断しました" />
       </div>
     </div>
@@ -96,13 +96,14 @@ import Rooms from "@/components/organisms/Rooms.vue";
 import { useSettingStore } from "@/stores/setting";
 
 const store = useStore();
+const userStore = useUserStore();
 const settingStore = useSettingStore();
 const router = useRouter();
 
 // ストア
 const { savedName, tripResult } = storeToRefs(settingStore);
 const rooms = computed(() => store.state.roomMetadata); // APIから取得した部屋一覧
-const myID = computed(() => store.getters["user/displayedMyID"](10)); // 自分のID
+const displayingMyID = computed(() => userStore.displayingMyID(10)); // 自分のID
 const roomCount = computed(() => store.state.rooms); // 同期された部屋人数情報
 const userType = computed({
   // 画面で選択されているキャラタイプ

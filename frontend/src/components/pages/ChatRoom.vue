@@ -41,7 +41,7 @@
         v-if="!disconnected"
         class="total-user"
         :size="15"
-        :text="`${totalUser}人 (ID:${displayedMyID})`"
+        :text="`${totalUser}人 (ID:${displayingMyID})`"
       />
       <SpanText v-else class="total-user" :size="15" text="切断しました" />
     </div>
@@ -91,8 +91,10 @@ import InvertButton from "@/components/molecules/InvertButton.vue";
 import SubmittableField from "@/components/molecules/SubmittableField.vue";
 import ChatCharacter from "@/components/organisms/ChatCharacter.vue";
 import { useUIStore } from "../../stores/ui";
+import { useUserStore } from "../../stores/user";
 
 const store = useStore();
+const userStore = useUserStore();
 const uiStore = useUIStore();
 const router = useRouter();
 const route = useRoute();
@@ -127,7 +129,7 @@ const selectedVolume = computed({
 const visibleUsers = computed(() => store.getters.visibleUsers);
 const chatMessages = computed(() => store.state.chatMessages);
 const myID = computed(() => store.state.user.myID);
-const displayedMyID = computed(() => store.getters["user/displayedMyID"](3));
+const displayingMyID = computed(() => userStore.displayingMyID(3));
 const currentRoom = computed({
   get: () => store.state.user.currentRoom,
   set: (value) => store.commit("user/updateCurrentRoom", { room: value }),

@@ -46,13 +46,6 @@ const user = {
   },
   actions: {},
   getters: {
-    // 表示するためのID文字列
-    displayedMyID: (state) => (end) => {
-      if (state.myID == null) {
-        return "";
-      }
-      return state.myID.slice(0, end);
-    },
     // ユーザー自身のユーザー情報
     me(state, _, rootState) {
       return rootState.users[state.myID];

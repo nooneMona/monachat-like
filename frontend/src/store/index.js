@@ -487,6 +487,7 @@ export default createStore({
         dispatch("returnFromAUTHError");
       }
       commit("user/updateAuthInfo", { id, token });
+      userStore.updateAuthInfo(id, token);
       commit("updateUserExistence", { id, exists: true });
     },
     returnFromAUTHError({ state, dispatch, commit }) {
