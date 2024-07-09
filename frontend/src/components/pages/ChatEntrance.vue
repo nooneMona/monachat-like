@@ -7,12 +7,12 @@
     <div class="field-area">
       <SubmittableField ref="nameField" @submit="submitName" v-model="nameWithTrip" />
     </div>
-
     <div class="rule-area">
       <div class="rule-title">
         <SpanText text="もなちゃと☆ω(β版)のきまり" :size="20" />
       </div>
       <div class="scrollable-area">
+        <!-- TODO: コンポーネントに切り出す -->
         <ul class="notice-list">
           <li
             v-for="notice in notices"
@@ -29,8 +29,12 @@
           </li>
         </ul>
         <div class="manner">
-          <div><SpanText text="いろいろな世代・地域の人が集まる場所です" :size="20" /></div>
-          <div><SpanText text="マナーを守り、みんなで楽しく過ごせるようにしましょう" :size="20" /></div>
+          <div>
+            <SpanText text="いろいろな世代・地域の人が集まる場所です" :size="20" />
+          </div>
+          <div>
+            <SpanText text="マナーを守り、みんなで楽しく過ごせるようにしましょう" :size="20" />
+          </div>
         </div>
       </div>
     </div>
@@ -59,7 +63,7 @@ const router = useRouter();
 // 要素
 const nameField = ref(null);
 const typedNameFieldEl: Ref<HTMLInputElement | undefined> = computed(
-  () => nameField.value as unknown as HTMLInputElement | undefined
+  () => nameField.value as unknown as HTMLInputElement | undefined,
 );
 
 // リアクティブ
@@ -87,7 +91,7 @@ onMounted(async () => {
 onUnmounted(() => window.removeEventListener("keydown", onKeyDown));
 
 // メソッド
-const submitName = async ({ text }: {text: string}) => {
+const submitName = async ({ text }: { text: string }) => {
   // 解析が無事に終わってから移動しないと引き継がれないのでawaitする。
   await store.dispatch("parseNameWithTrip", { text });
   await store.dispatch("resetLogStorage");
@@ -102,8 +106,8 @@ const submitName = async ({ text }: {text: string}) => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;;
-  
+  align-items: center;
+
   .field-space {
     height: 20px;
   }
@@ -113,7 +117,7 @@ const submitName = async ({ text }: {text: string}) => {
     height: 50px;
     width: 50%;
   }
-  
+
   .rule-area {
     margin: 20px auto;
     width: 70%;
@@ -122,7 +126,7 @@ const submitName = async ({ text }: {text: string}) => {
     scrollbar-width: none; /* Firefox 対応 */
 
     .rule-title {
-      padding-left: 20px;;
+      padding-left: 20px;
     }
 
     .notice-list {

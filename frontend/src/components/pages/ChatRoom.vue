@@ -50,7 +50,9 @@
         <select v-model="selectedStat" @change="onChangeStat">
           <option disabled value="">状態</option>
           <option disabled value="free">フリー</option>
-          <option v-for="option in statOptions" :key="option">{{ option }}</option>
+          <option v-for="option in statOptions" :key="option">
+            {{ option }}
+          </option>
         </select>
         <select v-model="selectedVolume">
           <option disabled value="" selected>音量</option>

@@ -20,7 +20,7 @@ const props = withDefaults(
     sequence: string[];
     index?: number;
   }>(),
-  { index: 0 }
+  { index: 0 },
 );
 const emits = defineEmits<{ (e: "update:index", index: number): void }>();
 

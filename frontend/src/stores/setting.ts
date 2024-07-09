@@ -1,6 +1,5 @@
-
-import { defineStore } from 'pinia'
-import { computed, Ref, ref } from 'vue'
+import { defineStore } from "pinia";
+import { computed, Ref, ref } from "vue";
 
 export interface ISetting {
   isDarkMode: boolean;
@@ -30,20 +29,32 @@ const updateValueWithPerpetuation = (ref: Ref<string>, key: StorageKey, value: s
   localStorage.setItem(`${storageKeyPrefix}/${key}`, value);
 };
 
-export const useSettingStore = defineStore('setting', () => {
-  const savedName = ref(getValueWithDefault('name', ''))
-  const updateSavedName = (value: string) => updateValueWithPerpetuation(savedName, 'name', value);
-  const savedTrip = ref(getValueWithDefault('trip', ''))
-  const updateSavedTrip = (value: string) => updateValueWithPerpetuation(savedTrip, 'trip', value);
-  const tripResult = ref(getValueWithDefault('tripResult', ''))
-  const updateTripResult = (value: string) => updateValueWithPerpetuation(tripResult, 'tripResult', value);
+export const useSettingStore = defineStore("setting", () => {
+  const savedName = ref(getValueWithDefault("name", ""));
+  const updateSavedName = (value: string) => updateValueWithPerpetuation(savedName, "name", value);
+  const savedTrip = ref(getValueWithDefault("trip", ""));
+  const updateSavedTrip = (value: string) => updateValueWithPerpetuation(savedTrip, "trip", value);
+  const tripResult = ref(getValueWithDefault("tripResult", ""));
+  const updateTripResult = (value: string) =>
+    updateValueWithPerpetuation(tripResult, "tripResult", value);
   const savedNameWithTrip = computed(() => {
     if (savedTrip.value === "") {
       return savedName.value;
     }
     return `${savedName.value}#${savedTrip.value}`;
-  })
-  const isDarkMode = ref(getBooleanValueWithDefault('darkMode', false));
-  const updateIsDarkMode = (value: boolean) => updateBooleanValueWithPerpetuation(isDarkMode, 'darkMode', value);
-  return { savedName, updateSavedName, savedTrip, updateSavedTrip, tripResult, updateTripResult, savedNameWithTrip, isDarkMode, updateIsDarkMode }
-})
+  });
+  const isDarkMode = ref(getBooleanValueWithDefault("darkMode", false));
+  const updateIsDarkMode = (value: boolean) =>
+    updateBooleanValueWithPerpetuation(isDarkMode, "darkMode", value);
+  return {
+    savedName,
+    updateSavedName,
+    savedTrip,
+    updateSavedTrip,
+    tripResult,
+    updateTripResult,
+    savedNameWithTrip,
+    isDarkMode,
+    updateIsDarkMode,
+  };
+});

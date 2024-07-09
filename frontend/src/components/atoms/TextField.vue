@@ -25,12 +25,12 @@ const shouldBeDark = computed(() => {
   if (props.isDark !== undefined) {
     return props.isDark;
   }
-  return isDarkModeFromStore
+  return isDarkModeFromStore;
 });
 
 const inputEl = ref(null);
 const typedInputEl: Ref<HTMLInputElement | undefined> = computed(
-  () => inputEl.value as unknown as HTMLInputElement | undefined
+  () => inputEl.value as unknown as HTMLInputElement | undefined,
 );
 
 const text = computed({

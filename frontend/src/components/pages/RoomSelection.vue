@@ -125,14 +125,14 @@ const hexColors = computed(() =>
   colors.value.map((e) => ({
     id: e.id,
     hexColor: Color.monaRGBToHex({ r: e.r, g: e.g, b: e.b }),
-  }))
+  })),
 );
 const characterSequence = computed(() => characters.value.map((e) => e.characters).flat());
 const characterOptions = computed(() =>
   characters.value.map((e) => ({
     value: e.genre,
     text: e.genre,
-  }))
+  })),
 );
 const dispTrip = computed(() => {
   if (!tripResult.value) {

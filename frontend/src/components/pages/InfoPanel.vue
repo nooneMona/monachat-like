@@ -47,7 +47,7 @@
                 @change="
                   onChangeSilentIgnore(
                     silentIgnoreSlotProps.data.ihash,
-                    silentIgnoreSlotProps.data.isSilentUser
+                    silentIgnoreSlotProps.data.isSilentUser,
                   )
                 "
               />

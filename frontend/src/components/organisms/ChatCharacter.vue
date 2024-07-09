@@ -71,7 +71,7 @@ import { useUIStore } from "../../stores/ui";
 
 const props = withDefaults(
   defineProps<{ user: any; messages: any[]; bubbleAreaHeight: number; isDark?: boolean }>(),
-  { bubbleAreaHeight: 300, isDark: undefined }
+  { bubbleAreaHeight: 300, isDark: undefined },
 );
 const emits = defineEmits<{
   (e: "sizeUpdated", obj: { id: string; width: number; height: number }): void;
@@ -81,7 +81,7 @@ const emits = defineEmits<{
 // 要素
 const characterEl = ref(null);
 const typedCharacterEl: Ref<HTMLDivElement | undefined> = computed(
-  () => characterEl.value as unknown as HTMLDivElement | undefined
+  () => characterEl.value as unknown as HTMLDivElement | undefined,
 );
 
 // ストア

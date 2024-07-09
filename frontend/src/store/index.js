@@ -323,7 +323,7 @@ export default createStore({
     },
     enterName({ state, commit }) {
       // ローカルストレージの内容に頼る
-      const trip = settingStore.savedTrip
+      const trip = settingStore.savedTrip;
       let name = settingStore.savedName;
       name = name.trim() === "" ? "名無しさん" : name;
       const enterParams = {

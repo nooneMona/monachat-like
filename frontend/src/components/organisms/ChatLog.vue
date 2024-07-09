@@ -62,7 +62,7 @@ const unseenLogCounter = ref(0);
 
 // 画面を見ていなかった時の背景色
 const invibisbleOnReceivedBackgroundColor = computed(() =>
-  isDarkMode.value ? "#3A3A3A" : "gainsboro"
+  isDarkMode.value ? "#3A3A3A" : "gainsboro",
 );
 
 const splitToContentsArray = (msg: string): string[] => {
@@ -149,7 +149,7 @@ watch(
         unseenLogCounter.value > 1000 ? "999+" : unseenLogCounter.value
       })`;
     }
-  }
+  },
 );
 // FIXME:
 // We cannot change the scroll position of the element
@@ -158,7 +158,7 @@ watch(
   () => store.state.setting.descendingLog,
   () => {
     scrollToLatest();
-  }
+  },
 );
 </script>
 
