@@ -78,7 +78,7 @@ export default {
     const isDescendingLog = computedSetting("descendingLog", "setting/updateDescendingLog");
     const isDrawUnderLineLog = computedSetting(
       "drawBorderBottomLog",
-      "setting/updateDrawBorderBottomLog"
+      "setting/updateDrawBorderBottomLog",
     );
     const isLogInfinite = computedSetting("logInfinite", "setting/updateLogInfinite");
     const isDarkMode = computedSetting("darkMode", "setting/updateDarkMode");
@@ -86,15 +86,19 @@ export default {
 
     const bindPrimevueDarkMode = (isDark) => {
       if (isDark) {
-        document.querySelector('html').classList.add("my-app-dark");
+        document.querySelector("html").classList.add("my-app-dark");
       } else {
-        document.querySelector('html').classList.remove("my-app-dark");
+        document.querySelector("html").classList.remove("my-app-dark");
       }
-    }
-    watch(isDarkMode, (value) => {
-      bindPrimevueDarkMode(value);
-      settingStore.updateIsDarkMode(value);
-    }, { immediate: true });
+    };
+    watch(
+      isDarkMode,
+      (value) => {
+        bindPrimevueDarkMode(value);
+        settingStore.updateIsDarkMode(value);
+      },
+      { immediate: true },
+    );
 
     return {
       isKBMode,

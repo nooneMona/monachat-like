@@ -20,7 +20,7 @@ const props = withDefaults(
     type: "text",
     size: undefined,
     isDark: undefined,
-  }
+  },
 );
 
 const shouldBeDark = computed(() => {
@@ -28,7 +28,7 @@ const shouldBeDark = computed(() => {
   if (props.isDark !== undefined) {
     return props.isDark;
   }
-  return isDarkModeFromStore
+  return isDarkModeFromStore;
 });
 
 const color = computed(() => {

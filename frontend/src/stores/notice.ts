@@ -1,19 +1,17 @@
-
-import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { defineStore } from "pinia";
+import { computed, ref } from "vue";
 
 export interface INotice {
-  requiredRefresh: boolean
+  requiredRefresh: boolean;
 }
 
-export const useNoticeStore = defineStore('notice', () => {
+export const useNoticeStore = defineStore("notice", () => {
   const requiredRefresh = ref(false);
 
-  const isRequiredRefresh =computed(()=> requiredRefresh.value)
+  const isRequiredRefresh = computed(() => requiredRefresh.value);
 
-  const requestRefresh = () =>  requiredRefresh.value = true
-  const stopRefreshRequest = () => requiredRefresh.value = false
+  const requestRefresh = () => (requiredRefresh.value = true);
+  const stopRefreshRequest = () => (requiredRefresh.value = false);
 
-  return { requiredRefresh, isRequiredRefresh, requestRefresh, stopRefreshRequest }
-})
-
+  return { requiredRefresh, isRequiredRefresh, requestRefresh, stopRefreshRequest };
+});

@@ -1,21 +1,14 @@
 <template>
   <div class="room-selection">
+    <!-- トップエリア -->
     <div class="selection-top">
-      <SpanText text="もなちゃと☆ω(β版)" :size="20" />
-      <div class="top-right-text-area">
-        <SpanText v-if="!disconnected" :text="`ID:${myID}...`" />
-        <SpanText v-else text="切断しました" />
-      </div>
+      <div><SpanText text="もなちゃと☆ω(β版)" :size="24" /></div>
+      <div class="selection-top-right"><SpanText :text="topRightText" /></div>
     </div>
+    <!-- 左エリア -->
     <div class="room-selection-columns">
       <div class="character-selection-area">
-        <div
-          :style="{
-            textAlign: 'center',
-          }"
-        >
-          <SpanText text="キャラ選択" :size="18" />
-        </div>
+        <div><SpanText text="キャラ選択" :size="18" /></div>
         <div class="charceter-selection-box">
           <div class="selection-index-container">
             <Dropdown title="インデックス" :options="characterOptions" @select="onSelectGenre" />
@@ -28,22 +21,8 @@
               :user="{ type: userType, hexValue: userHexColor, stat: '通常', scl: 100 }"
               :depthRate="1.0"
             />
-            <div
-              :style="{
-                lineHeight: 1,
-                textAlign: 'center',
-              }"
-            >
-              <SpanText :text="savedName" />
-            </div>
-            <div
-              :style="{
-                lineHeight: 1,
-                textAlign: 'center',
-              }"
-            >
-              <SpanText :text="dispTrip" />
-            </div>
+            <div class="character-preview-text"><SpanText :text="savedName" /></div>
+            <div class="character-preview-text"><SpanText :text="dispTrip" /></div>
           </div>
         </div>
         <div class="selection-box-under-area">
@@ -52,22 +31,19 @@
           </div>
           <div>
             <label for="type">
-              <input id="type" v-model="userType" :style="{ width: '100px' }" />
-              タイプ
+              <input id="type" v-model="userType" :style="{ width: '100px' }" />タイプ
             </label>
-            <label for="color">
-              <input id="color" type="color" v-model="userHexColor" />
-              色
-            </label>
+            <label for="color"> <input id="color" type="color" v-model="userHexColor" />色 </label>
           </div>
           <div class="selection-box-under-buttons">
             <Button title="名前変更" @onClick="backToHome" />
           </div>
           <div class="selection-box-under-buttons">
-            <Button title="キャラランダム変更" @onClick="randomCharacter" />
+            <Button title="キャラランダム変更" @onClick="pickRandomCharacter" />
           </div>
         </div>
       </div>
+      <!-- 右エリア -->
       <div class="room-selection-area">
         <div class="text-flex-box">
           <SpanText text="ステージ選択" :size="18" />
@@ -79,7 +55,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { storeToRefs } from "pinia";
@@ -94,45 +70,49 @@ import ColorPalette from "@/components/molecules/ColorPalette.vue";
 import Dropdown from "@/components/molecules/Dropdown.vue";
 import Rooms from "@/components/organisms/Rooms.vue";
 import { useSettingStore } from "@/stores/setting";
+import { useUserStore } from "@/stores/user";
+import { CharactersResponse, ColorResponse, RoomResponse } from "@/infrastructure/api";
+import { CharType } from "@/domain/charType";
 
 const store = useStore();
+const userStore = useUserStore();
 const settingStore = useSettingStore();
 const router = useRouter();
 
 // ストア
-const { savedName, tripResult } = storeToRefs(settingStore);
+const { savedName, tripResult, savedType, savedColor } = storeToRefs(settingStore);
+const { disconnected } = storeToRefs(userStore);
 const rooms = computed(() => store.state.roomMetadata); // APIから取得した部屋一覧
-const myID = computed(() => store.getters["user/displayedMyID"](10)); // 自分のID
+const displayingMyID = computed(() => userStore.displayingMyID(10)); // 自分のID
 const roomCount = computed(() => store.state.rooms); // 同期された部屋人数情報
 const userType = computed({
   // 画面で選択されているキャラタイプ
-  get: () => store.state.setting.type,
-  set: (value) => store.commit("setting/updateType", value),
+  get: () => savedType.value,
+  set: (value) => settingStore.updateSavedType(value),
 });
 const userHexColor = computed({
   // 画面で選択されているキャラ色
-  get: () => store.state.setting.color,
-  set: (value) => store.commit("setting/updateColor", value),
+  get: () => savedColor.value,
+  set: (value) => settingStore.updateSavedColor(value),
 });
-const disconnected = computed(() => store.state.user.disconnected);
 
 // リアクティブ
-const currentCharIndex = ref(0); // 画面で選択されているキャラのIndex
-const colors = ref([]); // APIから取得した色一覧
-const characters = ref([]); // APIから取得したキャラ一覧
+const colorsResponse = ref<ColorResponse[]>([]);
+const charactersResponse = ref<CharactersResponse>([]);
 
+const currentCharIndex = ref(0); // 画面で選択されているキャラのIndex
 const hexColors = computed(() =>
-  colors.value.map((e) => ({
+  colorsResponse.value.map((e) => ({
     id: e.id,
     hexColor: Color.monaRGBToHex({ r: e.r, g: e.g, b: e.b }),
-  }))
+  })),
 );
-const characterSequence = computed(() => characters.value.map((e) => e.characters).flat());
+const characterSequence = computed(() => charactersResponse.value.map((e) => e.characters).flat());
 const characterOptions = computed(() =>
-  characters.value.map((e) => ({
+  charactersResponse.value.map((e) => ({
     value: e.genre,
     text: e.genre,
-  }))
+  })),
 );
 const dispTrip = computed(() => {
   if (!tripResult.value) {
@@ -140,33 +120,42 @@ const dispTrip = computed(() => {
   }
   return `◆${tripResult.value.slice(0, 11)}`;
 });
+const topRightText = computed(() => {
+  if (!disconnected.value) {
+    return `ID:${displayingMyID.value}...`;
+  }
+  return "切断しました";
+});
 
 // ライフサイクル
 onMounted(async () => {
   const colorsRes = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/colors`);
-  colors.value = colorsRes.data.colors;
+  colorsResponse.value = colorsRes.data.colors;
   const charactersRes = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/characters`);
-  characters.value = charactersRes.data.characters;
+  charactersResponse.value = charactersRes.data.characters;
 
   store.commit("user/updateCurrentRoom", { room: null });
   store.commit("resetChatMessages");
   await store.dispatch("enterName", { text: null });
 });
 
-const updateColor = (hexColor) => {
+const updateColor = (hexColor: string) => {
   userHexColor.value = hexColor;
 };
-const onSelectGenre = (genre) => {
-  const targetCharacters = characters.value.find((e) => e.genre === genre).characters;
-  const type = targetCharacters[0];
-  userType.value = type;
+const onSelectGenre = (genre: string) => {
+  const targetCharacters = charactersResponse.value.find((e) => e.genre === genre)?.characters;
+  if (targetCharacters === undefined) {
+    return CharType.create(undefined).value;
+  }
+  userType.value = CharType.create(targetCharacters[0]).value;
 };
-const randomCharacter = async () => {
+const pickRandomCharacter = async () => {
   const res = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/character/random`);
-  userType.value = res.data.randomChar;
+  userType.value = CharType.create(res.data.randomChar).value;
 };
-const submitEnter = async (room) => {
+const submitEnter = async (room: RoomResponse["rooms"][number]) => {
   router.push({
+    // NOTE: idに"/"が含まれる
     path: `/room${room.id}`,
   });
 };
@@ -192,95 +181,106 @@ watch([userType, characterSequence], () => {
 });
 
 watch(currentCharIndex, () => {
-  userType.value = characterSequence.value[currentCharIndex.value];
+  const selectedCharType = characterSequence.value[currentCharIndex.value];
+  userType.value = CharType.create(selectedCharType).value;
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .room-selection {
-  height: 100%;
-}
-
-.selection-top {
-  display: flex;
-  justify-content: center;
-  position: relative;
-}
-
-.top-right-text-area {
-  position: absolute;
-  right: 10px;
-}
-
-.room-selection-columns {
-  margin-top: 30px;
-  display: flex;
-}
-
-.character-selection-area {
-  float: left;
-  width: 30%;
-  height: 100%;
-}
-
-.charceter-selection-box {
-  margin: 0px auto;
-  position: relative;
-  border: solid 1px;
-  width: 80%;
-  aspect-ratio: 1 / 1;
-}
-
-.selection-index-container {
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform: translateX(-30%);
-}
-
-.character-selection-box-image {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  pointer-events: none;
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-
-.room-selection-area {
-  float: right;
-  display: flex;
-  flex-flow: column wrap;
-  width: 70%;
+  row-gap: 30px;
   height: 100%;
-}
 
-.text-flex-box {
-  display: flex;
-  justify-content: space-between;
-}
+  .selection-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: relative;
 
-.selection-box-under-area {
-  margin: 5px auto;
-  width: 80%;
-}
+    .selection-top-right {
+      position: absolute;
+      right: 10px;
+    }
+  }
 
-.seek-bar-container {
-  margin: 10px auto 8px;
-  width: 248px;
-}
+  .room-selection-columns {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
 
-.selection-box-under-buttons {
-  margin: 10px 0;
-}
+    .character-selection-area {
+      display: flex;
+      flex-direction: column;
+      width: 30%;
+      align-items: center;
 
-.color-palette-container {
-  position: absolute;
-  right: 0px;
-  transform: translateX(50%);
-  width: 59px;
-  height: 236px;
+      .charceter-selection-box {
+        margin: 0px auto;
+        position: relative;
+        border: solid 1px;
+        width: 80%;
+        aspect-ratio: 1 / 1;
+
+        .selection-index-container {
+          position: absolute;
+          left: 0;
+          top: 0;
+          transform: translateX(-30%);
+        }
+
+        .character-selection-box-image {
+          position: absolute;
+          left: 0px;
+          right: 0px;
+          bottom: 0px;
+          pointer-events: none;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .character-preview-text {
+          line-height: 1;
+          text-align: "center";
+        }
+
+        .color-palette-container {
+          position: absolute;
+          right: 0px;
+          transform: translateX(50%);
+          width: 59px;
+          height: 236px;
+        }
+      }
+
+      .selection-box-under-area {
+        margin: 5px auto;
+        width: 80%;
+
+        .seek-bar-container {
+          margin: 10px auto 8px;
+          width: 248px;
+        }
+
+        .selection-box-under-buttons {
+          margin: 10px 0;
+        }
+      }
+    }
+
+    .room-selection-area {
+      display: flex;
+      flex-direction: column;
+      width: 70%;
+
+      .text-flex-box {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 20px;
+      }
+    }
+  }
 }
 </style>

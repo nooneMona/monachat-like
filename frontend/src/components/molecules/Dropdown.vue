@@ -40,7 +40,7 @@ const props = withDefaults(
     options: Option[];
     isDark?: boolean;
   }>(),
-  { isDark: undefined }
+  { isDark: undefined },
 );
 const emits = defineEmits<{ (e: "select", value: string): void }>();
 

@@ -41,7 +41,7 @@
         v-if="!disconnected"
         class="total-user"
         :size="15"
-        :text="`${totalUser}人 (ID:${displayedMyID})`"
+        :text="`${totalUser}人 (ID:${displayingMyID})`"
       />
       <SpanText v-else class="total-user" :size="15" text="切断しました" />
     </div>
@@ -50,7 +50,9 @@
         <select v-model="selectedStat" @change="onChangeStat">
           <option disabled value="">状態</option>
           <option disabled value="free">フリー</option>
-          <option v-for="option in statOptions" :key="option">{{ option }}</option>
+          <option v-for="option in statOptions" :key="option">
+            {{ option }}
+          </option>
         </select>
         <select v-model="selectedVolume">
           <option disabled value="" selected>音量</option>
@@ -89,8 +91,11 @@ import InvertButton from "@/components/molecules/InvertButton.vue";
 import SubmittableField from "@/components/molecules/SubmittableField.vue";
 import ChatCharacter from "@/components/organisms/ChatCharacter.vue";
 import { useUIStore } from "../../stores/ui";
+import { useUserStore } from "../../stores/user";
+import { storeToRefs } from "pinia";
 
 const store = useStore();
+const userStore = useUserStore();
 const uiStore = useUIStore();
 const router = useRouter();
 const route = useRoute();
@@ -115,6 +120,7 @@ const keyCount = ref(0);
 const typingStartTime = ref(0);
 
 // ストア
+const { disconnected } = storeToRefs(userStore);
 const selectedVolume = computed({
   get: () => store.state.setting.sound,
   set: (value) => {
@@ -125,14 +131,13 @@ const selectedVolume = computed({
 const visibleUsers = computed(() => store.getters.visibleUsers);
 const chatMessages = computed(() => store.state.chatMessages);
 const myID = computed(() => store.state.user.myID);
-const displayedMyID = computed(() => store.getters["user/displayedMyID"](3));
+const displayingMyID = computed(() => userStore.displayingMyID(3));
 const currentRoom = computed({
   get: () => store.state.user.currentRoom,
   set: (value) => store.commit("user/updateCurrentRoom", { room: value }),
 });
 // TODO: キャラクターの配置範囲をdivで限定できれば、この処理を書く必要がない
 const bottomBarHeight = computed(() => `${uiStore.bottomBarHeight}px`);
-const disconnected = computed(() => store.state.user.disconnected);
 const totalUser = computed(() => {
   return Object.keys(store.getters.visibleUsers).length;
 });

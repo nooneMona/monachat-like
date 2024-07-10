@@ -16,12 +16,12 @@ import Button from "@/components/atoms/Button.vue";
 
 const inputEl = ref(null);
 const typedInputEl: Ref<HTMLInputElement | undefined> = computed(
-  () => inputEl.value as unknown as HTMLInputElement | undefined
+  () => inputEl.value as unknown as HTMLInputElement | undefined,
 );
 
 const props = withDefaults(
   defineProps<{ modelValue: string; allowedEmpty: boolean; disabled: boolean }>(),
-  { allowedEmpty: true, disabled: false }
+  { allowedEmpty: true, disabled: false },
 );
 const emits = defineEmits<{
   (e: "delete-all"): void;
