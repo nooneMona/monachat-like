@@ -6,7 +6,7 @@ export interface ISetting {
 }
 
 const storageKeyPrefix = `/monachatchat`;
-type StorageKey = "name" | "trip" | "tripResult" | "darkMode";
+type StorageKey = "name" | "trip" | "type" | "color" | "tripResult" | "darkMode";
 const TRUE = "true";
 const FALSE = "false";
 
@@ -37,6 +37,12 @@ export const useSettingStore = defineStore("setting", () => {
   const tripResult = ref(getValueWithDefault("tripResult", ""));
   const updateTripResult = (value: string) =>
     updateValueWithPerpetuation(tripResult, "tripResult", value);
+  const savedType = ref(getValueWithDefault("type", "charhan"));
+  const updateSavedType = (value: string) => updateValueWithPerpetuation(savedType, "type", value);
+  const savedColor = ref(getValueWithDefault("color", "#ffffff"));
+  const updateSavedColor = (value: string) =>
+    updateValueWithPerpetuation(savedColor, "color", value);
+
   const savedNameWithTrip = computed(() => {
     if (savedTrip.value === "") {
       return savedName.value;
@@ -46,11 +52,16 @@ export const useSettingStore = defineStore("setting", () => {
   const isDarkMode = ref(getBooleanValueWithDefault("darkMode", false));
   const updateIsDarkMode = (value: boolean) =>
     updateBooleanValueWithPerpetuation(isDarkMode, "darkMode", value);
+
   return {
     savedName,
     updateSavedName,
     savedTrip,
     updateSavedTrip,
+    savedType,
+    updateSavedType,
+    savedColor,
+    updateSavedColor,
     tripResult,
     updateTripResult,
     savedNameWithTrip,

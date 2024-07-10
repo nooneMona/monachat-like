@@ -39,8 +39,6 @@ const setting = {
     // 一時的に保持する値
     selectedUsersIhashes: [],
     // 永久に保持する値
-    type: getValueWithDefault("type", "charhan"), // キャラタイプ
-    color: getValueWithDefault("color", "#ffffff"), // キャラの色(hex6桁指定)
     sound: getValueWithDefault("sound", ""), // 音量
     kbMode: getBooleanValueWithDefault("kbMode", false), // KBモード ON/OFF
     typingMode: getBooleanValueWithDefault("typingMode", true), // タイピングモード ON/OFF
@@ -67,8 +65,6 @@ const setting = {
           presetColor[presetColor.indexOf(state.selectedUsersIhashes[ihash]) + 1];
       }
     },
-    updateType: (state, value) => updateValueWithPerpetuation(state, "type", value),
-    updateColor: (state, value) => updateValueWithPerpetuation(state, "color", value),
     updateSound: (state, value) => updateValueWithPerpetuation(state, "sound", value),
     updateKBMode: (state, value) => updateBooleanValueWithPerpetuation(state, "kbMode", value),
     updateTypingMode: (state, value) =>
@@ -105,12 +101,6 @@ const setting = {
     },
   },
   getters: {
-    nameWithTrip: (state) => {
-      if (state.trip === "") {
-        return state.name;
-      }
-      return `${state.name}#${state.trip}`;
-    },
     loadLog: (state) => {
       return JSON.parse(state.log);
     },

@@ -92,6 +92,7 @@ import SubmittableField from "@/components/molecules/SubmittableField.vue";
 import ChatCharacter from "@/components/organisms/ChatCharacter.vue";
 import { useUIStore } from "../../stores/ui";
 import { useUserStore } from "../../stores/user";
+import { storeToRefs } from "pinia";
 
 const store = useStore();
 const userStore = useUserStore();
@@ -119,6 +120,7 @@ const keyCount = ref(0);
 const typingStartTime = ref(0);
 
 // ストア
+const { disconnected } = storeToRefs(userStore);
 const selectedVolume = computed({
   get: () => store.state.setting.sound,
   set: (value) => {
@@ -136,7 +138,6 @@ const currentRoom = computed({
 });
 // TODO: キャラクターの配置範囲をdivで限定できれば、この処理を書く必要がない
 const bottomBarHeight = computed(() => `${uiStore.bottomBarHeight}px`);
-const disconnected = computed(() => store.state.user.disconnected);
 const totalUser = computed(() => {
   return Object.keys(store.getters.visibleUsers).length;
 });

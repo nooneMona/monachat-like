@@ -12,10 +12,12 @@ import { piniaInstance } from "../piniaInstance";
 import { useNoticeStore } from "@/stores/notice";
 import { useUIStore } from "../stores/ui";
 import { useSettingStore } from "@/stores/setting";
+import { useUserStore } from "../stores/user";
 
 const noticeStore = useNoticeStore(piniaInstance);
 const uiStore = useUIStore(piniaInstance);
 const settingStore = useSettingStore(piniaInstance);
+const userStore = useUserStore(piniaInstance);
 
 export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
@@ -196,11 +198,11 @@ export default createStore({
     },
     registerSocketEvents({ state, commit, dispatch }) {
       state.socket.on("connect", () => {
-        commit("user/updateDisconnected", { disconnected: false });
+        userStore.updateDisconnected(false);
         dispatch("receivedConnect");
       });
       state.socket.on("disconnect", () => {
-        commit("user/updateDisconnected", { disconnected: true });
+        userStore.updateDisconnected(true);
       });
       state.socket.on("COM", (param) => {
         dispatch("receivedCOM", param);
@@ -345,7 +347,7 @@ export default createStore({
       }
     },
     enter({ state, commit }, { room }) {
-      const hexColor = state.setting.color;
+      const hexColor = settingStore.savedColor;
       const { r, g, b } = Color.hexToMonaRGB(hexColor);
       const randomX = Math.floor(Math.random() * uiStore.width);
       const defaultY = uiStore.height - 150;
@@ -363,7 +365,7 @@ export default createStore({
         r,
         g,
         b,
-        type: state.setting.type,
+        type: settingStore.savedType,
       });
       const log = setting.getters.loadLog(state.setting);
       if (state.logMessages.length === 0 && log.length !== 0) {

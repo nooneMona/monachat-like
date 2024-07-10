@@ -49,12 +49,7 @@ import axios from "axios";
 import SpanText from "@/components/atoms/SpanText.vue";
 import SubmittableField from "@/components/molecules/SubmittableField.vue";
 import { useSettingStore } from "@/stores/setting";
-
-type News = {
-  day: string;
-  info: string;
-  isNew: boolean;
-};
+import { NewsResponse } from "@/infrastructure/api";
 
 const store = useStore();
 const settingStore = useSettingStore();
@@ -68,7 +63,7 @@ const typedNameFieldEl: Ref<HTMLInputElement | undefined> = computed(
 
 // リアクティブ
 const nameWithTrip = ref("");
-const notices = ref<News[]>([]);
+const notices = ref<NewsResponse>([]);
 
 const onKeyDown = (e: KeyboardEvent) => {
   if (e.key === "Enter") {
