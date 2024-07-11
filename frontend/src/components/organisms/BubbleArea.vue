@@ -2,7 +2,7 @@
   <div
     class="bubble-area-frame"
     :class="{
-      'debug-frame': isVisibleDebugFrame,
+      'debug-frame': isVisibleFrame,
     }"
     :style="{
       bottom: `${300 - user.y}`,
@@ -12,7 +12,7 @@
     <div
       class="bubble-area"
       :class="{
-        'debug-frame': isVisibleDebugFrame,
+        'debug-frame': isVisibleFrame,
       }"
     >
       <div v-for="msg in messages" :key="msg.messageID" class="bubble-container">
@@ -25,11 +25,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { useStore } from "vuex";
 import Bubble from "@/components/molecules/character/Bubble.vue";
+import { useDevStore } from "@/stores/develop";
+import { storeToRefs } from "pinia";
 
-const store = useStore();
+const devStore = useDevStore();
+const { isVisibleFrame } = storeToRefs(devStore);
 
 const props = defineProps<{ user: any; messages: any[] }>();
 const emits = defineEmits<{
@@ -39,7 +40,6 @@ const emits = defineEmits<{
 const afterEnter = (_: Element, messageID: string) => {
   emits("bubbleDeleted", { characterID: props.user.id, messageID });
 };
-const isVisibleDebugFrame = computed(() => store.state.developer.isVisibleFrame);
 </script>
 
 <style lang="scss" scoped>

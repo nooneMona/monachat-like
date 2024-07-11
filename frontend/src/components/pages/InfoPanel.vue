@@ -88,7 +88,7 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 import Checkbox from "primevue/checkbox";
 import TabView from "primevue/tabview";
@@ -102,13 +102,18 @@ import SettingsFields from "@/components/organisms/SettingsFields.vue";
 import SpanText from "@/components/atoms/SpanText.vue";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores/setting";
+import { useDevStore } from "@/stores/develop";
 
 const store = useStore();
 const settingStore = useSettingStore();
+const devStore = useDevStore();
 
 const { isDarkMode, isKBMode } = storeToRefs(settingStore);
 
-const isCheckedFrame = ref(false);
+const isCheckedFrame = computed({
+  get: () => devStore.isVisibleFrame,
+  set: (value) => devStore.updateIsVisibleFrame(value),
+});
 const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
 const backgroundColor = computed(() => {
   if (isDarkMode.value) {
@@ -148,10 +153,6 @@ const onClickDisconnect = () => {
 const onClickKicked = () => {
   store.dispatch("suicide");
 };
-
-watch(isCheckedFrame, () => {
-  store.commit("developer/updateIsVisibleFrame", isCheckedFrame.value);
-});
 </script>
 
 <style lang="scss" scoped>

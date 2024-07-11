@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from "uuid";
 import io from "socket.io-client";
 import { indexGetters } from "@/store/getters";
 import setting from "@/store/modules/setting";
-import developer from "@/store/modules/developer";
 import Color from "./color";
 import { piniaInstance } from "../piniaInstance";
 import { useNoticeStore } from "@/stores/notice";
@@ -20,7 +19,7 @@ const userStore = useUserStore(piniaInstance);
 
 export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
-  modules: { setting, developer },
+  modules: { setting },
   state() {
     return {
       socket: null, // socket.ioのクライアント

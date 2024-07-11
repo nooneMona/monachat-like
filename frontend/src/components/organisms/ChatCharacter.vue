@@ -3,11 +3,11 @@
     :class="[
       'character-container',
       {
-        'debug-frame': isVisibleDebugFrame,
+        'debug-frame': isVisibleFrame,
       },
     ]"
   >
-    <div class="debug-text character-text" v-if="isVisibleDebugFrame">
+    <div class="debug-text character-text" v-if="isVisibleFrame">
       <SpanText :text="`(${user.x}, ${user.y})`" :size="10" />
     </div>
     <BubbleArea
@@ -19,7 +19,7 @@
     <div ref="characterEl" class="character">
       <CharacterImage
         :class="{
-          'debug-frame': isVisibleDebugFrame,
+          'debug-frame': isVisibleFrame,
           'image-frame': selectedUsersIhashes[user.ihash],
         }"
         :style="{
@@ -40,7 +40,7 @@
         :class="[
           'character-text',
           {
-            'debug-frame': isVisibleDebugFrame,
+            'debug-frame': isVisibleFrame,
           },
         ]"
       >
@@ -50,7 +50,7 @@
         :class="[
           'character-text',
           {
-            'debug-frame': isVisibleDebugFrame,
+            'debug-frame': isVisibleFrame,
           },
         ]"
       >
@@ -70,6 +70,7 @@ import { UIColor } from "../../ui/uiColor";
 import { useUIStore } from "../../stores/ui";
 import { useSettingStore } from "@/stores/setting";
 import { storeToRefs } from "pinia";
+import { useDevStore } from "@/stores/develop";
 
 const props = withDefaults(
   defineProps<{ user: any; messages: any[]; bubbleAreaHeight: number; isDark?: boolean }>(),
@@ -90,10 +91,11 @@ const typedCharacterEl: Ref<HTMLDivElement | undefined> = computed(
 const store = useStore();
 const uiStore = useUIStore();
 const settingStore = useSettingStore();
+const devStore = useDevStore();
 
 const { isKBMode } = storeToRefs(settingStore);
+const { isVisibleFrame } = storeToRefs(devStore);
 
-const isVisibleDebugFrame = computed(() => store.state.developer.isVisibleFrame);
 const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
 const silentUsers = computed(() => store.getters.silentUsers);
 
