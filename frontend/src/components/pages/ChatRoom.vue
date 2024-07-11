@@ -116,6 +116,7 @@ const typingStartTime = ref(0); // タイピング開始時刻
 
 // ストア
 const { disconnected, myID } = storeToRefs(userStore);
+const { isDarkMode } = storeToRefs(settingStore);
 const selectedVolume = computed({
   get: () => settingStore.selectedVolume,
   set: (value) => settingStore.updateSelectedVolume(value),
@@ -132,7 +133,6 @@ const bottomBarHeight = computed(() => `${uiStore.bottomBarHeight}px`);
 const totalUser = computed(() => {
   return Object.keys(store.getters.visibleUsers).length;
 });
-const isDarkMode = computed(() => store.state.setting.darkMode);
 
 const disabledSubmitButton = computed(() => disconnected.value || !permittedSubmitting.value);
 const topRightText = computed(() =>

@@ -2,11 +2,6 @@ const storageKeyPrefix = `/monachatchat`;
 const TRUE = "true";
 const FALSE = "false";
 
-// Stateに保存しつつ、LocalStorageにも保存する
-const updateValueWithPerpetuation = (state, key, value) => {
-  state[key] = value;
-  localStorage.setItem(`${storageKeyPrefix}/${key}`, value);
-};
 const updateValueSessionStorageWithPerpetuation = (state, key, value) => {
   state[key] = value;
   sessionStorage.setItem(`${storageKeyPrefix}/${key}`, value);
@@ -18,10 +13,6 @@ const updateBooleanValueWithPerpetuation = (state, key, value) => {
   const serializedValue = value ? TRUE : FALSE;
   localStorage.setItem(`${storageKeyPrefix}/${key}`, serializedValue);
 };
-
-// Stateから初期値を取得し、取得できなかった場合はデフォルト値を取得する
-const getValueWithDefault = (key, defaultValue) =>
-  localStorage.getItem(`${storageKeyPrefix}/${key}`) ?? defaultValue;
 
 const getValueSessionStorageWithDefault = (key, defaultValue) =>
   sessionStorage.getItem(`${storageKeyPrefix}/${key}`) ?? defaultValue;
@@ -45,7 +36,6 @@ const setting = {
     descendingLog: getBooleanValueWithDefault("descendingLog", false),
     drawBorderBottomLog: getBooleanValueWithDefault("drawBorderBottomLog", false),
     logInfinite: getBooleanValueWithDefault("logInfinite", true), // ログを無限に保存するか
-    darkMode: getBooleanValueWithDefault("darkMode", false),
     log: getValueSessionStorageWithDefault("log", "[]"), // ログ
   }),
   mutations: {
@@ -75,7 +65,6 @@ const setting = {
       updateBooleanValueWithPerpetuation(state, "drawBorderBottomLog", value),
     updateLogInfinite: (state, value) =>
       updateBooleanValueWithPerpetuation(state, "logInfinite", value),
-    updateDarkMode: (state, value) => updateBooleanValueWithPerpetuation(state, "darkMode", value),
     saveCurrentLog: (state, value) => {
       let cutValue = value;
       const limit = 10000;

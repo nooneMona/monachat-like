@@ -100,6 +100,8 @@ import SwitchField from "@/components/molecules/SwitchField.vue";
 import ChatLog from "@/components/organisms/ChatLog.vue";
 import SettingsFields from "@/components/organisms/SettingsFields.vue";
 import SpanText from "@/components/atoms/SpanText.vue";
+import { storeToRefs } from "pinia";
+import { useSettingStore } from "@/stores/setting";
 
 export default {
   name: "InfoPanel",
@@ -117,6 +119,8 @@ export default {
   },
   setup() {
     const store = useStore();
+    const settingStore = useSettingStore();
+    const { isDarkMode } = storeToRefs(settingStore);
     const computedSetting = (fieldName, updatorName) => {
       return computed({
         get: () => {
@@ -131,7 +135,6 @@ export default {
     const isKBMode = computedSetting("kbMode", "setting/updateKBMode");
     const isCheckedFrame = ref(false);
     const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
-    const isDarkMode = computed(() => store.state.setting.darkMode);
     const backgroundColor = computed(() => {
       if (isDarkMode.value) {
         return "#121212";

@@ -6,21 +6,19 @@
 
 <script setup lang="ts">
 import SpanText from "@/components/atoms/SpanText.vue";
+import { useSettingStore } from "@/stores/setting";
 import { computed } from "vue";
-import { useStore } from "vuex";
 
 const props = withDefaults(defineProps<{ text: string; isDark?: boolean }>(), {
   isDark: undefined,
 });
 
-const store = useStore();
-
 const shouldBeDark = computed(() => {
-  const isDarkModeFromStore = store?.state?.setting?.darkMode;
-  if (isDarkModeFromStore !== undefined) {
-    return isDarkModeFromStore;
+  const isDarkModeFromStore = useSettingStore().isDarkMode;
+  if (props.isDark !== undefined) {
+    return props.isDark;
   }
-  return props.isDark ?? false;
+  return isDarkModeFromStore;
 });
 </script>
 

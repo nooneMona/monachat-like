@@ -14,9 +14,9 @@
 
 <script setup lang="ts">
 // TODO: セルの大きさを指定して上から割り振っていく方法で実現できるようにする (カラーパレットの数が増減したときに耐えられるように)
-import { useStore } from "vuex";
 import { MonaHexColor } from "../../store/color";
 import { computed } from "vue";
+import { useSettingStore } from "@/stores/setting";
 
 type Color = { hexColor: MonaHexColor };
 const gridWidth = 4;
@@ -27,14 +27,12 @@ const props = withDefaults(defineProps<{ hexColors: Color[]; isDark?: boolean }>
 });
 const emits = defineEmits<{ (e: "click", hexColor: MonaHexColor): void }>();
 
-const store = useStore();
-
 const shouldBeDark = computed(() => {
-  const isDarkModeFromStore = store?.state?.setting?.darkMode;
-  if (isDarkModeFromStore !== undefined) {
-    return isDarkModeFromStore;
+  const isDarkModeFromStore = useSettingStore().isDarkMode;
+  if (props.isDark !== undefined) {
+    return props.isDark;
   }
-  return props.isDark ?? false;
+  return isDarkModeFromStore;
 });
 
 const onClick = (color: Color) => emits("click", color.hexColor);

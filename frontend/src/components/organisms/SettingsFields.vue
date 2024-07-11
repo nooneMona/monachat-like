@@ -81,7 +81,10 @@ export default {
       "setting/updateDrawBorderBottomLog",
     );
     const isLogInfinite = computedSetting("logInfinite", "setting/updateLogInfinite");
-    const isDarkMode = computedSetting("darkMode", "setting/updateDarkMode");
+    const isDarkMode = computed({
+      get: () => settingStore.isDarkMode,
+      set: (value) => settingStore.updateIsDarkMode(value),
+    });
     const deleteLog = () => store.dispatch("resetLogStorage");
 
     const bindPrimevueDarkMode = (isDark) => {
@@ -95,7 +98,6 @@ export default {
       isDarkMode,
       (value) => {
         bindPrimevueDarkMode(value);
-        settingStore.updateIsDarkMode(value);
       },
       { immediate: true },
     );

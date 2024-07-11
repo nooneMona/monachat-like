@@ -17,8 +17,8 @@
 <script setup lang="ts">
 import SpanText from "@/components/atoms/SpanText.vue";
 import Color from "@/store/color";
+import { useSettingStore } from "@/stores/setting";
 import { computed } from "vue";
-import { useStore } from "vuex";
 
 type Message = {
   cmt: string;
@@ -29,14 +29,12 @@ const props = withDefaults(defineProps<{ msg: Message; color: string; isDark?: b
   isDark: undefined,
 });
 
-const store = useStore();
-
 const shouldBeDark = computed(() => {
-  const isDarkModeFromStore = store?.state?.setting?.darkMode;
-  if (isDarkModeFromStore !== undefined) {
-    return isDarkModeFromStore;
+  const isDarkModeFromStore = useSettingStore().isDarkMode;
+  if (props.isDark !== undefined) {
+    return props.isDark;
   }
-  return props.isDark ?? false;
+  return isDarkModeFromStore;
 });
 
 const isThinkingBubble = computed(() => props.msg.style === 2);

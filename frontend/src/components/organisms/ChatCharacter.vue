@@ -68,6 +68,7 @@ import CharacterImage from "@/components/organisms/CharacterImage.vue";
 import SpanText from "@/components/atoms/SpanText.vue";
 import { UIColor } from "../../ui/uiColor";
 import { useUIStore } from "../../stores/ui";
+import { useSettingStore } from "@/stores/setting";
 
 const props = withDefaults(
   defineProps<{ user: any; messages: any[]; bubbleAreaHeight: number; isDark?: boolean }>(),
@@ -109,11 +110,11 @@ const depthRate = computed(() => {
 });
 const isSilent = computed(() => silentUsers.value[props.user.id] != null);
 const shouldBeDark = computed(() => {
-  const isDarkModeFromStore = store?.state?.setting?.darkMode;
-  if (isDarkModeFromStore !== undefined) {
-    return isDarkModeFromStore;
+  const isDarkModeFromStore = useSettingStore().isDarkMode;
+  if (props.isDark !== undefined) {
+    return props.isDark;
   }
-  return props.isDark ?? false;
+  return isDarkModeFromStore;
 });
 const selectedBorderColor = computed(() => {
   const color: string | undefined = selectedUsersIhashes.value[props.user.ihash];

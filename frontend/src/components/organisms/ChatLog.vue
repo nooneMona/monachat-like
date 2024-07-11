@@ -43,17 +43,20 @@
 import { onMounted, computed, watch, ref, nextTick, onUnmounted } from "vue";
 import { useStore } from "vuex";
 import SpanText from "@/components/atoms/SpanText.vue";
+import { storeToRefs } from "pinia";
+import { useSettingStore } from "@/stores/setting";
 
 const pageTitle = document.title;
 const wrapperEl = ref<HTMLDivElement>();
 
 // ストア
 const store = useStore();
+const settingStore = useSettingStore();
+const { isDarkMode } = storeToRefs(settingStore);
 const isScrollable = computed(() => store.state.setting.scrollableLog);
 const isDecendingLog = computed(() => store.state.setting.descendingLog);
 const isDrawUnderLine = computed(() => store.state.setting.drawBorderBottomLog);
 const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
-const isDarkMode = computed(() => store.state.setting.darkMode);
 const messages = computed(() => store.getters.visibleLogMessages);
 
 // スクロール位置が下端にあるか
