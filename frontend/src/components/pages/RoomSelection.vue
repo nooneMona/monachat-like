@@ -73,6 +73,7 @@ import { useSettingStore } from "@/stores/setting";
 import { useUserStore } from "@/stores/user";
 import { CharactersResponse, ColorResponse, RoomResponse } from "@/infrastructure/api";
 import { CharType } from "@/domain/charType";
+import { Trip, TripFactory } from "@/domain/trip";
 
 const store = useStore();
 const userStore = useUserStore();
@@ -115,10 +116,14 @@ const characterOptions = computed(() =>
   })),
 );
 const dispTrip = computed(() => {
-  if (!tripResult.value) {
-    return store.state.user.ihash ? `◇${store.state.user.ihash?.slice(0, 6)}` : "Loading...";
+  let trip: Trip | undefined;
+  if (tripResult.value) {
+    trip = TripFactory.create("black", tripResult.value);
   }
-  return `◆${tripResult.value.slice(0, 11)}`;
+  if (!tripResult.value && store.state.user.ihash != undefined) {
+    trip = TripFactory.create("white", store.state.user.ihash);
+  }
+  return trip?.toString() ?? "Loading...";
 });
 const topRightText = computed(() => {
   if (!disconnected.value) {
