@@ -7,19 +7,10 @@ const user = {
   namespaced: true,
   state: () => ({
     ihash: null, // サーバーから付与されたihash
-    /*
-     * ユーザーの状態を復元するために必要な情報
-     */
-    x: null, // キャラのX座標
-    y: null, // キャラのY座標
   }),
   mutations: {
     updateIhash(state, { ihash }) {
       state.ihash = ihash;
-    },
-    updateCoordinate: (state, { x, y }) => {
-      state.x = x;
-      state.y = y;
     },
   },
   getters: {

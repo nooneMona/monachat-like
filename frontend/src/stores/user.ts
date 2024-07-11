@@ -23,6 +23,7 @@ export const useUserStore = defineStore("user", () => {
   const myToken = ref<string | null>(null); // サーバーから付与されたトークン
   const myID = ref<string | null>(null); // サーバから付与されたID
   const currentRoom = ref<{ id: string; name: string; img_url: string } | null>(null); // 現在いる部屋(部屋にいない場合はnull)
+  const coordinate = ref<{ x: number; y: number } | null>(null);
   const disconnected = ref(false); // サーバーから切断されているかどうか
 
   const updateAuthInfo = (id: string, token: string) => {
@@ -35,6 +36,13 @@ export const useUserStore = defineStore("user", () => {
       return;
     }
     currentRoom.value = { ...room };
+  };
+  const updateCoordinate = (value: { x: number; y: number } | null) => {
+    if (value === null) {
+      coordinate.value = null;
+      return;
+    }
+    coordinate.value = { ...value };
   };
   const updateDisconnected = (value: boolean) => {
     disconnected.value = value;
@@ -51,9 +59,11 @@ export const useUserStore = defineStore("user", () => {
     myID,
     myToken,
     currentRoom,
+    coordinate,
     disconnected,
     updateAuthInfo,
     updateCurrentRoom,
+    updateCoordinate,
     updateDisconnected,
     displayingMyID,
   };

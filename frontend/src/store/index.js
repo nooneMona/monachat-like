@@ -346,13 +346,13 @@ export default createStore({
         state.logMessages = log;
       }
     },
-    enter({ state, commit }, { room }) {
+    enter({ state }, { room }) {
       const hexColor = settingStore.savedColor;
       const { r, g, b } = Color.hexToMonaRGB(hexColor);
       const randomX = Math.floor(Math.random() * uiStore.width);
       const defaultY = uiStore.height - 150;
-      const x = state.user.x ?? randomX;
-      const y = state.user.y ?? defaultY;
+      const x = userStore.x ?? randomX;
+      const y = userStore.y ?? defaultY;
       state.socket.emit("ENTER", {
         token: userStore.myToken,
         room: room.id,
@@ -372,7 +372,7 @@ export default createStore({
         state.logMessages = log;
       }
       userStore.updateCurrentRoom(room);
-      commit("user/updateCoordinate", { x, y });
+      userStore.updateCoordinate({ x, y });
     },
     exit(context) {
       context.state.socket.emit("EXIT", {
@@ -392,7 +392,7 @@ export default createStore({
       }
       context.state.socket.emit("COM", comParam);
     },
-    setXY({ state, getters, commit }, { x, y }) {
+    setXY({ state, getters }, { x, y }) {
       const { scl, stat } = getters["user/me"];
       state.socket.emit("SET", {
         token: userStore.myToken,
@@ -401,7 +401,7 @@ export default createStore({
         scl,
         stat,
       });
-      commit("user/updateCoordinate", { x, y });
+      userStore.updateCoordinate({ x, y });
     },
     setStat(context, { stat }) {
       const { x, y, scl } = context.getters["user/me"];
