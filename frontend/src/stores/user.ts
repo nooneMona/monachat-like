@@ -22,11 +22,19 @@ export interface IUser {
 export const useUserStore = defineStore("user", () => {
   const myToken = ref<string | null>(null); // サーバーから付与されたトークン
   const myID = ref<string | null>(null); // サーバから付与されたID
+  const currentRoom = ref<{ id: string; name: string; img_url: string } | null>(null); // 現在いる部屋(部屋にいない場合はnull)
   const disconnected = ref(false); // サーバーから切断されているかどうか
 
   const updateAuthInfo = (id: string, token: string) => {
     myID.value = id;
     myToken.value = token;
+  };
+  const updateCurrentRoom = (room: { id: string; name: string; img_url: string } | null) => {
+    if (room === null) {
+      currentRoom.value = null;
+      return;
+    }
+    currentRoom.value = { ...room };
   };
   const updateDisconnected = (value: boolean) => {
     disconnected.value = value;
@@ -39,5 +47,14 @@ export const useUserStore = defineStore("user", () => {
     return myID.value.slice(0, end);
   });
 
-  return { myID, myToken, updateAuthInfo, disconnected, updateDisconnected, displayingMyID };
+  return {
+    myID,
+    myToken,
+    currentRoom,
+    disconnected,
+    updateAuthInfo,
+    updateCurrentRoom,
+    updateDisconnected,
+    displayingMyID,
+  };
 });

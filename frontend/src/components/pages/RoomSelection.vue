@@ -139,7 +139,7 @@ onMounted(async () => {
   const charactersRes = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/characters`);
   charactersResponse.value = charactersRes.data.characters;
 
-  store.commit("user/updateCurrentRoom", { room: null });
+  userStore.updateCurrentRoom(null);
   store.commit("resetChatMessages");
   await store.dispatch("enterName", { text: null });
 });

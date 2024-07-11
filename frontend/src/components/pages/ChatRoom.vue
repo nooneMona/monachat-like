@@ -124,8 +124,8 @@ const visibleUsers = computed(() => store.getters.visibleUsers);
 const chatMessages = computed(() => store.state.chatMessages);
 const displayingMyID = computed(() => userStore.displayingMyID(3));
 const currentRoom = computed({
-  get: () => store.state.user.currentRoom,
-  set: (value) => store.commit("user/updateCurrentRoom", { room: value }),
+  get: () => userStore.currentRoom,
+  set: (value) => userStore.updateCurrentRoom(value),
 });
 // TODO: キャラクターの配置範囲をdivで限定できれば、この処理を書く必要がない
 const bottomBarHeight = computed(() => `${uiStore.bottomBarHeight}px`);
@@ -155,7 +155,7 @@ onMounted(async () => {
       path: "/select",
     });
   }
-  currentRoom.value = roomObj;
+  currentRoom.value = { ...roomObj };
   store.dispatch("enter", { room: currentRoom.value });
 
   const unloadAppendExitLog = () => {

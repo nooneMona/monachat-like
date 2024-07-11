@@ -304,7 +304,7 @@ export default createStore({
       context.commit("setting/saveCurrentLog", context.state.logMessages);
     },
     // トリップ付き名前文字列`text`を分解しsetting.name, .tripに保管
-    parseNameWithTrip({ commit }, { text }) {
+    parseNameWithTrip(_, { text }) {
       let name = "";
       let trip = "";
       if (text.includes("#")) {
@@ -371,7 +371,7 @@ export default createStore({
       if (state.logMessages.length === 0 && log.length !== 0) {
         state.logMessages = log;
       }
-      commit("user/updateCurrentRoom", { room });
+      userStore.updateCurrentRoom(room);
       commit("user/updateCoordinate", { x, y });
     },
     exit(context) {
@@ -462,7 +462,7 @@ export default createStore({
         context.commit("user/updateIhash", { ihash: param.ihash });
       }
       if (context.getters.visibleUsers[param.id] === undefined) return;
-      if (context.state.user.currentRoom !== null) {
+      if (userStore.currentRoom !== null) {
         context.dispatch("playENTERAudio");
       }
       context.dispatch("appendUserLog", {
@@ -472,7 +472,7 @@ export default createStore({
     },
     async receivedEXIT(context, { id, isEnter }) {
       if (context.getters.visibleUsers[id] !== undefined) {
-        if (context.state.user.currentRoom !== null) {
+        if (userStore.currentRoom !== null) {
           context.dispatch("playENTERAudio");
         }
         // visibleUsersに退室を反映する前にログに書き出さないと、名前の情報がとれない。
@@ -491,10 +491,10 @@ export default createStore({
       userStore.updateAuthInfo(id, token);
       commit("updateUserExistence", { id, exists: true });
     },
-    returnFromAUTHError({ state, dispatch, commit }) {
+    returnFromAUTHError({ state, dispatch }) {
       if (state.currentPathName === "room") {
         dispatch("enter", {
-          room: state.user.currentRoom,
+          room: userStore.currentRoom,
           isReturned: true,
         });
       }
