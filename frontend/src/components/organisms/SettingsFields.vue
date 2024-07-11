@@ -34,7 +34,7 @@
       <SwitchField v-model="isDarkMode" label="ダークモード" labelId="darkMode" />
     </div>
     <div class="field-wrapper">
-      <Button
+      <PrimeButton
         label="ログを削除する"
         icon="pi pi-trash"
         class="p-button-raised p-button-sm p-button-warning p-button-text"
@@ -47,7 +47,7 @@
 <script>
 import { computed, watch } from "vue";
 import { useStore } from "vuex";
-import Button from "primevue/button";
+import PrimeButton from "primevue/button";
 import SwitchField from "../molecules/SwitchField.vue";
 import { useSettingStore } from "../../stores/setting";
 
@@ -55,7 +55,7 @@ export default {
   name: "SettingsFields",
   components: {
     SwitchField,
-    Button,
+    PrimeButton,
   },
   setup() {
     const store = useStore();
@@ -72,7 +72,10 @@ export default {
       });
     };
 
-    const isKBMode = computedSetting("kbMode", "setting/updateKBMode");
+    const isKBMode = computed({
+      get: () => settingStore.isKBMode,
+      set: (value) => settingStore.updateIsKBMode(value),
+    });
     const isTypingMode = computedSetting("typingMode", "setting/updateTypingMode");
     const isScrollableLog = computedSetting("scrollableLog", "setting/updateScrollableLog");
     const isDescendingLog = computedSetting("descendingLog", "setting/updateDescendingLog");

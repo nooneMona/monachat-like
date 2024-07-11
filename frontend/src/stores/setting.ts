@@ -6,7 +6,15 @@ export interface ISetting {
 }
 
 const storageKeyPrefix = `/monachatchat`;
-type StorageKey = "name" | "trip" | "type" | "color" | "tripResult" | "darkMode" | "sound";
+type StorageKey =
+  | "name"
+  | "trip"
+  | "type"
+  | "color"
+  | "tripResult"
+  | "darkMode"
+  | "sound"
+  | "kbMode";
 const TRUE = "true";
 const FALSE = "false";
 
@@ -30,6 +38,7 @@ const updateValueWithPerpetuation = (ref: Ref<string>, key: StorageKey, value: s
 };
 
 export const useSettingStore = defineStore("setting", () => {
+  // キャラクター情報
   const savedName = ref(getValueWithDefault("name", ""));
   const updateSavedName = (value: string) => updateValueWithPerpetuation(savedName, "name", value);
   const savedTrip = ref(getValueWithDefault("trip", ""));
@@ -42,10 +51,38 @@ export const useSettingStore = defineStore("setting", () => {
   const savedColor = ref(getValueWithDefault("color", "#ffffff"));
   const updateSavedColor = (value: string) =>
     updateValueWithPerpetuation(savedColor, "color", value);
+  const characterSetupResult = {
+    savedName,
+    updateSavedName,
+    savedTrip,
+    updateSavedTrip,
+    tripResult,
+    updateTripResult,
+    savedType,
+    updateSavedType,
+    savedColor,
+    updateSavedColor,
+  };
 
+  // 設定情報
   const selectedVolume = ref(getValueWithDefault("sound", ""));
   const updateSelectedVolume = (value: string) =>
     updateValueWithPerpetuation(selectedVolume, "sound", value);
+  // 設定情報（下部パネル）
+  const isKBMode = ref(getBooleanValueWithDefault("kbMode", false)); // KBモード ON/OFF
+  const updateIsKBMode = (value: boolean) =>
+    updateBooleanValueWithPerpetuation(isKBMode, "kbMode", value);
+  const isDarkMode = ref(getBooleanValueWithDefault("darkMode", false));
+  const updateIsDarkMode = (value: boolean) =>
+    updateBooleanValueWithPerpetuation(isDarkMode, "darkMode", value);
+  const settingSetupResult = {
+    selectedVolume,
+    updateSelectedVolume,
+    isKBMode,
+    updateIsKBMode,
+    isDarkMode,
+    updateIsDarkMode,
+  };
 
   const savedNameWithTrip = computed(() => {
     if (savedTrip.value === "") {
@@ -53,25 +90,10 @@ export const useSettingStore = defineStore("setting", () => {
     }
     return `${savedName.value}#${savedTrip.value}`;
   });
-  const isDarkMode = ref(getBooleanValueWithDefault("darkMode", false));
-  const updateIsDarkMode = (value: boolean) =>
-    updateBooleanValueWithPerpetuation(isDarkMode, "darkMode", value);
 
   return {
-    savedName,
-    updateSavedName,
-    savedTrip,
-    updateSavedTrip,
-    savedType,
-    updateSavedType,
-    savedColor,
-    updateSavedColor,
-    tripResult,
-    updateTripResult,
-    selectedVolume,
-    updateSelectedVolume,
+    ...characterSetupResult,
+    ...settingSetupResult,
     savedNameWithTrip,
-    isDarkMode,
-    updateIsDarkMode,
   };
 });

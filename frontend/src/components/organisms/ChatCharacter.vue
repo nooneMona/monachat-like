@@ -69,6 +69,7 @@ import SpanText from "@/components/atoms/SpanText.vue";
 import { UIColor } from "../../ui/uiColor";
 import { useUIStore } from "../../stores/ui";
 import { useSettingStore } from "@/stores/setting";
+import { storeToRefs } from "pinia";
 
 const props = withDefaults(
   defineProps<{ user: any; messages: any[]; bubbleAreaHeight: number; isDark?: boolean }>(),
@@ -88,9 +89,12 @@ const typedCharacterEl: Ref<HTMLDivElement | undefined> = computed(
 // ストア
 const store = useStore();
 const uiStore = useUIStore();
+const settingStore = useSettingStore();
+
+const { isKBMode } = storeToRefs(settingStore);
+
 const isVisibleDebugFrame = computed(() => store.state.developer.isVisibleFrame);
 const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
-const isKBMode = computed(() => store.state.setting.kbMode);
 const silentUsers = computed(() => store.getters.silentUsers);
 
 const dispTrip = computed(() => {

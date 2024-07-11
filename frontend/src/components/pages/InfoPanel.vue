@@ -1,5 +1,5 @@
 <template>
-  <TabView @tab-click="tabClicked">
+  <TabView>
     <TabPanel>
       <template #header>
         <span v-if="!isKBMode">ログ</span>
@@ -70,14 +70,14 @@
       </template>
       <SwitchField v-model="isCheckedFrame" label="フレーム表示" labelId="checkedFrame" />
       <div>
-        <Button
+        <PrimeButton
           label="切断／再接続テスト（３秒復帰）"
           class="p-button-raised p-button-text p-button-sm p-button-danger"
           @click="onClickDisconnect"
         />
       </div>
       <div>
-        <Button
+        <PrimeButton
           label="サーバーキックテスト"
           class="p-button-raised p-button-text p-button-sm p-button-danger"
           @click="onClickKicked"
@@ -87,7 +87,7 @@
   </TabView>
 </template>
 
-<script>
+<script setup>
 import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 import Checkbox from "primevue/checkbox";
@@ -95,7 +95,7 @@ import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import Button from "primevue/button";
+import PrimeButton from "primevue/button";
 import SwitchField from "@/components/molecules/SwitchField.vue";
 import ChatLog from "@/components/organisms/ChatLog.vue";
 import SettingsFields from "@/components/organisms/SettingsFields.vue";
@@ -103,118 +103,55 @@ import SpanText from "@/components/atoms/SpanText.vue";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores/setting";
 
-export default {
-  name: "InfoPanel",
-  components: {
-    TabView,
-    TabPanel,
-    DataTable,
-    Column,
-    Checkbox,
-    SwitchField,
-    ChatLog,
-    SettingsFields,
-    Button,
-    SpanText,
-  },
-  setup() {
-    const store = useStore();
-    const settingStore = useSettingStore();
-    const { isDarkMode } = storeToRefs(settingStore);
-    const computedSetting = (fieldName, updatorName) => {
-      return computed({
-        get: () => {
-          return store.state.setting[fieldName];
-        },
-        set: (value) => {
-          store.commit(updatorName, value);
-        },
-      });
-    };
+const store = useStore();
+const settingStore = useSettingStore();
 
-    const isKBMode = computedSetting("kbMode", "setting/updateKBMode");
-    const isCheckedFrame = ref(false);
-    const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
-    const backgroundColor = computed(() => {
-      if (isDarkMode.value) {
-        return "#121212";
-      }
-      return "white";
-    });
+const { isDarkMode, isKBMode } = storeToRefs(settingStore);
 
-    const userDisp = (user, id) => {
-      if (user.trip) {
-        return `${user.name}◆${user.trip} (ID:${id.slice(0, 3)})`;
-      }
-      return `${user.name}◇${user.ihash?.slice(0, 6)} (ID:${id.slice(0, 3)})`;
-    };
-    const manageableUsers = computed(() => {
-      const usersObj = store.getters.manageableUsers;
-      return Object.keys(usersObj).map((key) => {
-        return {
-          id: key,
-          ...usersObj[key],
-          disp: userDisp(usersObj[key], key),
-          ihash: usersObj[key].ihash,
-          isSilentUser: store.getters.silentUsers[key] != null,
-        };
-      });
-    });
+const isCheckedFrame = ref(false);
+const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
+const backgroundColor = computed(() => {
+  if (isDarkMode.value) {
+    return "#121212";
+  }
+  return "white";
+});
 
-    const onClickIgnore = (ihash) => {
-      store.dispatch("toggleIgnorance", { ihash });
-    };
-    const onChangeSilentIgnore = (ihash, isActive) => {
-      store.dispatch("toggleSilentIgnorance", { ihash, isActive });
-    };
-    const onClickDisconnect = () => {
-      store.dispatch("simulateReconnection");
-    };
-    const onClickKicked = () => {
-      store.dispatch("suicide");
-    };
-
-    const tabClicked = (e) => {
-      let tabName = "";
-      switch (e.index) {
-        case 0:
-          tabName = "ログ";
-          break;
-        case 1:
-          tabName = "ユーザー";
-          break;
-        case 2:
-          tabName = "設定";
-          break;
-        case 3:
-          tabName = "公式";
-          break;
-        case 4:
-          tabName = "開発";
-          break;
-        default:
-          tabName = "";
-      }
-    };
-
-    watch(isCheckedFrame, () => {
-      store.commit("developer/updateIsVisibleFrame", isCheckedFrame.value);
-    });
-
-    return {
-      isCheckedFrame,
-      manageableUsers,
-      onClickIgnore,
-      onChangeSilentIgnore,
-      isKBMode,
-      onClickDisconnect,
-      onClickKicked,
-      tabClicked,
-      selectedUsersIhashes,
-      backgroundColor,
-    };
-  },
+const userDisp = (user, id) => {
+  if (user.trip) {
+    return `${user.name}◆${user.trip} (ID:${id.slice(0, 3)})`;
+  }
+  return `${user.name}◇${user.ihash?.slice(0, 6)} (ID:${id.slice(0, 3)})`;
 };
+const manageableUsers = computed(() => {
+  const usersObj = store.getters.manageableUsers;
+  return Object.keys(usersObj).map((key) => {
+    return {
+      id: key,
+      ...usersObj[key],
+      disp: userDisp(usersObj[key], key),
+      ihash: usersObj[key].ihash,
+      isSilentUser: store.getters.silentUsers[key] != null,
+    };
+  });
+});
+
+const onClickIgnore = (ihash) => {
+  store.dispatch("toggleIgnorance", { ihash });
+};
+const onChangeSilentIgnore = (ihash, isActive) => {
+  store.dispatch("toggleSilentIgnorance", { ihash, isActive });
+};
+const onClickDisconnect = () => {
+  store.dispatch("simulateReconnection");
+};
+const onClickKicked = () => {
+  store.dispatch("suicide");
+};
+
+watch(isCheckedFrame, () => {
+  store.commit("developer/updateIsVisibleFrame", isCheckedFrame.value);
+});
 </script>
 
 <style lang="scss" scoped>
