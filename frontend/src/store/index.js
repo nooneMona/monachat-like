@@ -4,7 +4,6 @@ import { createStore } from "vuex";
 import { v4 as uuidv4 } from "uuid";
 import io from "socket.io-client";
 import { indexGetters } from "@/store/getters";
-import user from "@/store/modules/user";
 import setting from "@/store/modules/setting";
 import developer from "@/store/modules/developer";
 import Color from "./color";
@@ -21,7 +20,7 @@ const userStore = useUserStore(piniaInstance);
 
 export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
-  modules: { user, setting, developer },
+  modules: { setting, developer },
   state() {
     return {
       socket: null, // socket.ioのクライアント
@@ -129,7 +128,7 @@ export default createStore({
         state.ihashsIgnoredByMe[ihash] = ignores;
         // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
       }
-      if (ihash === state.user.ihash) {
+      if (ihash === userStore.ihash) {
         state.idsIgnoresMe[id] = ignores;
         // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
         state.chatMessages[id] = [];
@@ -392,9 +391,9 @@ export default createStore({
       }
       context.state.socket.emit("COM", comParam);
     },
-    setXY({ state, getters }, { x, y }) {
-      const { scl, stat } = getters["user/me"];
-      state.socket.emit("SET", {
+    setXY(context, { x, y }) {
+      const { scl, stat } = context.state.users[userStore.myID];
+      context.state.socket.emit("SET", {
         token: userStore.myToken,
         x,
         y,
@@ -404,7 +403,7 @@ export default createStore({
       userStore.updateCoordinate({ x, y });
     },
     setStat(context, { stat }) {
-      const { x, y, scl } = context.getters["user/me"];
+      const { x, y, scl } = context.state.users[userStore.myID];
       context.state.socket.emit("SET", {
         token: userStore.myToken,
         x,
@@ -414,7 +413,7 @@ export default createStore({
       });
     },
     setScl(context) {
-      const { x, y, scl, stat } = context.getters["user/me"];
+      const { x, y, scl, stat } = context.state.users[userStore.myID];
       const newScl = scl === 100 ? -100 : 100;
       context.state.socket.emit("SET", {
         token: userStore.myToken,
@@ -459,7 +458,7 @@ export default createStore({
       context.commit("updateUserByEnter", param);
       if (param.id === userStore.myID) {
         settingStore.updateTripResult(param.trip);
-        context.commit("user/updateIhash", { ihash: param.ihash });
+        userStore.updateIhash(param.ihash);
       }
       if (context.getters.visibleUsers[param.id] === undefined) return;
       if (userStore.currentRoom !== null) {
@@ -520,7 +519,7 @@ export default createStore({
       }
     },
     toggleIgnorance(context, { ihash }) {
-      if (ihash === context.state.user.ihash) {
+      if (ihash === userStore.ihash) {
         return;
       }
       const newIgnores = !context.state.ihashsIgnoredByMe[ihash];
@@ -531,7 +530,7 @@ export default createStore({
       });
     },
     toggleSilentIgnorance(context, { ihash, isActive }) {
-      if (ihash === context.state.user.ihash) {
+      if (ihash === userStore.ihash) {
         return;
       }
       context.commit("updateUserSilentIgnore", { ihash, isActive });

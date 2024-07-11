@@ -82,7 +82,7 @@ const router = useRouter();
 
 // ストア
 const { savedName, tripResult, savedType, savedColor } = storeToRefs(settingStore);
-const { disconnected } = storeToRefs(userStore);
+const { ihash, disconnected } = storeToRefs(userStore);
 const rooms = computed(() => store.state.roomMetadata); // APIから取得した部屋一覧
 const displayingMyID = computed(() => userStore.displayingMyID(10)); // 自分のID
 const roomCount = computed(() => store.state.rooms); // 同期された部屋人数情報
@@ -120,8 +120,8 @@ const dispTrip = computed(() => {
   if (tripResult.value) {
     trip = TripFactory.create("black", tripResult.value);
   }
-  if (!tripResult.value && store.state.user.ihash != undefined) {
-    trip = TripFactory.create("white", store.state.user.ihash);
+  if (!tripResult.value && ihash.value !== null) {
+    trip = TripFactory.create("white", ihash.value);
   }
   return trip?.toString() ?? "Loading...";
 });

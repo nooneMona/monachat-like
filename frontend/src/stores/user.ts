@@ -22,6 +22,7 @@ export interface IUser {
 export const useUserStore = defineStore("user", () => {
   const myToken = ref<string | null>(null); // サーバーから付与されたトークン
   const myID = ref<string | null>(null); // サーバから付与されたID
+  const ihash = ref<string | null>(null); // サーバーから付与されたihash
   const currentRoom = ref<{ id: string; name: string; img_url: string } | null>(null); // 現在いる部屋(部屋にいない場合はnull)
   const coordinate = ref<{ x: number; y: number } | null>(null);
   const disconnected = ref(false); // サーバーから切断されているかどうか
@@ -29,6 +30,9 @@ export const useUserStore = defineStore("user", () => {
   const updateAuthInfo = (id: string, token: string) => {
     myID.value = id;
     myToken.value = token;
+  };
+  const updateIhash = (value: string) => {
+    ihash.value = value;
   };
   const updateCurrentRoom = (room: { id: string; name: string; img_url: string } | null) => {
     if (room === null) {
@@ -58,10 +62,12 @@ export const useUserStore = defineStore("user", () => {
   return {
     myID,
     myToken,
+    ihash,
     currentRoom,
     coordinate,
     disconnected,
     updateAuthInfo,
+    updateIhash,
     updateCurrentRoom,
     updateCoordinate,
     updateDisconnected,
