@@ -167,7 +167,7 @@ onMounted(async () => {
   window.addEventListener("keydown", onKeyDown);
 });
 
-const onKeyDown = (e: any) => {
+const onKeyDown = (e: KeyboardEvent) => {
   if (e.key === "Enter") {
     chatField.value?.focus();
   }
@@ -185,9 +185,11 @@ const drop = (e: DragEvent) => {
   }
   //何か別の要素にドロップしてしまったとき
   const targetId = Object.keys(characterChildren.value).find((element) => {
-    return (characterChildren.value[element] as any).contains(e.target);
+    const candidate = characterChildren.value[element] as unknown as HTMLElement;
+    // NOTE: eventが発生するのがcharacter配下のみなので、要素を含むかどうかで判定する
+    return candidate.contains(e.target as HTMLElement);
   });
-  if (targetId) {
+  if (targetId !== undefined) {
     // キャラクターの要素にドロップしたとき
     store.dispatch("setXY", {
       x: store.state.users[targetId].x + e.offsetX - gripX.value,
@@ -206,9 +208,9 @@ const clickExit = async () => {
   });
 };
 const submitCOM = (param: { text: string }) => {
-  if (param.text.match(/^状態:|^状態：|^stat:|^stat：/)) {
+  if (param.text.match(/^(状態|stat)(:|：)/)) {
     store.dispatch("setStat", {
-      stat: param.text.replace(/(状態:|状態：|stat:|stat：)/, ""),
+      stat: param.text.replace(/(状態|stat)(:|：)/, ""),
     });
     selectedStat.value = "free";
     return;
@@ -237,7 +239,10 @@ const onTyped = (value: string) => {
   }
   keyCount.value += 1;
 };
-const onChangeStat = (e: any) => {
+const onChangeStat = (e: Event) => {
+  if (!(e.target instanceof HTMLSelectElement)) {
+    return;
+  }
   store.dispatch("setStat", {
     stat: e.target.value,
   });
@@ -246,6 +251,7 @@ const dragStart = (e: DragEvent) => {
   gripX.value = e.offsetX;
   gripY.value = e.offsetY - bubbleAreaHeight;
 };
+// キャラクターの画像が変化した時
 const sizeUpdated = (e: { id: string; width: number; height: number }) => {
   store.commit("updateUserSize", {
     id: e.id,
