@@ -125,7 +125,7 @@ export default createStore({
     },
     updateUserIgnore(state, { id, stat, ihash }) {
       const ignores = stat === "on"; // offでもなかった場合は無視を解除する
-      if (id === state.user.myID) {
+      if (id === userStore.myID) {
         state.ihashsIgnoredByMe[ihash] = ignores;
         // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
       }
@@ -323,7 +323,7 @@ export default createStore({
       commit("resetLog");
       commit("setting/saveCurrentLog", state.logMessages);
     },
-    enterName({ state, commit }) {
+    enterName({ state }) {
       // ローカルストレージの内容に頼る
       const trip = settingStore.savedTrip;
       let name = settingStore.savedName;
@@ -334,9 +334,9 @@ export default createStore({
         name,
         trip,
       };
-      if (state.user.myToken !== null) {
+      if (userStore.myToken !== null) {
         // すでにトークンを取得している場合はトークンを付加する
-        enterParams.token = state.user.myToken;
+        enterParams.token = userStore.myToken;
       }
       state.socket.emit("ENTER", enterParams);
       settingStore.updateSavedName(name);
@@ -354,7 +354,7 @@ export default createStore({
       const x = state.user.x ?? randomX;
       const y = state.user.y ?? defaultY;
       state.socket.emit("ENTER", {
-        token: state.user.myToken,
+        token: userStore.myToken,
         room: room.id,
         x,
         y,
@@ -376,12 +376,12 @@ export default createStore({
     },
     exit(context) {
       context.state.socket.emit("EXIT", {
-        token: context.state.user.myToken,
+        token: userStore.myToken,
       });
     },
     com(context, { text, shift, typing }) {
       const comParam = {
-        token: context.state.user.myToken,
+        token: userStore.myToken,
         cmt: text,
       };
       if (shift) {
@@ -395,7 +395,7 @@ export default createStore({
     setXY({ state, getters, commit }, { x, y }) {
       const { scl, stat } = getters["user/me"];
       state.socket.emit("SET", {
-        token: state.user.myToken,
+        token: userStore.myToken,
         x,
         y,
         scl,
@@ -406,7 +406,7 @@ export default createStore({
     setStat(context, { stat }) {
       const { x, y, scl } = context.getters["user/me"];
       context.state.socket.emit("SET", {
-        token: context.state.user.myToken,
+        token: userStore.myToken,
         x,
         y,
         scl,
@@ -417,7 +417,7 @@ export default createStore({
       const { x, y, scl, stat } = context.getters["user/me"];
       const newScl = scl === 100 ? -100 : 100;
       context.state.socket.emit("SET", {
-        token: context.state.user.myToken,
+        token: userStore.myToken,
         x,
         y,
         scl: newScl,
@@ -430,11 +430,11 @@ export default createStore({
       });
     },
     receivedConnect({ state }) {
-      if (state.user.myToken == null) {
+      if (userStore.myToken == null) {
         return;
       }
       state.socket.emit("AUTH", {
-        token: state.user.myToken,
+        token: userStore.myToken,
       });
     },
     receivedCOM(context, { id, cmt, style, typing }) {
@@ -457,7 +457,7 @@ export default createStore({
     },
     receivedENTER(context, param) {
       context.commit("updateUserByEnter", param);
-      if (param.id === context.state.user.myID) {
+      if (param.id === userStore.myID) {
         settingStore.updateTripResult(param.trip);
         context.commit("user/updateIhash", { ihash: param.ihash });
       }
@@ -488,7 +488,6 @@ export default createStore({
       if (id === "error") {
         dispatch("returnFromAUTHError");
       }
-      commit("user/updateAuthInfo", { id, token });
       userStore.updateAuthInfo(id, token);
       commit("updateUserExistence", { id, exists: true });
     },
@@ -507,7 +506,7 @@ export default createStore({
       noticeStore.requestRefresh();
     },
     removeChatMessagesIgnored(context, { id, ihash }) {
-      if (id === context.state.user.myID) {
+      if (id === userStore.myID) {
         context.getters.idsByIhash[ihash].forEach((targetId) => {
           context.commit("removeChatMessages", { id: targetId });
         });
@@ -526,7 +525,7 @@ export default createStore({
       }
       const newIgnores = !context.state.ihashsIgnoredByMe[ihash];
       context.state.socket.emit("IG", {
-        token: context.state.user.myToken,
+        token: userStore.myToken,
         stat: newIgnores ? "on" : "off",
         ihash,
       });
@@ -546,16 +545,16 @@ export default createStore({
     },
     suicide({ state }) {
       state.socket.emit("SUICIDE", {
-        token: state.user.myToken,
+        token: userStore.myToken,
       });
     },
-    playCOMAudio(context) {
-      if (context.state.setting.sound === "off") return;
+    playCOMAudio() {
+      if (settingStore.selectedVolume === "off") return;
       const music = new Audio("sound/mojachat5l1.mp3");
       music.play();
     },
-    playENTERAudio(context) {
-      if (context.state.setting.sound === "off") return;
+    playENTERAudio() {
+      if (settingStore.selectedVolume === "off") return;
       const music = new Audio("sound/mojachat5l0.mp3");
       music.play();
     },

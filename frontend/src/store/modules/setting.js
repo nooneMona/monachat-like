@@ -39,7 +39,6 @@ const setting = {
     // 一時的に保持する値
     selectedUsersIhashes: [],
     // 永久に保持する値
-    sound: getValueWithDefault("sound", ""), // 音量
     kbMode: getBooleanValueWithDefault("kbMode", false), // KBモード ON/OFF
     typingMode: getBooleanValueWithDefault("typingMode", true), // タイピングモード ON/OFF
     scrollableLog: getBooleanValueWithDefault("scrollableLog", false),
@@ -65,7 +64,6 @@ const setting = {
           presetColor[presetColor.indexOf(state.selectedUsersIhashes[ihash]) + 1];
       }
     },
-    updateSound: (state, value) => updateValueWithPerpetuation(state, "sound", value),
     updateKBMode: (state, value) => updateBooleanValueWithPerpetuation(state, "kbMode", value),
     updateTypingMode: (state, value) =>
       updateBooleanValueWithPerpetuation(state, "typingMode", value),

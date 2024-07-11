@@ -6,7 +6,7 @@ export interface ISetting {
 }
 
 const storageKeyPrefix = `/monachatchat`;
-type StorageKey = "name" | "trip" | "type" | "color" | "tripResult" | "darkMode";
+type StorageKey = "name" | "trip" | "type" | "color" | "tripResult" | "darkMode" | "sound";
 const TRUE = "true";
 const FALSE = "false";
 
@@ -43,6 +43,10 @@ export const useSettingStore = defineStore("setting", () => {
   const updateSavedColor = (value: string) =>
     updateValueWithPerpetuation(savedColor, "color", value);
 
+  const selectedVolume = ref(getValueWithDefault("sound", ""));
+  const updateSelectedVolume = (value: string) =>
+    updateValueWithPerpetuation(selectedVolume, "sound", value);
+
   const savedNameWithTrip = computed(() => {
     if (savedTrip.value === "") {
       return savedName.value;
@@ -64,6 +68,8 @@ export const useSettingStore = defineStore("setting", () => {
     updateSavedColor,
     tripResult,
     updateTripResult,
+    selectedVolume,
+    updateSelectedVolume,
     savedNameWithTrip,
     isDarkMode,
     updateIsDarkMode,

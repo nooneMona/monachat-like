@@ -1,10 +1,11 @@
 // クライアントを使用するユーザーがもつ情報を管理する
+import { useUserStore } from "../../stores/user";
+import { piniaInstance } from "../../piniaInstance";
 
+const userStore = useUserStore(piniaInstance);
 const user = {
   namespaced: true,
   state: () => ({
-    myToken: null,
-    myID: null,
     ihash: null, // サーバーから付与されたihash
     /*
      * ユーザーの状態を復元するために必要な情報
@@ -14,10 +15,6 @@ const user = {
     y: null, // キャラのY座標
   }),
   mutations: {
-    updateAuthInfo(state, { id, token }) {
-      state.myID = id;
-      state.myToken = token;
-    },
     updateIhash(state, { ihash }) {
       state.ihash = ihash;
     },
@@ -32,8 +29,8 @@ const user = {
   actions: {},
   getters: {
     // ユーザー自身のユーザー情報
-    me(state, _, rootState) {
-      return rootState.users[state.myID];
+    me(_, __, rootState) {
+      return rootState.users[userStore.myID];
     },
   },
 };
