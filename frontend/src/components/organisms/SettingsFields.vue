@@ -1,20 +1,22 @@
 <template>
   <div>
-    <Accordion :value="['0']" multiple>
+    <Accordion :value="['0', '1']" multiple>
       <AccordionPanel value="0">
         <AccordionHeader>一般／外観</AccordionHeader>
         <AccordionContent>
+          <div class="field-wrapper">
+            <SwitchField
+              v-model="isDrawnUnderlineLog"
+              label="ログに色の下線を引く"
+              labelId="drawUnderLineLog"
+            />
+          </div>
           <div class="field-wrapper">
             <SwitchField v-model="isKBMode" label="KBテーマ" labelId="KBMode" />
           </div>
           <div class="field-wrapper">
             <SwitchField v-model="isDarkMode" label="ダークモード" labelId="darkMode" />
           </div>
-          <SwitchField
-            v-model="isDrawnUnderlineLog"
-            label="ログに色の下線を引く"
-            labelId="drawUnderLineLog"
-          />
         </AccordionContent>
       </AccordionPanel>
       <AccordionPanel value="1">
@@ -62,12 +64,12 @@
 import { computed, watch } from "vue";
 import { useStore } from "vuex";
 import PrimeButton from "primevue/button";
-import SwitchField from "../molecules/SwitchField.vue";
-import { useSettingStore } from "../../stores/setting";
 import Accordion from "primevue/accordion";
 import AccordionPanel from "primevue/accordionpanel";
 import AccordionHeader from "primevue/accordionheader";
 import AccordionContent from "primevue/accordioncontent";
+import SwitchField from "@/components/molecules/SwitchField.vue";
+import { useSettingStore } from "@/stores/setting";
 
 const store = useStore();
 const settingStore = useSettingStore();
@@ -102,17 +104,14 @@ const isDarkMode = computed({
 });
 const deleteLog = () => store.dispatch("resetLogStorage");
 
-const bindPrimevueDarkMode = (isDark: boolean) => {
-  if (isDark) {
-    document.querySelector("html")?.classList.add("my-app-dark");
-  } else {
-    document.querySelector("html")?.classList.remove("my-app-dark");
-  }
-};
 watch(
   isDarkMode,
   (value) => {
-    bindPrimevueDarkMode(value);
+    if (value) {
+      document.querySelector("html")?.classList.add("my-app-dark");
+    } else {
+      document.querySelector("html")?.classList.remove("my-app-dark");
+    }
   },
   { immediate: true },
 );
@@ -120,6 +119,7 @@ watch(
 
 <style>
 .field-wrapper {
-  margin-bottom: 0.5rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
 }
 </style>
