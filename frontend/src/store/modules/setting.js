@@ -30,7 +30,6 @@ const setting = {
     // 一時的に保持する値
     selectedUsersIhashes: [],
     // 永久に保持する値
-    descendingLog: getBooleanValueWithDefault("descendingLog", false),
     drawBorderBottomLog: getBooleanValueWithDefault("drawBorderBottomLog", false),
     logInfinite: getBooleanValueWithDefault("logInfinite", false), // ログを無限に保存するか
     log: getValueSessionStorageWithDefault("log", "[]"), // ログ
@@ -51,8 +50,6 @@ const setting = {
           presetColor[presetColor.indexOf(state.selectedUsersIhashes[ihash]) + 1];
       }
     },
-    updateDescendingLog: (state, value) =>
-      updateBooleanValueWithPerpetuation(state, "descendingLog", value),
     updateDrawBorderBottomLog: (state, value) =>
       updateBooleanValueWithPerpetuation(state, "drawBorderBottomLog", value),
     updateLogInfinite: (state, value) =>

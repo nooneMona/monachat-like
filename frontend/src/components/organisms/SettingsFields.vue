@@ -95,7 +95,10 @@ const isScrollableLog = computed({
   get: () => settingStore.isScrollableLog,
   set: (value) => settingStore.updateIsScrollableLog(value),
 });
-const isDescendingLog = computedSetting("descendingLog", "setting/updateDescendingLog");
+const isDescendingLog = computed({
+  get: () => settingStore.isDescendingLog,
+  set: (value) => settingStore.updateIsDescendingLog(value),
+});
 const isDrawUnderLineLog = computedSetting(
   "drawBorderBottomLog",
   "setting/updateDrawBorderBottomLog",

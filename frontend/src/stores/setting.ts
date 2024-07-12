@@ -16,7 +16,8 @@ type StorageKey =
   | "sound"
   | "kbMode"
   | "typingMode"
-  | "scrollableLog";
+  | "scrollableLog"
+  | "descendingLog";
 const TRUE = "true";
 const FALSE = "false";
 
@@ -83,6 +84,9 @@ export const useSettingStore = defineStore("setting", () => {
   const isScrollableLog = ref(getBooleanValueWithDefault("scrollableLog", false));
   const updateIsScrollableLog = (value: boolean) =>
     updateBooleanValueWithPerpetuation(isScrollableLog, "scrollableLog", value);
+  const isDescendingLog = ref(getBooleanValueWithDefault("descendingLog", false));
+  const updateIsDescendingLog = (value: boolean) =>
+    updateBooleanValueWithPerpetuation(isDescendingLog, "descendingLog", value);
   const settingSetupResult = {
     selectedVolume,
     updateSelectedVolume,
@@ -94,6 +98,8 @@ export const useSettingStore = defineStore("setting", () => {
     updateIsTypingMode,
     isScrollableLog,
     updateIsScrollableLog,
+    isDescendingLog,
+    updateIsDescendingLog,
   };
 
   const savedNameWithTrip = computed(() => {

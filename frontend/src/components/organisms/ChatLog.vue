@@ -52,8 +52,7 @@ const wrapperEl = ref<HTMLDivElement>();
 // ストア
 const store = useStore();
 const settingStore = useSettingStore();
-const { isDarkMode, isScrollableLog } = storeToRefs(settingStore);
-const isDecendingLog = computed(() => store.state.setting.descendingLog);
+const { isDarkMode, isScrollableLog, isDescendingLog } = storeToRefs(settingStore);
 const isDrawUnderLine = computed(() => store.state.setting.drawBorderBottomLog);
 const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
 const messages = computed(() => store.getters.visibleLogMessages);
@@ -85,7 +84,7 @@ const scrollToLatest = () => {
   if (elm === undefined) {
     return;
   }
-  const destTop = store.state.setting.descendingLog ? elm.scrollHeight - elm.offsetHeight : 0;
+  const destTop = isDescendingLog ? elm.scrollHeight - elm.offsetHeight : 0;
   elm.scrollTop = destTop;
 };
 const handleScroll = () => {
@@ -97,9 +96,7 @@ const handleScroll = () => {
   // 1px分の誤差を許容する
   const isLatestOnDesc =
     scrollBottomPosition - 1 < elm.scrollHeight && elm.scrollHeight < scrollBottomPosition + 1;
-  const isOnLatestScrollPosition = store.state.setting.descendingLog
-    ? isLatestOnDesc
-    : elm.scrollTop === 0;
+  const isOnLatestScrollPosition = isDescendingLog ? isLatestOnDesc : elm.scrollTop === 0;
   isLatestScrollPosition.value = isOnLatestScrollPosition;
 };
 
@@ -140,7 +137,7 @@ watch(
   () => [...messages.value],
   () => {
     if (isLatestScrollPosition.value) {
-      if (store.state.setting.descendingLog) {
+      if (isDescendingLog) {
         nextTick(scrollToLatest);
       }
       scrollToLatest();
@@ -157,7 +154,7 @@ watch(
 // We cannot change the scroll position of the element
 // whose CSS prop 'display' is 'none'.
 watch(
-  () => store.state.setting.descendingLog,
+  () => isDescendingLog,
   () => {
     scrollToLatest();
   },
