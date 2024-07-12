@@ -68,7 +68,7 @@
         <span v-if="!isKBMode">開発</span>
         <i v-else class="pi pi-github"></i>
       </template>
-      <SwitchField v-model="isCheckedFrame" label="フレーム表示" labelId="checkedFrame" />
+      <SwitchField v-model="isVisibleFrame" label="フレーム表示" labelId="checkedFrame" />
       <div>
         <PrimeButton
           label="切断／再接続テスト（３秒復帰）"
@@ -87,7 +87,7 @@
   </TabView>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import { useStore } from "vuex";
 import Checkbox from "primevue/checkbox";
@@ -103,31 +103,29 @@ import SpanText from "@/components/atoms/SpanText.vue";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores/setting";
 import { useDevStore } from "@/stores/develop";
+import { useUIStore } from "@/stores/ui";
+import { Character } from "@/domain/character";
 
 const store = useStore();
+const uiStore = useUIStore();
 const settingStore = useSettingStore();
 const devStore = useDevStore();
 
-const { isDarkMode, isKBMode } = storeToRefs(settingStore);
+const { isKBMode } = storeToRefs(settingStore);
+const { panelBackgroundColor } = storeToRefs(uiStore);
 
-const isCheckedFrame = computed({
+const isVisibleFrame = computed({
   get: () => devStore.isVisibleFrame,
   set: (value) => devStore.updateIsVisibleFrame(value),
 });
 const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
-const backgroundColor = computed(() => {
-  if (isDarkMode.value) {
-    return "#121212";
-  }
-  return "white";
-});
 
-const userDisp = (user, id) => {
-  if (user.trip) {
-    return `${user.name}◆${user.trip} (ID:${id.slice(0, 3)})`;
-  }
-  return `${user.name}◇${user.ihash?.slice(0, 6)} (ID:${id.slice(0, 3)})`;
+const userDisp = (user: { name: string; trip: string; ihash: string }, id: string) => {
+  const character = Character.create({ name: user.name, trip: user.trip, ihash: user.ihash });
+  const idDisp = `(ID:${id.slice(0, 3)})`;
+  return `${character.nameTag} ${idDisp}`;
 };
+
 const manageableUsers = computed(() => {
   const usersObj = store.getters.manageableUsers;
   return Object.keys(usersObj).map((key) => {
@@ -141,10 +139,10 @@ const manageableUsers = computed(() => {
   });
 });
 
-const onClickIgnore = (ihash) => {
+const onClickIgnore = (ihash: string) => {
   store.dispatch("toggleIgnorance", { ihash });
 };
-const onChangeSilentIgnore = (ihash, isActive) => {
+const onChangeSilentIgnore = (ihash: string, isActive: boolean) => {
   store.dispatch("toggleSilentIgnorance", { ihash, isActive });
 };
 const onClickDisconnect = () => {
@@ -177,12 +175,12 @@ const onClickKicked = () => {
 }
 
 :deep(.p-tabview-nav) {
-  background-color: v-bind(backgroundColor);
+  background-color: v-bind(panelBackgroundColor);
   height: 40px;
 }
 
 :deep(.p-tabview-nav .p-tabview-header .p-tabview-nav-link) {
-  background-color: v-bind(backgroundColor);
+  background-color: v-bind(panelBackgroundColor);
   height: 30px;
   min-width: 160px;
   padding: 1.18em;
@@ -191,7 +189,7 @@ const onClickKicked = () => {
 }
 
 :deep(.p-tabview-panels) {
-  background-color: v-bind(backgroundColor);
+  background-color: v-bind(panelBackgroundColor);
 }
 
 :deep(.pi) {
@@ -199,10 +197,10 @@ const onClickKicked = () => {
 }
 
 :deep(.p-datatable .p-resizable-column) {
-  background-color: v-bind(backgroundColor);
+  background-color: v-bind(panelBackgroundColor);
 }
 
 :deep(.p-datatable .p-datatable-tbody td) {
-  background-color: v-bind(backgroundColor);
+  background-color: v-bind(panelBackgroundColor);
 }
 </style>
