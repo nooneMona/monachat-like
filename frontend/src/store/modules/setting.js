@@ -34,7 +34,7 @@ const setting = {
     scrollableLog: getBooleanValueWithDefault("scrollableLog", false),
     descendingLog: getBooleanValueWithDefault("descendingLog", false),
     drawBorderBottomLog: getBooleanValueWithDefault("drawBorderBottomLog", false),
-    logInfinite: getBooleanValueWithDefault("logInfinite", true), // ログを無限に保存するか
+    logInfinite: getBooleanValueWithDefault("logInfinite", false), // ログを無限に保存するか
     log: getValueSessionStorageWithDefault("log", "[]"), // ログ
   }),
   mutations: {
