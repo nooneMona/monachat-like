@@ -123,7 +123,7 @@ const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIha
 const userDisp = (user: { name: string; trip: string; ihash: string }, id: string) => {
   const character = Character.create({ name: user.name, trip: user.trip, ihash: user.ihash });
   const idDisp = `(ID:${id.slice(0, 3)})`;
-  return `${character.nameTag} ${idDisp}`;
+  return `${character.nameTag()} ${idDisp}`;
 };
 
 const manageableUsers = computed(() => {

@@ -23,7 +23,7 @@
           <div class="field-wrapper">
             <SwitchField
               v-model="isScrollableLog"
-              label="ログの高さを固定する"
+              label="ログの高さを固定する（スクロール）"
               labelId="scrollableLog"
             />
           </div>
@@ -87,8 +87,14 @@ const isKBMode = computed({
   get: () => settingStore.isKBMode,
   set: (value) => settingStore.updateIsKBMode(value),
 });
-const isTypingMode = computedSetting("typingMode", "setting/updateTypingMode");
-const isScrollableLog = computedSetting("scrollableLog", "setting/updateScrollableLog");
+const isTypingMode = computed({
+  get: () => settingStore.isTypingMode,
+  set: (value) => settingStore.updateIsTypingMode(value),
+});
+const isScrollableLog = computed({
+  get: () => settingStore.isScrollableLog,
+  set: (value) => settingStore.updateIsScrollableLog(value),
+});
 const isDescendingLog = computedSetting("descendingLog", "setting/updateDescendingLog");
 const isDrawUnderLineLog = computedSetting(
   "drawBorderBottomLog",

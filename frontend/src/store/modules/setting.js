@@ -30,8 +30,6 @@ const setting = {
     // 一時的に保持する値
     selectedUsersIhashes: [],
     // 永久に保持する値
-    typingMode: getBooleanValueWithDefault("typingMode", true), // タイピングモード ON/OFF
-    scrollableLog: getBooleanValueWithDefault("scrollableLog", false),
     descendingLog: getBooleanValueWithDefault("descendingLog", false),
     drawBorderBottomLog: getBooleanValueWithDefault("drawBorderBottomLog", false),
     logInfinite: getBooleanValueWithDefault("logInfinite", false), // ログを無限に保存するか
@@ -53,10 +51,6 @@ const setting = {
           presetColor[presetColor.indexOf(state.selectedUsersIhashes[ihash]) + 1];
       }
     },
-    updateTypingMode: (state, value) =>
-      updateBooleanValueWithPerpetuation(state, "typingMode", value),
-    updateScrollableLog: (state, value) =>
-      updateBooleanValueWithPerpetuation(state, "scrollableLog", value),
     updateDescendingLog: (state, value) =>
       updateBooleanValueWithPerpetuation(state, "descendingLog", value),
     updateDrawBorderBottomLog: (state, value) =>

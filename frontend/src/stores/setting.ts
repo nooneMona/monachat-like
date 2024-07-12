@@ -14,7 +14,9 @@ type StorageKey =
   | "tripResult"
   | "darkMode"
   | "sound"
-  | "kbMode";
+  | "kbMode"
+  | "typingMode"
+  | "scrollableLog";
 const TRUE = "true";
 const FALSE = "false";
 
@@ -75,6 +77,12 @@ export const useSettingStore = defineStore("setting", () => {
   const isDarkMode = ref(getBooleanValueWithDefault("darkMode", false));
   const updateIsDarkMode = (value: boolean) =>
     updateBooleanValueWithPerpetuation(isDarkMode, "darkMode", value);
+  const isTypingMode = ref(getBooleanValueWithDefault("typingMode", true)); // タイピングモード ON/OFF
+  const updateIsTypingMode = (value: boolean) =>
+    updateBooleanValueWithPerpetuation(isTypingMode, "typingMode", value);
+  const isScrollableLog = ref(getBooleanValueWithDefault("scrollableLog", false));
+  const updateIsScrollableLog = (value: boolean) =>
+    updateBooleanValueWithPerpetuation(isScrollableLog, "scrollableLog", value);
   const settingSetupResult = {
     selectedVolume,
     updateSelectedVolume,
@@ -82,6 +90,10 @@ export const useSettingStore = defineStore("setting", () => {
     updateIsKBMode,
     isDarkMode,
     updateIsDarkMode,
+    isTypingMode,
+    updateIsTypingMode,
+    isScrollableLog,
+    updateIsScrollableLog,
   };
 
   const savedNameWithTrip = computed(() => {

@@ -2,8 +2,8 @@
   <div
     ref="wrapperEl"
     :style="{
-      maxHeight: isScrollable ? '220px' : 'none',
-      overflowY: isScrollable ? 'scroll' : 'auto',
+      maxHeight: isScrollableLog ? '220px' : 'none',
+      overflowY: isScrollableLog ? 'scroll' : 'auto',
     }"
   >
     <!-- ログの1行分 -->
@@ -52,8 +52,7 @@ const wrapperEl = ref<HTMLDivElement>();
 // ストア
 const store = useStore();
 const settingStore = useSettingStore();
-const { isDarkMode } = storeToRefs(settingStore);
-const isScrollable = computed(() => store.state.setting.scrollableLog);
+const { isDarkMode, isScrollableLog } = storeToRefs(settingStore);
 const isDecendingLog = computed(() => store.state.setting.descendingLog);
 const isDrawUnderLine = computed(() => store.state.setting.drawBorderBottomLog);
 const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);

@@ -385,7 +385,7 @@ export default createStore({
       if (shift) {
         comParam.style = 2;
       }
-      if (context.state.setting.typingMode && typing !== undefined) {
+      if (settingStore.isTypingMode && typing !== undefined) {
         comParam.typing = { ...typing };
       }
       context.state.socket.emit("COM", comParam);
