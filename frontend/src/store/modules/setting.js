@@ -1,28 +1,12 @@
 const storageKeyPrefix = `/monachatchat`;
-const TRUE = "true";
-const FALSE = "false";
 
 const updateValueSessionStorageWithPerpetuation = (state, key, value) => {
   state[key] = value;
   sessionStorage.setItem(`${storageKeyPrefix}/${key}`, value);
 };
 
-// Stateに保存しつつ、LocalStorageにも保存する(Bool型のみ)
-const updateBooleanValueWithPerpetuation = (state, key, value) => {
-  state[key] = value;
-  const serializedValue = value ? TRUE : FALSE;
-  localStorage.setItem(`${storageKeyPrefix}/${key}`, serializedValue);
-};
-
 const getValueSessionStorageWithDefault = (key, defaultValue) =>
   sessionStorage.getItem(`${storageKeyPrefix}/${key}`) ?? defaultValue;
-const getBooleanValueWithDefault = (key, defaultValue) => {
-  const serializedValue = localStorage.getItem(`${storageKeyPrefix}/${key}`);
-  if (![TRUE, FALSE].includes(serializedValue)) {
-    return defaultValue;
-  }
-  return serializedValue === TRUE;
-};
 
 const setting = {
   namespaced: true,
@@ -30,8 +14,6 @@ const setting = {
     // 一時的に保持する値
     selectedUsersIhashes: [],
     // 永久に保持する値
-    drawBorderBottomLog: getBooleanValueWithDefault("drawBorderBottomLog", false),
-    logInfinite: getBooleanValueWithDefault("logInfinite", false), // ログを無限に保存するか
     log: getValueSessionStorageWithDefault("log", "[]"), // ログ
   }),
   mutations: {
@@ -50,10 +32,6 @@ const setting = {
           presetColor[presetColor.indexOf(state.selectedUsersIhashes[ihash]) + 1];
       }
     },
-    updateDrawBorderBottomLog: (state, value) =>
-      updateBooleanValueWithPerpetuation(state, "drawBorderBottomLog", value),
-    updateLogInfinite: (state, value) =>
-      updateBooleanValueWithPerpetuation(state, "logInfinite", value),
     saveCurrentLog: (state, value) => {
       let cutValue = value;
       const limit = 10000;

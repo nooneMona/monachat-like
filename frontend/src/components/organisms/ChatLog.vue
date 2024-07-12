@@ -14,7 +14,9 @@
       :style="{
         backgroundColor: msg.visibleOnReceived ? 'none' : invibisbleOnReceivedBackgroundColor,
         /*rgbaが渡されているが、alphaの値が1.0でありrgbに変換されるため、rgbに0.4を新たに加える。そうすると勝手にrgbaに変換され、線が薄くなる*/
-        borderBottom: isDrawUnderLine ? `2px solid ${msg.color.replace(')', ', 0.4)')}` : 'none',
+        borderBottom: isDrawnUnderlineLog
+          ? `2px solid ${msg.color.replace(')', ', 0.4)')}`
+          : 'none',
       }"
     >
       <SpanText
@@ -33,7 +35,7 @@
       </template>
       <SpanText :text="msg.foot" :type="selectedUsersIhashes[msg.ihash]" />
     </div>
-    <div class="log-info-container" v-if="!isDecendingLog && messages.length !== 0">
+    <div class="log-info-container" v-if="!isDescendingLog && messages.length !== 0">
       <SpanText :text="`現在のログ: ${messages.length}件`" type="text" />
     </div>
   </div>
@@ -52,8 +54,8 @@ const wrapperEl = ref<HTMLDivElement>();
 // ストア
 const store = useStore();
 const settingStore = useSettingStore();
-const { isDarkMode, isScrollableLog, isDescendingLog } = storeToRefs(settingStore);
-const isDrawUnderLine = computed(() => store.state.setting.drawBorderBottomLog);
+const { isDarkMode, isScrollableLog, isDescendingLog, isDrawnUnderlineLog } =
+  storeToRefs(settingStore);
 const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
 const messages = computed(() => store.getters.visibleLogMessages);
 
@@ -84,7 +86,7 @@ const scrollToLatest = () => {
   if (elm === undefined) {
     return;
   }
-  const destTop = isDescendingLog ? elm.scrollHeight - elm.offsetHeight : 0;
+  const destTop = isDescendingLog.value ? elm.scrollHeight - elm.offsetHeight : 0;
   elm.scrollTop = destTop;
 };
 const handleScroll = () => {
@@ -96,7 +98,7 @@ const handleScroll = () => {
   // 1px分の誤差を許容する
   const isLatestOnDesc =
     scrollBottomPosition - 1 < elm.scrollHeight && elm.scrollHeight < scrollBottomPosition + 1;
-  const isOnLatestScrollPosition = isDescendingLog ? isLatestOnDesc : elm.scrollTop === 0;
+  const isOnLatestScrollPosition = isDescendingLog.value ? isLatestOnDesc : elm.scrollTop === 0;
   isLatestScrollPosition.value = isOnLatestScrollPosition;
 };
 

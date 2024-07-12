@@ -17,7 +17,9 @@ type StorageKey =
   | "kbMode"
   | "typingMode"
   | "scrollableLog"
-  | "descendingLog";
+  | "descendingLog"
+  | "drawBorderBottomLog"
+  | "logInfinite";
 const TRUE = "true";
 const FALSE = "false";
 
@@ -87,6 +89,12 @@ export const useSettingStore = defineStore("setting", () => {
   const isDescendingLog = ref(getBooleanValueWithDefault("descendingLog", false));
   const updateIsDescendingLog = (value: boolean) =>
     updateBooleanValueWithPerpetuation(isDescendingLog, "descendingLog", value);
+  const isDrawnUnderlineLog = ref(getBooleanValueWithDefault("drawBorderBottomLog", false));
+  const updateIsDrawnUnderlineLog = (value: boolean) =>
+    updateBooleanValueWithPerpetuation(isDrawnUnderlineLog, "drawBorderBottomLog", value);
+  const isInfiniteLog = ref(getBooleanValueWithDefault("logInfinite", false)); // ログを無限に保存するか
+  const updateIsInfiniteLog = (value: boolean) =>
+    updateBooleanValueWithPerpetuation(isInfiniteLog, "logInfinite", value);
   const settingSetupResult = {
     selectedVolume,
     updateSelectedVolume,
@@ -100,6 +108,10 @@ export const useSettingStore = defineStore("setting", () => {
     updateIsScrollableLog,
     isDescendingLog,
     updateIsDescendingLog,
+    isDrawnUnderlineLog,
+    updateIsDrawnUnderlineLog,
+    isInfiniteLog,
+    updateIsInfiniteLog,
   };
 
   const savedNameWithTrip = computed(() => {

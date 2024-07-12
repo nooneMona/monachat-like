@@ -41,7 +41,7 @@ export default createStore({
     },
     appendLog(state, logObj) {
       const MAX_LOG_LENGTH = 1_000;
-      if (state.setting.logInfinite) {
+      if (settingStore.isInfiniteLog) {
         state.logMessages = [logObj, ...state.logMessages];
         return;
       }

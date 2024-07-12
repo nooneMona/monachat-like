@@ -11,7 +11,7 @@
             <SwitchField v-model="isDarkMode" label="ダークモード" labelId="darkMode" />
           </div>
           <SwitchField
-            v-model="isDrawUnderLineLog"
+            v-model="isDrawnUnderlineLog"
             label="ログに色の下線を引く"
             labelId="drawUnderLineLog"
           />
@@ -71,17 +71,6 @@ import AccordionContent from "primevue/accordioncontent";
 
 const store = useStore();
 const settingStore = useSettingStore();
-const computedSetting = (fieldName: string, updatorName: string) => {
-  return computed({
-    get: () => {
-      return store.state.setting[fieldName];
-    },
-    set: (value) => {
-      // TODO: mutationの上にactionをかぶせる。
-      store.commit(updatorName, value);
-    },
-  });
-};
 
 const isKBMode = computed({
   get: () => settingStore.isKBMode,
@@ -99,11 +88,14 @@ const isDescendingLog = computed({
   get: () => settingStore.isDescendingLog,
   set: (value) => settingStore.updateIsDescendingLog(value),
 });
-const isDrawUnderLineLog = computedSetting(
-  "drawBorderBottomLog",
-  "setting/updateDrawBorderBottomLog",
-);
-const isLogInfinite = computedSetting("logInfinite", "setting/updateLogInfinite");
+const isDrawnUnderlineLog = computed({
+  get: () => settingStore.isDrawnUnderlineLog,
+  set: (value) => settingStore.updateIsDrawnUnderlineLog(value),
+});
+const isLogInfinite = computed({
+  get: () => settingStore.isInfiniteLog,
+  set: (value) => settingStore.updateIsInfiniteLog(value),
+});
 const isDarkMode = computed({
   get: () => settingStore.isDarkMode,
   set: (value) => settingStore.updateIsDarkMode(value),
