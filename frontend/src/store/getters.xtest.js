@@ -1,5 +1,7 @@
 import { indexGetters } from "./getters";
 
+// TODO: 修正する
+
 describe("roomObj", () => {
   it("roomオブジェクトを取得できるかどうか", () => {
     const id = "/3";
