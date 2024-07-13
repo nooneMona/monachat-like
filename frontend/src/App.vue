@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <Notice v-if="isRequiredRefresh" @click="onClickErrorTextButton" />
+    <NoticeBar v-if="isRequiredRefresh" @click="onClickErrorTextButton" />
     <div class="panel-container" :style="{ width: `${width}px`, height: `${height}px` }">
       <router-view></router-view>
     </div>
@@ -16,7 +16,7 @@ import { useStore } from "vuex";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import InfoPanel from "@/components/pages/InfoPanel.vue";
-import Notice from "@/components/organisms/Notice.vue";
+import NoticeBar from "@/components/organisms/NoticeBar.vue";
 import { useNoticeStore } from "./stores/notice";
 import { useUIStore } from "./stores/ui";
 
