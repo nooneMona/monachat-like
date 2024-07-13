@@ -1,4 +1,4 @@
-import Bubble from "./Bubble.vue";
+import Bubble from "./ChatBubble.vue";
 
 export default {
   title: "molecules/character/Bubble",

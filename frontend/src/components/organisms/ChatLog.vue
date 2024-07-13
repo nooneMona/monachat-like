@@ -8,12 +8,13 @@
     }"
   >
     <!-- ログの1行分 -->
+    <!-- TODO: コンポーネント化する -->
     <div
       class="log-row"
       v-for="msg in messages"
       :key="msg"
       :style="{
-        backgroundColor: msg.visibleOnReceived ? 'none' : invibisbleOnReceivedBackgroundColor,
+        backgroundColor: msg.visibleOnReceived ? 'none' : greyBackgroundColor,
         /*rgbaが渡されているが、alphaの値が1.0でありrgbに変換されるため、rgbに0.4を新たに加える。そうすると勝手にrgbaに変換され、線が薄くなる*/
         borderBottom: isDrawnUnderlineLog
           ? `2px solid ${msg.color.replace(')', ', 0.4)')}`
@@ -48,6 +49,7 @@ import { useStore } from "vuex";
 import SpanText from "@/components/atoms/SpanText.vue";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores/setting";
+import { useUIStore } from "@/stores/ui";
 
 const pageTitle = document.title;
 const wrapperEl = ref<HTMLDivElement>();
@@ -55,19 +57,16 @@ const wrapperEl = ref<HTMLDivElement>();
 // ストア
 const store = useStore();
 const settingStore = useSettingStore();
+const uiStore = useUIStore();
 
-const { isDarkMode, isScrollableLog, isDescendingLog, isDrawnUnderlineLog, selectedUsersIhashes } =
+const { isScrollableLog, isDescendingLog, isDrawnUnderlineLog, selectedUsersIhashes } =
   storeToRefs(settingStore);
+const { greyBackgroundColor } = storeToRefs(uiStore);
 const messages = computed(() => store.getters.visibleLogMessages);
 
 // スクロール位置が下端にあるか
 const isLatestScrollPosition = ref(true);
 const unseenLogCounter = ref(0);
-
-// 画面を見ていなかった時の背景色
-const invibisbleOnReceivedBackgroundColor = computed(() =>
-  isDarkMode.value ? "#3A3A3A" : "#dcdcdc",
-);
 
 const splitToContentsArray = (msg: string): string[] => {
   const urlPattern = /https?:\/\/[^\s$.?#].[^\s]*/gm;

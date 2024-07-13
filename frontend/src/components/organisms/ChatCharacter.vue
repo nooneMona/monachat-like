@@ -1,12 +1,5 @@
 <template>
-  <div
-    :class="[
-      'character-container',
-      {
-        'debug-frame': isVisibleFrame,
-      },
-    ]"
-  >
+  <div :class="['character-container', { 'debug-frame': isVisibleFrame }]">
     <div class="debug-text character-text" v-if="isVisibleFrame">
       <SpanText :text="`(${user.x}, ${user.y})`" :size="10" />
     </div>
@@ -20,7 +13,7 @@
       <CharacterImage
         :class="{
           'debug-frame': isVisibleFrame,
-          'image-frame': selectedUsersIhashes[user.ihash],
+          'selected-frame': selectedUsersIhashes[user.ihash],
         }"
         :style="{
           borderStyle: selectedUsersIhashes[user.ihash] ? 'solid' : 'unset',
@@ -30,30 +23,18 @@
         :depthRate="depthRate"
         :is-k-b-mode="isKBMode"
         :is-silent="isSilent"
-        @click="toggleUserSelecting(user.ihash)"
+        @click="toggleUserSelecting(user.ihash) /* TODO: 親コンポーネントに渡す */"
         @click.right.prevent="
-          selectedUsersIhashes[user.ihash] ? changeSelectedUsersColor(user.ihash) : ''
+          selectedUsersIhashes[user.ihash]
+            ? changeSelectedUsersColor(user.ihash)
+            : '' /* TODO: 親コンポーネントに渡す */
         "
         @imageUpdated="imageUpdated"
       />
-      <div
-        :class="[
-          'character-text',
-          {
-            'debug-frame': isVisibleFrame,
-          },
-        ]"
-      >
+      <div :class="['character-text', { 'debug-frame': isVisibleFrame }]">
         <SpanText :text="user.name" />
       </div>
-      <div
-        :class="[
-          'character-text',
-          {
-            'debug-frame': isVisibleFrame,
-          },
-        ]"
-      >
+      <div :class="['character-text', { 'debug-frame': isVisibleFrame }]">
         <SpanText :text="dispSubText" />
       </div>
     </div>
@@ -71,9 +52,43 @@ import { useUIStore } from "../../stores/ui";
 import { SelectedUserColorType, useSettingStore } from "@/stores/setting";
 import { storeToRefs } from "pinia";
 import { useDevStore } from "@/stores/develop";
+import { Character } from "@/domain/character";
+
+type ChatCharacterUser = {
+  id: string;
+  x: number;
+  y: number;
+  dispX: number;
+  dispY: number;
+  scl: number;
+  stat: string;
+  trip: string;
+  ihash: string;
+  name: string;
+  rgbaValue: string;
+  hexValue: string;
+  type: string;
+  isMobile: boolean;
+  alive: boolean;
+  width: number;
+  height: number;
+};
+
+type ChatMessages = {
+  messageID: string;
+  id: string;
+  cmt: string;
+  style: number;
+  typing: string;
+}[];
 
 const props = withDefaults(
-  defineProps<{ user: any; messages: any[]; bubbleAreaHeight: number; isDark?: boolean }>(),
+  defineProps<{
+    user: ChatCharacterUser;
+    messages: ChatMessages;
+    bubbleAreaHeight?: number;
+    isDark?: boolean;
+  }>(),
   { bubbleAreaHeight: 300, isDark: undefined },
 );
 const emits = defineEmits<{
@@ -98,15 +113,13 @@ const { isVisibleFrame } = storeToRefs(devStore);
 
 const silentUsers = computed(() => store.getters.silentUsers);
 
-const dispTrip = computed(() => {
-  if (props.user.trip) {
-    return `◆${props.user.trip.slice(0, 10)}`;
-  }
-  return `◇${props.user.ihash?.slice(0, 6)}`;
-});
 const dispSubText = computed(() => {
-  const { isMobile } = props.user;
-  return `${dispTrip.value}${isMobile ? "ﾓ" : ""}`;
+  const character = Character.create({
+    name: props.user.name,
+    trip: props.user.trip,
+    ihash: props.user.ihash,
+  });
+  return `${character.tripTag()}${props.user.isMobile ? "ﾓ" : ""}`;
 });
 const depthRate = computed(() => {
   let result = 1 - (uiStore.height - props.user.dispY) / uiStore.height;
@@ -181,7 +194,7 @@ onUpdated(() => {
   .character {
     pointer-events: auto;
 
-    .image-frame {
+    .selected-frame {
       box-sizing: border-box;
       border-radius: 5px;
       border-width: 2px;

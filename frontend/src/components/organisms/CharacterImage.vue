@@ -9,13 +9,38 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, onMounted } from "vue";
+import { computed, ref, watch } from "vue";
 import axios from "axios";
 import { Stat } from "@/domain/stat";
 import defaultCharhanSVG from "@/store/defaultCharhan";
 import StatPanel from "@/components/molecules/character/StatPanel.vue";
 
-const props = defineProps<{ user: any; depthRate: number; isKBMode: boolean; isSilent: boolean }>();
+type ChatCharacterUser = {
+  id: string;
+  x: number;
+  y: number;
+  dispX: number;
+  dispY: number;
+  scl: number;
+  stat: string;
+  trip: string;
+  ihash: string;
+  name: string;
+  rgbaValue: string;
+  hexValue: string;
+  type: string;
+  isMobile: boolean;
+  alive: boolean;
+  width: number;
+  height: number;
+};
+
+const props = defineProps<{
+  user: ChatCharacterUser;
+  depthRate: number;
+  isKBMode: boolean;
+  isSilent: boolean;
+}>();
 const emits = defineEmits<{ (e: "imageUpdated"): void }>();
 
 // リアクティブ
@@ -23,13 +48,15 @@ const fetchedSVGText = ref("");
 
 const characterOpacity = computed(() => (props.isSilent ? 0.3 : 1));
 // 画像のパス
-const imagePath = computed(() => {
+const imageFilePath = computed(() => {
   // NOTE: 存在しないキャラコかどうかは問い合わせがないとわからないため、
-  // バリデーションはここでは行わない。空白も存在しないキャラコかわからない扱い。
+  //       バリデーションはここでは行わない。空白も存在しないキャラコかわからない扱い。
+  // TODO: サニタイズでは完全なディレクトリトラバーサルの対策になっていない
+  const sanitizedType = props.user.type.replace(/[^0-9a-z]/gi, "");
   if (props.isKBMode) {
-    return `/img/kb/${props.user.type}`;
+    return `/img/kb/${sanitizedType}.svg`;
   }
-  return `/img/svg/${props.user.type}`;
+  return `/img/svg/${sanitizedType}.svg`;
 });
 const characterSVG = computed(() => {
   let text = fetchedSVGText.value;
@@ -50,14 +77,13 @@ const isVisibleStat = computed(() => {
 
 const fetchSVGData = async () => {
   if (props.user.type == null) {
-    // typeがundefined or nullのときにリクエストを送信しない。
-    // 仮に順番にリクエストを送信しても、何らかの拍子にtypeがundefinedのときのリクエストのレスポンスが最後に来ると、
-    // いくら正しいキャラコでリクエストしてもチャーハンになってしまう。
+    // NOTE: 仮に正しい順番(e.g. undefined->mona)にリクエストを送信しても、
+    // type=undefinedの状態のリクエストのレスポンスが最後に来る(e.g. mona->undefined)とチャーハンになってしまう。
     return;
   }
   try {
     const svgRes = await axios({
-      url: `${imagePath.value}.svg`,
+      url: imageFilePath.value,
       method: "GET",
       responseType: "text",
     });
@@ -67,16 +93,20 @@ const fetchSVGData = async () => {
   }
 };
 
-onMounted(() => fetchSVGData());
-// パスが変わるということはデータも変わるということを想定
-// 例: KBモードの切替
-watch(imagePath, () => fetchSVGData());
+watch(
+  imageFilePath,
+  () => {
+    // NOTE: パスが変わるということはデータも変わる 例: KBモードの切替
+    fetchSVGData();
+  },
+  { immediate: true },
+);
 watch([fetchedSVGText], () => {
+  // NOTE: svgにセットされた瞬間はまだ描画されていない
+  //       => タスクキューに積んで遅延させる
   setTimeout(() => {
-    // svgにセットされた瞬間はまだ描画されていないので、遅延させる。遅延時間に意味はない。
-    // TODO: 描画完了イベントをとれるようにする。
     emits("imageUpdated");
-  }, 100);
+  }, 0);
 });
 </script>
 

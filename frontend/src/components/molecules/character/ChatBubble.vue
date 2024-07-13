@@ -10,7 +10,7 @@
       },
     ]"
   >
-    <SpanText :text="msg.cmt" :type="isDark(color) ? 'white' : 'black'" class="text" />
+    <SpanText :text="msg.cmt" :type="isDarkColor(color) ? 'white' : 'black'" class="text" />
   </div>
 </template>
 
@@ -38,7 +38,7 @@ const shouldBeDark = computed(() => {
 });
 
 const isThinkingBubble = computed(() => props.msg.style === 2);
-const isDark = (color: string) => {
+const isDarkColor = (color: string) => {
   return Color.isDarkColor(color);
 };
 const borderColor = computed(() => (shouldBeDark.value ? "white" : "black"));
