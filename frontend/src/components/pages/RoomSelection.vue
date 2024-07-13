@@ -20,6 +20,8 @@
             <CharacterImage
               :user="{ type: userType, hexValue: userHexColor, stat: '通常', scl: 100 }"
               :depthRate="1.0"
+              :isKBMode
+              :isSilent="false"
             />
             <div class="character-preview-text"><SpanText :text="savedName" /></div>
             <div class="character-preview-text"><SpanText :text="dispTrip" /></div>
@@ -49,7 +51,7 @@
           <SpanText text="ステージ選択" :size="18" />
           <SpanText text="最大人数 ∞人" :size="18" />
         </div>
-        <Rooms :rooms="rooms" :roomCount="roomCount" @clickRoom="submitEnter" />
+        <RoomButtons :rooms="rooms" :roomCount="roomCount" @clickRoom="submitEnter" />
       </div>
     </div>
   </div>
@@ -68,7 +70,7 @@ import CharacterImage from "@/components/organisms/CharacterImage.vue";
 import SeekBar from "@/components/molecules/SeekBar.vue";
 import ColorPalette from "@/components/molecules/ColorPalette.vue";
 import Dropdown from "@/components/molecules/Dropdown.vue";
-import Rooms from "@/components/organisms/Rooms.vue";
+import RoomButtons from "@/components/organisms/RoomButtons.vue";
 import { useSettingStore } from "@/stores/setting";
 import { useUserStore } from "@/stores/user";
 import { CharactersResponse, ColorResponse, RoomResponse } from "@/infrastructure/api";
@@ -81,7 +83,7 @@ const settingStore = useSettingStore();
 const router = useRouter();
 
 // ストア
-const { savedName, tripResult, savedType, savedColor } = storeToRefs(settingStore);
+const { savedName, tripResult, savedType, savedColor, isKBMode } = storeToRefs(settingStore);
 const { ihash, disconnected } = storeToRefs(userStore);
 const rooms = computed(() => store.state.roomMetadata); // APIから取得した部屋一覧
 const displayingMyID = computed(() => userStore.displayingMyID(10)); // 自分のID
