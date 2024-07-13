@@ -111,14 +111,13 @@ const uiStore = useUIStore();
 const settingStore = useSettingStore();
 const devStore = useDevStore();
 
-const { isKBMode } = storeToRefs(settingStore);
+const { isKBMode, selectedUsersIhashes } = storeToRefs(settingStore);
 const { panelBackgroundColor } = storeToRefs(uiStore);
 
 const isVisibleFrame = computed({
   get: () => devStore.isVisibleFrame,
   set: (value) => devStore.updateIsVisibleFrame(value),
 });
-const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
 
 const userDisp = (user: { name: string; trip: string; ihash: string }, id: string) => {
   const character = Character.create({ name: user.name, trip: user.trip, ihash: user.ihash });

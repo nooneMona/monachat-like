@@ -68,7 +68,7 @@ import CharacterImage from "@/components/organisms/CharacterImage.vue";
 import SpanText from "@/components/atoms/SpanText.vue";
 import { UIColor } from "../../ui/uiColor";
 import { useUIStore } from "../../stores/ui";
-import { useSettingStore } from "@/stores/setting";
+import { SelectedUserColorType, useSettingStore } from "@/stores/setting";
 import { storeToRefs } from "pinia";
 import { useDevStore } from "@/stores/develop";
 
@@ -93,10 +93,9 @@ const uiStore = useUIStore();
 const settingStore = useSettingStore();
 const devStore = useDevStore();
 
-const { isKBMode } = storeToRefs(settingStore);
+const { isKBMode, selectedUsersIhashes } = storeToRefs(settingStore);
 const { isVisibleFrame } = storeToRefs(devStore);
 
-const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
 const silentUsers = computed(() => store.getters.silentUsers);
 
 const dispTrip = computed(() => {
@@ -123,12 +122,11 @@ const shouldBeDark = computed(() => {
   return isDarkModeFromStore;
 });
 const selectedBorderColor = computed(() => {
-  const color: string | undefined = selectedUsersIhashes.value[props.user.ihash];
-  const candidates = ["red", "blue", "green", "purple", "orange"] as const;
-  if (color === undefined || !(candidates as readonly string[]).includes(color)) {
+  const color: SelectedUserColorType | undefined = selectedUsersIhashes.value[props.user.ihash];
+  if (color === undefined) {
     return undefined;
   }
-  return new UIColor(color as (typeof candidates)[number]).getCSSColorName(shouldBeDark.value);
+  return new UIColor(color).getCSSColorName(shouldBeDark.value);
 });
 
 const imageUpdated = () => {
@@ -143,10 +141,10 @@ const imageUpdated = () => {
   });
 };
 const toggleUserSelecting = (ihash: string) => {
-  store.dispatch("setting/toggleUserSelecting", { ihash });
+  settingStore.toggleUserSelecting(ihash);
 };
 const changeSelectedUsersColor = (ihash: string) => {
-  store.dispatch("setting/changeSelectedUsersColor", { ihash });
+  settingStore.changeSelectedUserColor(ihash);
 };
 const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messageID: string }) => {
   emits("bubbleDeleted", { characterID, messageID });

@@ -1,6 +1,7 @@
 <template>
   <div
     ref="wrapperEl"
+    class="log-container"
     :style="{
       maxHeight: isScrollableLog ? '220px' : 'none',
       overflowY: isScrollableLog ? 'scroll' : 'auto',
@@ -8,9 +9,9 @@
   >
     <!-- ログの1行分 -->
     <div
+      class="log-row"
       v-for="msg in messages"
       :key="msg"
-      class="log-row"
       :style="{
         backgroundColor: msg.visibleOnReceived ? 'none' : invibisbleOnReceivedBackgroundColor,
         /*rgbaが渡されているが、alphaの値が1.0でありrgbに変換されるため、rgbに0.4を新たに加える。そうすると勝手にrgbaに変換され、線が薄くなる*/
@@ -54,9 +55,9 @@ const wrapperEl = ref<HTMLDivElement>();
 // ストア
 const store = useStore();
 const settingStore = useSettingStore();
-const { isDarkMode, isScrollableLog, isDescendingLog, isDrawnUnderlineLog } =
+
+const { isDarkMode, isScrollableLog, isDescendingLog, isDrawnUnderlineLog, selectedUsersIhashes } =
   storeToRefs(settingStore);
-const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
 const messages = computed(() => store.getters.visibleLogMessages);
 
 // スクロール位置が下端にあるか
@@ -65,7 +66,7 @@ const unseenLogCounter = ref(0);
 
 // 画面を見ていなかった時の背景色
 const invibisbleOnReceivedBackgroundColor = computed(() =>
-  isDarkMode.value ? "#3A3A3A" : "gainsboro",
+  isDarkMode.value ? "#3A3A3A" : "#dcdcdc",
 );
 
 const splitToContentsArray = (msg: string): string[] => {
@@ -110,10 +111,10 @@ const handleVisibilityChange = () => {
 };
 
 const toggleUserSelecting = (ihash: string) => {
-  store.dispatch("setting/toggleUserSelecting", { ihash });
+  settingStore.toggleUserSelecting(ihash);
 };
 const changeSelectedUsersColor = (ihash: string) => {
-  store.dispatch("setting/changeSelectedUsersColor", { ihash });
+  settingStore.changeSelectedUserColor(ihash);
 };
 
 const increaseUnseenLogCounter = () => {
@@ -164,15 +165,16 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.log-row {
-  padding-top: 1px;
-  padding-bottom: 1px;
+.log-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2px;
 
+  .link {
+    text-decoration: none;
+  }
   .log-info-container {
     padding-top: 16px;
   }
-}
-.link {
-  text-decoration: none;
 }
 </style>

@@ -19,9 +19,13 @@ type StorageKey =
   | "scrollableLog"
   | "descendingLog"
   | "drawBorderBottomLog"
-  | "logInfinite";
+  | "logInfinite"
+  | "selectedUsersIhashes";
 const TRUE = "true";
 const FALSE = "false";
+
+export const SelectedUserColors = ["red", "blue", "green", "purple", "orange"] as const;
+export type SelectedUserColorType = (typeof SelectedUserColors)[number];
 
 const getBooleanValueWithDefault = (key: StorageKey, defaultValue: boolean) => {
   const serializedValue = localStorage.getItem(`${storageKeyPrefix}/${key}`);
@@ -114,6 +118,28 @@ export const useSettingStore = defineStore("setting", () => {
     updateIsInfiniteLog,
   };
 
+  // ユーザー設定情報
+  const selectedUsersIhashes = ref<{ [key in string]: SelectedUserColorType }>({});
+  const toggleUserSelecting = (ihash: string) => {
+    if (selectedUsersIhashes.value[ihash]) {
+      delete selectedUsersIhashes.value[ihash];
+    } else {
+      selectedUsersIhashes.value[ihash] = "red";
+    }
+  };
+  const changeSelectedUserColor = (ihash: string) => {
+    const indexOfSelectedColor = SelectedUserColors.indexOf(
+      selectedUsersIhashes.value[ihash] ?? "red",
+    );
+    const nextIndex = (indexOfSelectedColor + 1) % SelectedUserColors.length;
+    selectedUsersIhashes.value[ihash] = SelectedUserColors[nextIndex] ?? "red";
+  };
+  const userSettingResult = {
+    selectedUsersIhashes,
+    toggleUserSelecting,
+    changeSelectedUserColor,
+  };
+
   const savedNameWithTrip = computed(() => {
     if (savedTrip.value === "") {
       return savedName.value;
@@ -124,6 +150,7 @@ export const useSettingStore = defineStore("setting", () => {
   return {
     ...characterSetupResult,
     ...settingSetupResult,
+    ...userSettingResult,
     savedNameWithTrip,
   };
 });
