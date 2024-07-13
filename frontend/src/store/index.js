@@ -4,7 +4,6 @@ import { createStore } from "vuex";
 import { v4 as uuidv4 } from "uuid";
 import io from "socket.io-client";
 import { indexGetters } from "@/store/getters";
-import setting from "@/store/modules/setting";
 import Color from "./color";
 import { piniaInstance } from "../piniaInstance";
 import { useNoticeStore } from "@/stores/notice";
@@ -19,7 +18,6 @@ const userStore = useUserStore(piniaInstance);
 
 export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
-  modules: { setting },
   state() {
     return {
       socket: null, // socket.ioのクライアント
@@ -268,7 +266,7 @@ export default createStore({
         context.getters.visibleUsers[id]?.rgbaValue ??
         Color.monaRGBToCSS({ r: 255, g: 255, b: 255 }, 1.0);
       context.commit("appendLog", { head, content, foot, visibleOnReceived, color, ihash });
-      context.commit("setting/saveCurrentLog", context.state.logMessages);
+      settingStore.saveCurrentLog(context.state.logMessages);
     },
     appendUserLog(context, { id, isEnter }) {
       const name = context.getters.visibleUsers[id]?.name;
@@ -299,7 +297,7 @@ export default createStore({
         context.getters.visibleUsers[id]?.rgbaValue ??
         Color.monaRGBToCSS({ r: 255, g: 255, b: 255 }, 1.0);
       context.commit("appendLog", { head, content, foot, visibleOnReceived, color, ihash });
-      context.commit("setting/saveCurrentLog", context.state.logMessages);
+      settingStore.saveCurrentLog(context.state.logMessages);
     },
     // トリップ付き名前文字列`text`を分解しsetting.name, .tripに保管
     parseNameWithTrip(_, { text }) {
@@ -319,7 +317,7 @@ export default createStore({
     },
     resetLogStorage({ state, commit }) {
       commit("resetLog");
-      commit("setting/saveCurrentLog", state.logMessages);
+      settingStore.saveCurrentLog(state.logMessages);
     },
     enterName({ state }) {
       // ローカルストレージの内容に頼る
@@ -339,7 +337,7 @@ export default createStore({
       state.socket.emit("ENTER", enterParams);
       settingStore.updateSavedName(name);
       settingStore.updateSavedTrip(trip);
-      const log = setting.getters.loadLog(state.setting);
+      const log = settingStore.loadedLogFromStorage;
       if (state.logMessages.length === 0 && log.length !== 0) {
         state.logMessages = log;
       }
@@ -365,7 +363,7 @@ export default createStore({
         b,
         type: settingStore.savedType,
       });
-      const log = setting.getters.loadLog(state.setting);
+      const log = settingStore.loadedLogFromStorage;
       if (state.logMessages.length === 0 && log.length !== 0) {
         state.logMessages = log;
       }

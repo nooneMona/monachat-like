@@ -20,7 +20,8 @@ type StorageKey =
   | "descendingLog"
   | "drawBorderBottomLog"
   | "logInfinite"
-  | "selectedUsersIhashes";
+  | "selectedUsersIhashes"
+  | "log";
 const TRUE = "true";
 const FALSE = "false";
 
@@ -44,6 +45,16 @@ const getValueWithDefault = (key: StorageKey, defaultValue: string) =>
 const updateValueWithPerpetuation = (ref: Ref<string>, key: StorageKey, value: string) => {
   ref.value = value;
   localStorage.setItem(`${storageKeyPrefix}/${key}`, value);
+};
+const getValueSessionStorageWithDefault = (key: StorageKey, defaultValue: string) =>
+  sessionStorage.getItem(`${storageKeyPrefix}/${key}`) ?? defaultValue;
+const updateValueSessionStorageWithPerpetuation = (
+  ref: Ref<string>,
+  key: StorageKey,
+  value: string,
+) => {
+  ref.value = value;
+  sessionStorage.setItem(`${storageKeyPrefix}/${key}`, value);
 };
 
 export const useSettingStore = defineStore("setting", () => {
@@ -134,10 +145,42 @@ export const useSettingStore = defineStore("setting", () => {
     const nextIndex = (indexOfSelectedColor + 1) % SelectedUserColors.length;
     selectedUsersIhashes.value[ihash] = SelectedUserColors[nextIndex] ?? "red";
   };
+  const log = ref(getValueSessionStorageWithDefault("log", "[]"));
+  const saveCurrentLog = (
+    value: {
+      head: string;
+      content: string;
+      foot: string;
+      visibleOnReceived: boolean;
+      color: string;
+      ihash: string;
+    }[],
+  ) => {
+    const SAVED_LOG_MAX = 10_000;
+    let cutLogs = value;
+    if (value.length > SAVED_LOG_MAX) {
+      cutLogs = value.slice(0, SAVED_LOG_MAX - value.length);
+    }
+    const logRawData = JSON.stringify(cutLogs);
+    updateValueSessionStorageWithPerpetuation(log, "log", logRawData);
+  };
+  const loadedLogFromStorage = computed(() => {
+    return JSON.parse(log.value) as {
+      head: string;
+      content: string;
+      foot: string;
+      visibleOnReceived: boolean;
+      color: string;
+      ihash: string;
+    }[];
+  });
   const userSettingResult = {
     selectedUsersIhashes,
     toggleUserSelecting,
     changeSelectedUserColor,
+    log,
+    saveCurrentLog,
+    loadedLogFromStorage,
   };
 
   const savedNameWithTrip = computed(() => {
