@@ -163,6 +163,12 @@ export const useUserStore = defineStore("user", () => {
     socketIOInstance.emit("COM", comParam);
   };
 
+  const sendError = (text: string) => {
+    socketIOInstance.emit("ERROR", {
+      text: JSON.stringify(text),
+    });
+  };
+
   return {
     myID,
     myToken,
@@ -182,5 +188,6 @@ export const useUserStore = defineStore("user", () => {
     enter,
     exit,
     com,
+    sendError,
   };
 });

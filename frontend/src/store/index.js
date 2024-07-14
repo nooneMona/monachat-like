@@ -273,11 +273,6 @@ export default createStore({
         stat,
       });
     },
-    sendError(_, { text }) {
-      socketIOInstance.emit("ERROR", {
-        text: JSON.stringify(text),
-      });
-    },
     receivedConnect() {
       if (userStore.myToken == null) {
         return;

@@ -39,10 +39,10 @@ onMounted(() => {
   roomStore.syncRoomMetadata();
   window.onerror = (message, source, lineno, colno) => {
     const text = `${message} ${source}?${lineno}:${colno}`;
-    store.dispatch("sendError", { text });
+    userStore.sendError(text);
   };
   window.onunhandledrejection = (e) => {
-    store.dispatch("sendError", { text: e.reason });
+    userStore.sendError(e.reason);
   };
 });
 router.beforeEach((to, _, next) => {
