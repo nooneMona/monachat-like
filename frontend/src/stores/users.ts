@@ -178,6 +178,7 @@ export const useUsersStore = defineStore("users", () => {
   };
 
   return {
+    users,
     chatMessages,
     ihashsIgnoredByMe,
     idsIgnoresMe,

@@ -165,27 +165,25 @@ export const useUserStore = defineStore("user", () => {
   };
 
   const setXY = (x: number, y: number) => {
-    const userStore = useUserStore();
     const usersStore = useUsersStore();
 
-    const { scl, stat } = usersStore.users[userStore.myID];
+    const { scl, stat } = usersStore.users[myID.value];
     socketIOInstance.emit("SET", {
-      token: userStore.myToken,
+      token: myToken.value,
       x,
       y,
       scl,
       stat,
     });
-    userStore.updateCoordinate({ x, y });
+    updateCoordinate({ x, y });
   };
 
   const setStat = (stat: string) => {
-    const userStore = useUserStore();
     const usersStore = useUsersStore();
 
-    const { x, y, scl } = usersStore.users[userStore.myID];
+    const { x, y, scl } = usersStore.users[myID.value];
     socketIOInstance.emit("SET", {
-      token: userStore.myToken,
+      token: myToken.value,
       x,
       y,
       scl,
@@ -194,13 +192,12 @@ export const useUserStore = defineStore("user", () => {
   };
 
   const setScl = () => {
-    const userStore = useUserStore();
     const usersStore = useUsersStore();
 
-    const { x, y, scl, stat } = usersStore.users[userStore.myID];
+    const { x, y, scl, stat } = usersStore.users[myID.value];
     const newScl = scl === 100 ? -100 : 100;
     socketIOInstance.emit("SET", {
-      token: userStore.myToken,
+      token: myToken.value,
       x,
       y,
       scl: newScl,
@@ -208,31 +205,29 @@ export const useUserStore = defineStore("user", () => {
     });
   };
 
-  const toggleIgnorance = (ihash: string) => {
-    const userStore = useUserStore();
+  const toggleIgnorance = (targetIhash: string) => {
     const usersStore = useUsersStore();
 
-    if (ihash === userStore.ihash) {
+    if (targetIhash === ihash.value) {
       return;
     }
-    const newIgnores = !usersStore.ihashsIgnoredByMe[ihash];
+    const newIgnores = !usersStore.ihashsIgnoredByMe[targetIhash];
     socketIOInstance.emit("IG", {
-      token: userStore.myToken,
+      token: myToken.value,
       stat: newIgnores ? "on" : "off",
       ihash,
     });
   };
 
-  const toggleSilentIgnorance = (ihash: string, isActive: boolean) => {
-    const userStore = useUserStore();
+  const toggleSilentIgnorance = (targetIhash: string, isActive: boolean) => {
     const usersStore = useUsersStore();
 
-    if (ihash === userStore.ihash) {
+    if (targetIhash === ihash.value) {
       return;
     }
-    usersStore.updateUserSilentIgnore(ihash, isActive);
+    usersStore.updateUserSilentIgnore(targetIhash, isActive);
     if (isActive) {
-      usersStore.idsByIhash[ihash].forEach((targetId) => {
+      usersStore.idsByIhash[targetIhash].forEach((targetId) => {
         usersStore.removeChatMessages(targetId);
       });
     }
