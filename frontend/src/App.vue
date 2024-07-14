@@ -33,7 +33,6 @@ const { isRequiredRefresh } = storeToRefs(noticeStore);
 
 // ライフサイクル
 onMounted(() => {
-  store.commit("initializeSocket");
   store.dispatch("registerSocketEvents");
   store.dispatch("loadPreData");
   window.onerror = (message, source, lineno, colno) => {

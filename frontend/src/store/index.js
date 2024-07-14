@@ -25,15 +25,11 @@ export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
   state() {
     return {
-      socket: null, // socket.ioのクライアント
       users: {}, // 現在のコンテキストにいるユーザー
     };
   },
   getters: indexGetters,
   mutations: {
-    initializeSocket(state) {
-      state.socket = socketIOInstance;
-    },
     initializeUsers(state, users) {
       state.users = {};
       users.forEach((userObj) => {
@@ -143,52 +139,52 @@ export default createStore({
       const res = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/rooms`);
       roomStore.updateRoomMetadata(res.data.rooms);
     },
-    registerSocketEvents({ state, commit, dispatch }) {
-      state.socket.on("connect", () => {
+    registerSocketEvents({ commit, dispatch }) {
+      socketIOInstance.on("connect", () => {
         userStore.updateDisconnected(false);
         dispatch("receivedConnect");
       });
-      state.socket.on("disconnect", () => {
+      socketIOInstance.on("disconnect", () => {
         userStore.updateDisconnected(true);
       });
-      state.socket.on("COM", (param) => {
+      socketIOInstance.on("COM", (param) => {
         dispatch("receivedCOM", param);
       });
-      state.socket.on("ENTER", (param) => {
+      socketIOInstance.on("ENTER", (param) => {
         dispatch("receivedENTER", param);
         commit("updateUserDispLocation", { id: param.id });
       });
-      state.socket.on("SET", (param) => {
+      socketIOInstance.on("SET", (param) => {
         commit("updateUserBySet", param);
         commit("updateUserDispLocation", { id: param.id });
       });
-      state.socket.on("IG", (param) => {
+      socketIOInstance.on("IG", (param) => {
         commit("updateUserIgnore", param);
         dispatch("removeChatMessagesIgnored", { id: param.id, ihash: param.ihash });
       });
-      state.socket.on("EXIT", (param) => {
+      socketIOInstance.on("EXIT", (param) => {
         dispatch("receivedEXIT", {
           id: param.id,
           isEnter: false,
         });
       });
-      state.socket.on("USER", (param) => {
+      socketIOInstance.on("USER", (param) => {
         commit("initializeUsers", param);
       });
-      state.socket.on("COUNT", (param) => {
+      socketIOInstance.on("COUNT", (param) => {
         roomStore.updateRooms(param);
       });
-      state.socket.on("AUTH", ({ id, token }) => {
+      socketIOInstance.on("AUTH", ({ id, token }) => {
         dispatch("receivedAUTH", {
           id,
           token,
         });
       });
-      state.socket.on("SLEEP", (param) => {
+      socketIOInstance.on("SLEEP", (param) => {
         commit("updateUserExistence", { id: param.id, exists: false });
         usersStore.removeChatMessages(param.id);
       });
-      state.socket.on("AWAKE", (param) => {
+      socketIOInstance.on("AWAKE", (param) => {
         commit("updateUserExistence", { id: param.id, exists: true });
       });
     },
@@ -266,7 +262,7 @@ export default createStore({
       settingStore.updateSavedName(name);
       settingStore.updateSavedTrip(trip);
     },
-    enterName({ state }) {
+    enterName() {
       // ローカルストレージの内容に頼る
       const trip = settingStore.savedTrip;
       let name = settingStore.savedName;
@@ -281,7 +277,7 @@ export default createStore({
         // すでにトークンを取得している場合はトークンを付加する
         enterParams.token = userStore.myToken;
       }
-      state.socket.emit("ENTER", enterParams);
+      socketIOInstance.emit("ENTER", enterParams);
       settingStore.updateSavedName(name);
       settingStore.updateSavedTrip(trip);
       const log = settingStore.loadedLogFromStorage;
@@ -289,14 +285,14 @@ export default createStore({
         logStore.$patch({ logs: log });
       }
     },
-    enter({ state }, { room }) {
+    enter(_, { room }) {
       const hexColor = settingStore.savedColor;
       const { r, g, b } = Color.hexToMonaRGB(hexColor);
       const randomX = Math.floor(Math.random() * uiStore.width);
       const defaultY = uiStore.height - 150;
       const x = userStore.coordinate?.x ?? randomX;
       const y = userStore.coordinate?.y ?? defaultY;
-      state.socket.emit("ENTER", {
+      socketIOInstance.emit("ENTER", {
         token: userStore.myToken,
         room: room.id,
         x,
@@ -317,12 +313,12 @@ export default createStore({
       userStore.updateCurrentRoom(room);
       userStore.updateCoordinate({ x, y });
     },
-    exit(context) {
-      context.state.socket.emit("EXIT", {
+    exit() {
+      socketIOInstance.emit("EXIT", {
         token: userStore.myToken,
       });
     },
-    com(context, { text, shift, typing }) {
+    com(_, { text, shift, typing }) {
       const comParam = {
         token: userStore.myToken,
         cmt: text,
@@ -333,11 +329,11 @@ export default createStore({
       if (settingStore.isTypingMode && typing !== undefined) {
         comParam.typing = { ...typing };
       }
-      context.state.socket.emit("COM", comParam);
+      socketIOInstance.emit("COM", comParam);
     },
     setXY(context, { x, y }) {
       const { scl, stat } = context.state.users[userStore.myID];
-      context.state.socket.emit("SET", {
+      socketIOInstance.emit("SET", {
         token: userStore.myToken,
         x,
         y,
@@ -348,7 +344,7 @@ export default createStore({
     },
     setStat(context, { stat }) {
       const { x, y, scl } = context.state.users[userStore.myID];
-      context.state.socket.emit("SET", {
+      socketIOInstance.emit("SET", {
         token: userStore.myToken,
         x,
         y,
@@ -359,7 +355,7 @@ export default createStore({
     setScl(context) {
       const { x, y, scl, stat } = context.state.users[userStore.myID];
       const newScl = scl === 100 ? -100 : 100;
-      context.state.socket.emit("SET", {
+      socketIOInstance.emit("SET", {
         token: userStore.myToken,
         x,
         y,
@@ -367,16 +363,16 @@ export default createStore({
         stat,
       });
     },
-    sendError(context, { text }) {
-      context.state.socket.emit("ERROR", {
+    sendError(_, { text }) {
+      socketIOInstance.emit("ERROR", {
         text: JSON.stringify(text),
       });
     },
-    receivedConnect({ state }) {
+    receivedConnect() {
       if (userStore.myToken == null) {
         return;
       }
-      state.socket.emit("AUTH", {
+      socketIOInstance.emit("AUTH", {
         token: userStore.myToken,
       });
     },
@@ -460,12 +456,12 @@ export default createStore({
         });
       }
     },
-    toggleIgnorance(context, { ihash }) {
+    toggleIgnorance(_, { ihash }) {
       if (ihash === userStore.ihash) {
         return;
       }
       const newIgnores = !usersStore.ihashsIgnoredByMe[ihash];
-      context.state.socket.emit("IG", {
+      socketIOInstance.emit("IG", {
         token: userStore.myToken,
         stat: newIgnores ? "on" : "off",
         ihash,
@@ -478,14 +474,14 @@ export default createStore({
       usersStore.updateUserSilentIgnore(ihash, isActive);
       context.dispatch("removeChatMessagesSilentIgnored", { ihash, isActive });
     },
-    simulateReconnection({ state }) {
-      state.socket.disconnect();
+    simulateReconnection() {
+      socketIOInstance.disconnect();
       setTimeout(() => {
-        state.socket.connect();
+        socketIOInstance.connect();
       }, 3000);
     },
-    suicide({ state }) {
-      state.socket.emit("SUICIDE", {
+    suicide() {
+      socketIOInstance.emit("SUICIDE", {
         token: userStore.myToken,
       });
     },
