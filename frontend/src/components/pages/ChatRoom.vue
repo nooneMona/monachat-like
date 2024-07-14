@@ -228,7 +228,7 @@ const clickExit = async () => {
     path: "/select",
   });
 };
-const submitCOM = (param: { text: string }) => {
+const submitCOM = (param: { text: string; shift: boolean }) => {
   if (param.text.match(/^(状態|stat)(:|：)/)) {
     store.dispatch("setStat", {
       stat: param.text.replace(/(状態|stat)(:|：)/, ""),
@@ -240,7 +240,7 @@ const submitCOM = (param: { text: string }) => {
   setTimeout(function () {
     permittedSubmitting.value = true;
   }, commentIntervalMilliSec);
-  store.dispatch("com", {
+  userStore.com({
     ...param,
     typing: {
       count: keyCount.value,

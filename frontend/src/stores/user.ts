@@ -131,6 +131,38 @@ export const useUserStore = defineStore("user", () => {
     });
   };
 
+  const com = ({
+    text,
+    shift,
+    typing,
+  }: {
+    text: string;
+    shift: boolean;
+    typing: { count: number; milliTime: number };
+  }) => {
+    const settingStore = useSettingStore();
+
+    if (myToken.value === null) {
+      return;
+    }
+    const comParam: {
+      token: string;
+      cmt: string;
+      style?: number;
+      typing?: { count: number; milliTime: number };
+    } = {
+      token: myToken.value,
+      cmt: text,
+    };
+    if (shift) {
+      comParam.style = 2;
+    }
+    if (settingStore.isTypingMode && typing !== undefined) {
+      comParam.typing = { ...typing };
+    }
+    socketIOInstance.emit("COM", comParam);
+  };
+
   return {
     myID,
     myToken,
@@ -149,5 +181,6 @@ export const useUserStore = defineStore("user", () => {
     enterName,
     enter,
     exit,
+    com,
   };
 });

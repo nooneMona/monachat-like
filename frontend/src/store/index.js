@@ -241,19 +241,6 @@ export default createStore({
       logStore.appendLog({ head, content, foot, visibleOnReceived, color, ihash });
       settingStore.saveCurrentLog(logStore.logs);
     },
-    com(_, { text, shift, typing }) {
-      const comParam = {
-        token: userStore.myToken,
-        cmt: text,
-      };
-      if (shift) {
-        comParam.style = 2;
-      }
-      if (settingStore.isTypingMode && typing !== undefined) {
-        comParam.typing = { ...typing };
-      }
-      socketIOInstance.emit("COM", comParam);
-    },
     setXY(context, { x, y }) {
       const { scl, stat } = context.state.users[userStore.myID];
       socketIOInstance.emit("SET", {
