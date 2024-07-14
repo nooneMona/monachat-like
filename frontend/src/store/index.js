@@ -1,7 +1,6 @@
 import moment from "moment";
 import axios from "axios";
 import { createStore } from "vuex";
-import { v4 as uuidv4 } from "uuid";
 import io from "socket.io-client";
 import { indexGetters } from "@/store/getters";
 import Color from "../stores/color";
@@ -28,10 +27,6 @@ export default createStore({
     return {
       socket: null, // socket.ioのクライアント
       users: {}, // 現在のコンテキストにいるユーザー
-      chatMessages: {}, // 吹き出し
-      ihashsIgnoredByMe: {}, // 自分が無視したユーザーリスト
-      idsIgnoresMe: {}, // 自分が無視されたユーザーリスト
-      ihashsSilentIgnoredByMe: {},
     };
   },
   getters: indexGetters,
@@ -103,13 +98,15 @@ export default createStore({
     updateUserIgnore(state, { id, stat, ihash }) {
       const ignores = stat === "on"; // offでもなかった場合は無視を解除する
       if (id === userStore.myID) {
-        state.ihashsIgnoredByMe[ihash] = ignores;
+        // 自分が無視した場合
+        usersStore.updateUserIgnore(ihash, ignores);
         // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
       }
       if (ihash === userStore.ihash) {
-        state.idsIgnoresMe[id] = ignores;
+        // 自分が無視された場合
+        usersStore.updateIDsIgnoresMe(id, ignores);
         // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
-        state.chatMessages[id] = [];
+        usersStore.removeChatMessages(id);
       }
     },
     // キャラの座標とサイズから実際の表示座標を更新する
@@ -131,9 +128,6 @@ export default createStore({
         userRef.dispY = userRef.y;
       }
     },
-    updateUserSilentIgnore(state, { ihash, isActive }) {
-      state.ihashsSilentIgnoredByMe[ihash] = isActive;
-    },
     updateUserExistence(state, { id, exists }) {
       const userRef = state.users[id];
       if (!userRef) return;
@@ -144,24 +138,6 @@ export default createStore({
       if (!userRef) return;
       userRef.width = width;
       userRef.height = height;
-    },
-    appendChatMessage(state, { id, message }) {
-      if (state.chatMessages[id] === undefined) {
-        state.chatMessages[id] = [];
-      }
-      // NOTE: どう追加するかは吹き出しの重なり方が依存する
-      // ref: https://developer.mozilla.org/ja/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_without_z-index
-      state.chatMessages[id].push({ messageID: uuidv4(), ...message });
-    },
-    removeChatMessage(state, { characterID, messageID }) {
-      const index = state.chatMessages[characterID].findIndex((v) => v.messageID === messageID);
-      state.chatMessages[characterID].splice(index, 1);
-    },
-    removeChatMessages(state, { id }) {
-      state.chatMessages[id] = [];
-    },
-    resetChatMessages(state) {
-      state.chatMessages = {};
     },
     resetUsers(state) {
       state.users = {};
@@ -215,7 +191,7 @@ export default createStore({
       });
       state.socket.on("SLEEP", (param) => {
         commit("updateUserExistence", { id: param.id, exists: false });
-        commit("removeChatMessages", { id: param.id });
+        usersStore.removeChatMessages(param.id);
       });
       state.socket.on("AWAKE", (param) => {
         commit("updateUserExistence", { id: param.id, exists: true });
@@ -426,7 +402,7 @@ export default createStore({
       };
       // フォーカスから外れているときに吹き出しをためない
       if (document.visibilityState === "visible") {
-        context.commit("appendChatMessage", { id, message });
+        usersStore.appendChatMessage(id, message);
       }
       context.dispatch("appendLog", message);
       context.commit("updateUserExistence", { id, exists: true });
@@ -458,7 +434,7 @@ export default createStore({
         });
       }
       context.commit("updateUserExistence", { id, exists: false });
-      context.commit("removeChatMessages", { id });
+      usersStore.removeChatMessages(id);
     },
     receivedAUTH({ commit, dispatch }, { id, token }) {
       if (id === "error") {
@@ -482,14 +458,14 @@ export default createStore({
     removeChatMessagesIgnored(context, { id, ihash }) {
       if (id === userStore.myID) {
         context.getters.idsByIhash[ihash].forEach((targetId) => {
-          context.commit("removeChatMessages", { id: targetId });
+          usersStore.removeChatMessages(targetId);
         });
       }
     },
     removeChatMessagesSilentIgnored(context, { ihash, isActive }) {
       if (isActive) {
         context.getters.idsByIhash[ihash].forEach((targetId) => {
-          context.commit("removeChatMessages", { id: targetId });
+          usersStore.removeChatMessages(targetId);
         });
       }
     },
@@ -497,7 +473,7 @@ export default createStore({
       if (ihash === userStore.ihash) {
         return;
       }
-      const newIgnores = !context.state.ihashsIgnoredByMe[ihash];
+      const newIgnores = !usersStore.ihashsIgnoredByMe[ihash];
       context.state.socket.emit("IG", {
         token: userStore.myToken,
         stat: newIgnores ? "on" : "off",
@@ -508,7 +484,6 @@ export default createStore({
       if (ihash === userStore.ihash) {
         return;
       }
-      context.commit("updateUserSilentIgnore", { ihash, isActive });
       usersStore.updateUserSilentIgnore(ihash, isActive);
       context.dispatch("removeChatMessagesSilentIgnored", { ihash, isActive });
     },

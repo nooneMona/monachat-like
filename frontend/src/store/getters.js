@@ -1,20 +1,22 @@
 import { piniaInstance } from "../piniaInstance";
 import { useLogStore } from "../stores/log";
+import { useUsersStore } from "../stores/users";
 
+const usersStore = useUsersStore(piniaInstance);
 const logStore = useLogStore(piniaInstance);
 
 export const indexGetters = {
-  visibleLogMessages(state) {
+  visibleLogMessages() {
     return logStore.logMessages
-      .filter((e) => !state.ihashsSilentIgnoredByMe[e.ihash])
-      .filter((e) => !state.ihashsIgnoredByMe[e.ihash]);
+      .filter((e) => !usersStore.ihashsSilentIgnoredByMe[e.ihash])
+      .filter((e) => !usersStore.ihashsIgnoredByMe[e.ihash]);
   },
   // 画面に表示されているユーザー
   visibleUsers(state) {
     return Object.keys(state.users)
       .filter((id) => state.users[id].alive)
-      .filter((id) => !state.idsIgnoresMe[id])
-      .filter((id) => !state.ihashsIgnoredByMe[state.users[id].ihash])
+      .filter((id) => !usersStore.idsIgnoresMe[id])
+      .filter((id) => !usersStore.ihashsIgnoredByMe[state.users[id].ihash])
       .reduce((result, id) => {
         const resultRef = result;
         resultRef[id] = state.users[id];
@@ -25,18 +27,18 @@ export const indexGetters = {
   manageableUsers(state) {
     return Object.keys(state.users)
       .filter((id) => state.users[id].alive)
-      .filter((id) => !state.idsIgnoresMe[id]) // 自分が無視したユーザーは解除できるべきである
+      .filter((id) => !usersStore.idsIgnoresMe[id]) // 自分が無視したユーザーは解除できるべきである
       .reduce((result, id) => {
         const resultRef = result;
         resultRef[id] = state.users[id];
-        resultRef[id].isIgnored = state.ihashsIgnoredByMe[state.users[id].ihash] ?? false;
+        resultRef[id].isIgnored = usersStore.ihashsIgnoredByMe[state.users[id].ihash] ?? false;
         return result;
       }, {});
   },
   // サイレント無視したユーザー
   silentUsers(state) {
     return Object.keys(state.users)
-      .filter((id) => state.ihashsSilentIgnoredByMe[state.users[id].ihash])
+      .filter((id) => usersStore.ihashsSilentIgnoredByMe[state.users[id].ihash])
       .reduce((result, id) => {
         const resultRef = result;
         resultRef[id] = state.users[id];

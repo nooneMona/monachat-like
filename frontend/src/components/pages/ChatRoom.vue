@@ -102,9 +102,11 @@ import { useUserStore } from "../../stores/user";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores/setting";
 import { useRoomStore } from "../../stores/room";
+import { useUsersStore } from "../../stores/users";
 
 const store = useStore();
 const userStore = useUserStore();
+const usersStore = useUsersStore();
 const roomStore = useRoomStore();
 const uiStore = useUIStore();
 const settingStore = useSettingStore();
@@ -131,6 +133,7 @@ const typingStartTime = ref(0); // タイピング開始時刻
 
 // ストア
 const { disconnected, myID } = storeToRefs(userStore);
+const { chatMessages } = storeToRefs(usersStore);
 const { isDarkMode } = storeToRefs(settingStore);
 const selectedVolume = computed({
   get: () => settingStore.selectedVolume,
@@ -141,7 +144,6 @@ const selectedTime = computed({
   set: (value) => settingStore.updateSelectedTime(value),
 });
 const visibleUsers = computed(() => store.getters.visibleUsers);
-const chatMessages = computed(() => store.state.chatMessages);
 const displayingMyID = computed(() => userStore.displayingMyID(3));
 const currentRoom = computed({
   get: () => userStore.currentRoom,
@@ -285,7 +287,7 @@ const sizeUpdated = (e: { id: string; width: number; height: number }) => {
 };
 
 const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messageID: string }) => {
-  store.commit("removeChatMessage", { characterID, messageID });
+  usersStore.removeChatMessage(characterID, messageID);
 };
 </script>
 

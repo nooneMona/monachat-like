@@ -81,9 +81,11 @@ import { CharactersResponse, ColorResponse, RoomResponse } from "@/infrastructur
 import { CharType } from "@/domain/charType";
 import { Trip, TripFactory } from "@/domain/trip";
 import { useRoomStore } from "../../stores/room";
+import { useUsersStore } from "../../stores/users";
 
 const store = useStore();
 const userStore = useUserStore();
+const usersStore = useUsersStore();
 const roomStore = useRoomStore();
 const settingStore = useSettingStore();
 const router = useRouter();
@@ -147,7 +149,7 @@ onMounted(async () => {
   charactersResponse.value = charactersRes.data.characters;
 
   userStore.updateCurrentRoom(null);
-  store.commit("resetChatMessages");
+  usersStore.resetChatMessages();
   await store.dispatch("enterName", { text: null });
 });
 
