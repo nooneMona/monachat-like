@@ -1,18 +1,11 @@
-import { useSettingStore } from "../stores/setting";
 import { piniaInstance } from "../piniaInstance";
+import { useLogStore } from "../stores/log";
 
-const settingStore = useSettingStore(piniaInstance);
+const logStore = useLogStore(piniaInstance);
 
 export const indexGetters = {
-  // ログに表示するための順序が考慮されたリスト
-  logMessages(state) {
-    if (settingStore.isDescendingLog) {
-      return state.logMessages.slice().reverse();
-    }
-    return state.logMessages;
-  },
-  visibleLogMessages(state, getters) {
-    return getters.logMessages
+  visibleLogMessages(state) {
+    return logStore.logMessages
       .filter((e) => !state.ihashsSilentIgnoredByMe[e.ihash])
       .filter((e) => !state.ihashsIgnoredByMe[e.ihash]);
   },

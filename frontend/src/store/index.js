@@ -10,13 +10,17 @@ import { useNoticeStore } from "@/stores/notice";
 import { useUIStore } from "../stores/ui";
 import { useSettingStore } from "@/stores/setting";
 import { useUserStore } from "../stores/user";
+import { useUsersStore } from "../stores/users";
 import { useRoomStore } from "../stores/room";
+import { useLogStore } from "../stores/log";
 
 const noticeStore = useNoticeStore(piniaInstance);
 const uiStore = useUIStore(piniaInstance);
 const settingStore = useSettingStore(piniaInstance);
 const userStore = useUserStore(piniaInstance);
+const usersStore = useUsersStore(piniaInstance);
 const roomStore = useRoomStore(piniaInstance);
+const logStore = useLogStore(piniaInstance);
 
 export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
@@ -25,7 +29,6 @@ export default createStore({
       socket: null, // socket.ioのクライアント
       users: {}, // 現在のコンテキストにいるユーザー
       chatMessages: {}, // 吹き出し
-      logMessages: [], // ログ
       ihashsIgnoredByMe: {}, // 自分が無視したユーザーリスト
       idsIgnoresMe: {}, // 自分が無視されたユーザーリスト
       ihashsSilentIgnoredByMe: {},
@@ -33,17 +36,6 @@ export default createStore({
   },
   getters: indexGetters,
   mutations: {
-    appendLog(state, logObj) {
-      const MAX_LOG_LENGTH = 1_000;
-      if (settingStore.isInfiniteLog) {
-        state.logMessages = [logObj, ...state.logMessages];
-        return;
-      }
-      state.logMessages = [logObj, ...state.logMessages.slice(0, MAX_LOG_LENGTH - 1)];
-    },
-    resetLog(state) {
-      state.logMessages.splice(0);
-    },
     initializeSocket(state) {
       state.socket = io(import.meta.env.VITE_APP_SOCKET_HOST, {
         path: "/monachatchat/",
@@ -253,8 +245,8 @@ export default createStore({
       const color =
         context.getters.visibleUsers[id]?.rgbaValue ??
         Color.monaRGBToCSS({ r: 255, g: 255, b: 255 }, 1.0);
-      context.commit("appendLog", { head, content, foot, visibleOnReceived, color, ihash });
-      settingStore.saveCurrentLog(context.state.logMessages);
+      logStore.appendLog({ head, content, foot, visibleOnReceived, color, ihash });
+      settingStore.saveCurrentLog(logStore.logs);
     },
     appendUserLog(context, { id, isEnter }) {
       const name = context.getters.visibleUsers[id]?.name;
@@ -284,8 +276,8 @@ export default createStore({
       const color =
         context.getters.visibleUsers[id]?.rgbaValue ??
         Color.monaRGBToCSS({ r: 255, g: 255, b: 255 }, 1.0);
-      context.commit("appendLog", { head, content, foot, visibleOnReceived, color, ihash });
-      settingStore.saveCurrentLog(context.state.logMessages);
+      logStore.appendLog({ head, content, foot, visibleOnReceived, color, ihash });
+      settingStore.saveCurrentLog(logStore.logs);
     },
     // トリップ付き名前文字列`text`を分解しsetting.name, .tripに保管
     parseNameWithTrip(_, { text }) {
@@ -303,9 +295,9 @@ export default createStore({
       settingStore.updateSavedName(name);
       settingStore.updateSavedTrip(trip);
     },
-    resetLogStorage({ state, commit }) {
-      commit("resetLog");
-      settingStore.saveCurrentLog(state.logMessages);
+    resetLogStorage() {
+      logStore.resetLog();
+      settingStore.saveCurrentLog(logStore.logs);
     },
     enterName({ state }) {
       // ローカルストレージの内容に頼る
@@ -326,8 +318,8 @@ export default createStore({
       settingStore.updateSavedName(name);
       settingStore.updateSavedTrip(trip);
       const log = settingStore.loadedLogFromStorage;
-      if (state.logMessages.length === 0 && log.length !== 0) {
-        state.logMessages = log;
+      if (logStore.logs.length === 0 && log.length !== 0) {
+        logStore.$patch({ logs: log });
       }
     },
     enter({ state }, { room }) {
@@ -352,8 +344,8 @@ export default createStore({
         type: settingStore.savedType,
       });
       const log = settingStore.loadedLogFromStorage;
-      if (state.logMessages.length === 0 && log.length !== 0) {
-        state.logMessages = log;
+      if (logStore.logs.length === 0 && log.length !== 0) {
+        logStore.$patch({ logs: log });
       }
       userStore.updateCurrentRoom(room);
       userStore.updateCoordinate({ x, y });
@@ -517,6 +509,7 @@ export default createStore({
         return;
       }
       context.commit("updateUserSilentIgnore", { ihash, isActive });
+      usersStore.updateUserSilentIgnore(ihash, isActive);
       context.dispatch("removeChatMessagesSilentIgnored", { ihash, isActive });
     },
     simulateReconnection({ state }) {
