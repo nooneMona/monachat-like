@@ -2,7 +2,8 @@ import { defineConfig } from "vite";
 import path from "path";
 import vue from "@vitejs/plugin-vue";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
-import Unfonts from 'unplugin-fonts/vite'
+import Unfonts from "unplugin-fonts/vite";
+import vueDevTools from "vite-plugin-vue-devtools";
 
 export default defineConfig({
   build: {
@@ -19,6 +20,7 @@ export default defineConfig({
         families: ["Noto Sans JP"],
       },
     }),
+    vueDevTools(),
   ],
   resolve: {
     alias: {
