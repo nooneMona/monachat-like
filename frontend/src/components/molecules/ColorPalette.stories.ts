@@ -1,11 +1,17 @@
 import ColorPalette from "./ColorPalette.vue";
+import { StoryFn } from "@storybook/vue3";
 
 export default {
   title: "molecules/ColorPalette",
   component: ColorPalette,
 };
 
-const Template = (args) => ({
+interface Args {
+  hexColors: { id: string; hexColor: string }[];
+  isDark?: boolean;
+}
+
+const Template: StoryFn<Args> = (args) => ({
   components: { ColorPalette },
   setup() {
     return { args };
