@@ -17,12 +17,14 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import InfoPanel from "@/components/pages/InfoPanel.vue";
 import NoticeBar from "@/components/organisms/NoticeBar.vue";
-import { useUserStore } from "./stores/user";
-import { useNoticeStore } from "./stores/notice";
-import { useUIStore } from "./stores/ui";
+import { useUserStore } from "@/stores/user";
+import { useNoticeStore } from "@/stores/notice";
+import { useUIStore } from "@/stores/ui";
+import { useRoomStore } from "@/stores/room";
 
 const store = useStore();
 const userStore = useUserStore();
+const roomStore = useRoomStore();
 const noticeStore = useNoticeStore();
 const uiStore = useUIStore();
 const router = useRouter();
@@ -34,7 +36,7 @@ const { isRequiredRefresh } = storeToRefs(noticeStore);
 // ライフサイクル
 onMounted(() => {
   store.dispatch("registerSocketEvents");
-  store.dispatch("loadPreData");
+  roomStore.syncRoomMetadata();
   window.onerror = (message, source, lineno, colno) => {
     const text = `${message} ${source}?${lineno}:${colno}`;
     store.dispatch("sendError", { text });

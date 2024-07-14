@@ -86,7 +86,7 @@ export default createStore({
       userRef.stat = userObj.stat;
       userRef.alive = true;
     },
-    updateUserIgnore(state, { id, stat, ihash }) {
+    updateUserIgnore(_, { id, stat, ihash }) {
       const ignores = stat === "on"; // offでもなかった場合は無視を解除する
       if (id === userStore.myID) {
         // 自分が無視した場合
@@ -135,10 +135,6 @@ export default createStore({
     },
   },
   actions: {
-    async loadPreData() {
-      const res = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/rooms`);
-      roomStore.updateRoomMetadata(res.data.rooms);
-    },
     registerSocketEvents({ commit, dispatch }) {
       socketIOInstance.on("connect", () => {
         userStore.updateDisconnected(false);
