@@ -1,20 +1,24 @@
 <template>
   <div
     ref="wrapperEl"
+    class="log-container"
     :style="{
-      maxHeight: isScrollable ? '220px' : 'none',
-      overflowY: isScrollable ? 'scroll' : 'auto',
+      maxHeight: isScrollableLog ? '220px' : 'none',
+      overflowY: isScrollableLog ? 'scroll' : 'auto',
     }"
   >
     <!-- ログの1行分 -->
+    <!-- TODO: コンポーネント化する -->
     <div
+      class="log-row"
       v-for="msg in messages"
       :key="msg"
-      class="log-row"
       :style="{
-        backgroundColor: msg.visibleOnReceived ? 'none' : invibisbleOnReceivedBackgroundColor,
+        backgroundColor: msg.visibleOnReceived ? 'none' : greyBackgroundColor,
         /*rgbaが渡されているが、alphaの値が1.0でありrgbに変換されるため、rgbに0.4を新たに加える。そうすると勝手にrgbaに変換され、線が薄くなる*/
-        borderBottom: isDrawUnderLine ? `2px solid ${msg.color.replace(')', ', 0.4)')}` : 'none',
+        borderBottom: isDrawnUnderlineLog
+          ? `2px solid ${msg.color.replace(')', ', 0.4)')}`
+          : 'none',
       }"
     >
       <SpanText
@@ -33,7 +37,7 @@
       </template>
       <SpanText :text="msg.foot" :type="selectedUsersIhashes[msg.ihash]" />
     </div>
-    <div class="log-info-container" v-if="!isDecendingLog && messages.length !== 0">
+    <div class="log-info-container" v-if="!isDescendingLog && messages.length !== 0">
       <SpanText :text="`現在のログ: ${messages.length}件`" type="text" />
     </div>
   </div>
@@ -43,27 +47,26 @@
 import { onMounted, computed, watch, ref, nextTick, onUnmounted } from "vue";
 import { useStore } from "vuex";
 import SpanText from "@/components/atoms/SpanText.vue";
+import { storeToRefs } from "pinia";
+import { useSettingStore } from "@/stores/setting";
+import { useUIStore } from "@/stores/ui";
 
 const pageTitle = document.title;
 const wrapperEl = ref<HTMLDivElement>();
 
 // ストア
 const store = useStore();
-const isScrollable = computed(() => store.state.setting.scrollableLog);
-const isDecendingLog = computed(() => store.state.setting.descendingLog);
-const isDrawUnderLine = computed(() => store.state.setting.drawBorderBottomLog);
-const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
-const isDarkMode = computed(() => store.state.setting.darkMode);
+const settingStore = useSettingStore();
+const uiStore = useUIStore();
+
+const { isScrollableLog, isDescendingLog, isDrawnUnderlineLog, selectedUsersIhashes } =
+  storeToRefs(settingStore);
+const { greyBackgroundColor } = storeToRefs(uiStore);
 const messages = computed(() => store.getters.visibleLogMessages);
 
 // スクロール位置が下端にあるか
 const isLatestScrollPosition = ref(true);
 const unseenLogCounter = ref(0);
-
-// 画面を見ていなかった時の背景色
-const invibisbleOnReceivedBackgroundColor = computed(() =>
-  isDarkMode.value ? "#3A3A3A" : "gainsboro",
-);
 
 const splitToContentsArray = (msg: string): string[] => {
   const urlPattern = /https?:\/\/[^\s$.?#].[^\s]*/gm;
@@ -83,7 +86,7 @@ const scrollToLatest = () => {
   if (elm === undefined) {
     return;
   }
-  const destTop = store.state.setting.descendingLog ? elm.scrollHeight - elm.offsetHeight : 0;
+  const destTop = isDescendingLog.value ? elm.scrollHeight - elm.offsetHeight : 0;
   elm.scrollTop = destTop;
 };
 const handleScroll = () => {
@@ -95,9 +98,7 @@ const handleScroll = () => {
   // 1px分の誤差を許容する
   const isLatestOnDesc =
     scrollBottomPosition - 1 < elm.scrollHeight && elm.scrollHeight < scrollBottomPosition + 1;
-  const isOnLatestScrollPosition = store.state.setting.descendingLog
-    ? isLatestOnDesc
-    : elm.scrollTop === 0;
+  const isOnLatestScrollPosition = isDescendingLog.value ? isLatestOnDesc : elm.scrollTop === 0;
   isLatestScrollPosition.value = isOnLatestScrollPosition;
 };
 
@@ -109,10 +110,10 @@ const handleVisibilityChange = () => {
 };
 
 const toggleUserSelecting = (ihash: string) => {
-  store.dispatch("setting/toggleUserSelecting", { ihash });
+  settingStore.toggleUserSelecting(ihash);
 };
 const changeSelectedUsersColor = (ihash: string) => {
-  store.dispatch("setting/changeSelectedUsersColor", { ihash });
+  settingStore.changeSelectedUserColor(ihash);
 };
 
 const increaseUnseenLogCounter = () => {
@@ -138,7 +139,7 @@ watch(
   () => [...messages.value],
   () => {
     if (isLatestScrollPosition.value) {
-      if (store.state.setting.descendingLog) {
+      if (isDescendingLog) {
         nextTick(scrollToLatest);
       }
       scrollToLatest();
@@ -155,7 +156,7 @@ watch(
 // We cannot change the scroll position of the element
 // whose CSS prop 'display' is 'none'.
 watch(
-  () => store.state.setting.descendingLog,
+  () => isDescendingLog,
   () => {
     scrollToLatest();
   },
@@ -163,15 +164,16 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.log-row {
-  padding-top: 1px;
-  padding-bottom: 1px;
+.log-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2px;
 
+  .link {
+    text-decoration: none;
+  }
   .log-info-container {
     padding-top: 16px;
   }
-}
-.link {
-  text-decoration: none;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <TabView @tab-click="tabClicked">
+  <TabView>
     <TabPanel>
       <template #header>
         <span v-if="!isKBMode">ログ</span>
@@ -68,16 +68,16 @@
         <span v-if="!isKBMode">開発</span>
         <i v-else class="pi pi-github"></i>
       </template>
-      <SwitchField v-model="isCheckedFrame" label="フレーム表示" labelId="checkedFrame" />
+      <SwitchField v-model="isVisibleFrame" label="フレーム表示" labelId="checkedFrame" />
       <div>
-        <Button
+        <PrimeButton
           label="切断／再接続テスト（３秒復帰）"
           class="p-button-raised p-button-text p-button-sm p-button-danger"
           @click="onClickDisconnect"
         />
       </div>
       <div>
-        <Button
+        <PrimeButton
           label="サーバーキックテスト"
           class="p-button-raised p-button-text p-button-sm p-button-danger"
           @click="onClickKicked"
@@ -87,130 +87,68 @@
   </TabView>
 </template>
 
-<script>
-import { ref, watch, computed } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
 import { useStore } from "vuex";
 import Checkbox from "primevue/checkbox";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import Button from "primevue/button";
+import PrimeButton from "primevue/button";
 import SwitchField from "@/components/molecules/SwitchField.vue";
 import ChatLog from "@/components/organisms/ChatLog.vue";
 import SettingsFields from "@/components/organisms/SettingsFields.vue";
 import SpanText from "@/components/atoms/SpanText.vue";
+import { storeToRefs } from "pinia";
+import { useSettingStore } from "@/stores/setting";
+import { useDevStore } from "@/stores/develop";
+import { useUIStore } from "@/stores/ui";
+import { Character } from "@/domain/character";
 
-export default {
-  name: "InfoPanel",
-  components: {
-    TabView,
-    TabPanel,
-    DataTable,
-    Column,
-    Checkbox,
-    SwitchField,
-    ChatLog,
-    SettingsFields,
-    Button,
-    SpanText,
-  },
-  setup() {
-    const store = useStore();
-    const computedSetting = (fieldName, updatorName) => {
-      return computed({
-        get: () => {
-          return store.state.setting[fieldName];
-        },
-        set: (value) => {
-          store.commit(updatorName, value);
-        },
-      });
-    };
+const store = useStore();
+const uiStore = useUIStore();
+const settingStore = useSettingStore();
+const devStore = useDevStore();
 
-    const isKBMode = computedSetting("kbMode", "setting/updateKBMode");
-    const isCheckedFrame = ref(false);
-    const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
-    const isDarkMode = computed(() => store.state.setting.darkMode);
-    const backgroundColor = computed(() => {
-      if (isDarkMode.value) {
-        return "#121212";
-      }
-      return "white";
-    });
+const { isKBMode, selectedUsersIhashes } = storeToRefs(settingStore);
+const { panelBackgroundColor } = storeToRefs(uiStore);
 
-    const userDisp = (user, id) => {
-      if (user.trip) {
-        return `${user.name}◆${user.trip} (ID:${id.slice(0, 3)})`;
-      }
-      return `${user.name}◇${user.ihash?.slice(0, 6)} (ID:${id.slice(0, 3)})`;
-    };
-    const manageableUsers = computed(() => {
-      const usersObj = store.getters.manageableUsers;
-      return Object.keys(usersObj).map((key) => {
-        return {
-          id: key,
-          ...usersObj[key],
-          disp: userDisp(usersObj[key], key),
-          ihash: usersObj[key].ihash,
-          isSilentUser: store.getters.silentUsers[key] != null,
-        };
-      });
-    });
+const isVisibleFrame = computed({
+  get: () => devStore.isVisibleFrame,
+  set: (value) => devStore.updateIsVisibleFrame(value),
+});
 
-    const onClickIgnore = (ihash) => {
-      store.dispatch("toggleIgnorance", { ihash });
-    };
-    const onChangeSilentIgnore = (ihash, isActive) => {
-      store.dispatch("toggleSilentIgnorance", { ihash, isActive });
-    };
-    const onClickDisconnect = () => {
-      store.dispatch("simulateReconnection");
-    };
-    const onClickKicked = () => {
-      store.dispatch("suicide");
-    };
+const userDisp = (user: { name: string; trip: string; ihash: string }, id: string) => {
+  const character = Character.create({ name: user.name, trip: user.trip, ihash: user.ihash });
+  const idDisp = `(ID:${id.slice(0, 3)})`;
+  return `${character.nameTag()} ${idDisp}`;
+};
 
-    const tabClicked = (e) => {
-      let tabName = "";
-      switch (e.index) {
-        case 0:
-          tabName = "ログ";
-          break;
-        case 1:
-          tabName = "ユーザー";
-          break;
-        case 2:
-          tabName = "設定";
-          break;
-        case 3:
-          tabName = "公式";
-          break;
-        case 4:
-          tabName = "開発";
-          break;
-        default:
-          tabName = "";
-      }
-    };
-
-    watch(isCheckedFrame, () => {
-      store.commit("developer/updateIsVisibleFrame", isCheckedFrame.value);
-    });
-
+const manageableUsers = computed(() => {
+  const usersObj = store.getters.manageableUsers;
+  return Object.keys(usersObj).map((key) => {
     return {
-      isCheckedFrame,
-      manageableUsers,
-      onClickIgnore,
-      onChangeSilentIgnore,
-      isKBMode,
-      onClickDisconnect,
-      onClickKicked,
-      tabClicked,
-      selectedUsersIhashes,
-      backgroundColor,
+      id: key,
+      ...usersObj[key],
+      disp: userDisp(usersObj[key], key),
+      ihash: usersObj[key].ihash,
+      isSilentUser: store.getters.silentUsers[key] != null,
     };
-  },
+  });
+});
+
+const onClickIgnore = (ihash: string) => {
+  store.dispatch("toggleIgnorance", { ihash });
+};
+const onChangeSilentIgnore = (ihash: string, isActive: boolean) => {
+  store.dispatch("toggleSilentIgnorance", { ihash, isActive });
+};
+const onClickDisconnect = () => {
+  store.dispatch("simulateReconnection");
+};
+const onClickKicked = () => {
+  store.dispatch("suicide");
 };
 </script>
 
@@ -236,12 +174,12 @@ export default {
 }
 
 :deep(.p-tabview-nav) {
-  background-color: v-bind(backgroundColor);
+  background-color: v-bind(panelBackgroundColor);
   height: 40px;
 }
 
 :deep(.p-tabview-nav .p-tabview-header .p-tabview-nav-link) {
-  background-color: v-bind(backgroundColor);
+  background-color: v-bind(panelBackgroundColor);
   height: 30px;
   min-width: 160px;
   padding: 1.18em;
@@ -250,7 +188,7 @@ export default {
 }
 
 :deep(.p-tabview-panels) {
-  background-color: v-bind(backgroundColor);
+  background-color: v-bind(panelBackgroundColor);
 }
 
 :deep(.pi) {
@@ -258,10 +196,10 @@ export default {
 }
 
 :deep(.p-datatable .p-resizable-column) {
-  background-color: v-bind(backgroundColor);
+  background-color: v-bind(panelBackgroundColor);
 }
 
 :deep(.p-datatable .p-datatable-tbody td) {
-  background-color: v-bind(backgroundColor);
+  background-color: v-bind(panelBackgroundColor);
 }
 </style>

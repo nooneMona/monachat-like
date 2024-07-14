@@ -5,32 +5,31 @@
       :size="16"
       type="notice"
     />
-    <div :style="{ width: '80px' }">
-      <Button title="更新" @onClick="onClick" />
+    <div class="button">
+      <SimpleButton title="更新" @onClick="onClick" />
     </div>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import SpanText from "@/components/atoms/SpanText.vue";
-import Button from "@/components/atoms/Button.vue";
+import SimpleButton from "@/components/atoms/SimpleButton.vue";
 
-export default {
-  components: { Text, Button, SpanText },
-  emits: ["click"],
-  setup(_, { emit }) {
-    const onClick = () => emit("click");
-    return { onClick };
-  },
-};
+const emits = defineEmits<{ (e: "click"): void }>();
+
+const onClick = () => emits("click");
 </script>
 
 <style scoped>
 .frame {
-  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
   column-gap: 20px;
+
+  .button {
+    width: 80px;
+  }
 }
 </style>

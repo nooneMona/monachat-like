@@ -1,11 +1,17 @@
 import SubmittableField from "./SubmittableField.vue";
+import { StoryFn } from "@storybook/vue3";
 
 export default {
   title: "molecules/SubmittableField",
   component: SubmittableField,
 };
 
-const Template = (args) => ({
+interface Args {
+  allowedEmpty: boolean;
+  disabled: boolean;
+}
+
+const Template: StoryFn<Args> = (args) => ({
   components: { SubmittableField },
   setup() {
     return { args };
@@ -15,3 +21,9 @@ const Template = (args) => ({
 
 export const Normal = Template.bind({});
 Normal.args = {};
+
+export const AllowedEmpty = Template.bind({});
+AllowedEmpty.args = { allowedEmpty: true };
+
+export const Disabled = Template.bind({});
+Disabled.args = { disabled: true };

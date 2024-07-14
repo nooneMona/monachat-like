@@ -17,6 +17,14 @@ export const useUIStore = defineStore("ui", () => {
 
   const backgroundColor = computed(() => (settingStore.isDarkMode ? "black" : "#d9d5da"));
   const panelBackgroundColor = computed(() => (settingStore.isDarkMode ? "#121212" : "white"));
+  const greyBackgroundColor = computed(() => (settingStore.isDarkMode ? "#3A3A3A" : "#dcdcdc"));
 
-  return { width, height, bottomBarHeight, backgroundColor, panelBackgroundColor };
+  return {
+    width,
+    height,
+    bottomBarHeight,
+    backgroundColor,
+    panelBackgroundColor,
+    greyBackgroundColor,
+  };
 });

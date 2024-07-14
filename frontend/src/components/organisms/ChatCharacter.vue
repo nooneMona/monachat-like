@@ -1,26 +1,20 @@
 <template>
-  <div
-    :class="[
-      'character-container',
-      {
-        'debug-frame': isVisibleDebugFrame,
-      },
-    ]"
-  >
-    <div class="debug-text character-text" v-if="isVisibleDebugFrame">
+  <div :class="['character-container', { 'debug-frame': isVisibleFrame }]">
+    <div class="debug-text character-text" v-if="isVisibleFrame">
       <SpanText :text="`(${user.x}, ${user.y})`" :size="10" />
     </div>
     <BubbleArea
       class="bubble-area"
       :user="user"
       :messages="messages"
+      :bubbleAreaHeight
       @bubbleDeleted="bubbleDeleted"
     />
     <div ref="characterEl" class="character">
       <CharacterImage
         :class="{
-          'debug-frame': isVisibleDebugFrame,
-          'image-frame': selectedUsersIhashes[user.ihash],
+          'debug-frame': isVisibleFrame,
+          'selected-frame': selectedUsersIhashes[user.ihash],
         }"
         :style="{
           borderStyle: selectedUsersIhashes[user.ihash] ? 'solid' : 'unset',
@@ -30,30 +24,18 @@
         :depthRate="depthRate"
         :is-k-b-mode="isKBMode"
         :is-silent="isSilent"
-        @click="toggleUserSelecting(user.ihash)"
+        @click="toggleUserSelecting(user.ihash) /* TODO: 親コンポーネントに渡す */"
         @click.right.prevent="
-          selectedUsersIhashes[user.ihash] ? changeSelectedUsersColor(user.ihash) : ''
+          selectedUsersIhashes[user.ihash]
+            ? changeSelectedUsersColor(user.ihash)
+            : '' /* TODO: 親コンポーネントに渡す */
         "
         @imageUpdated="imageUpdated"
       />
-      <div
-        :class="[
-          'character-text',
-          {
-            'debug-frame': isVisibleDebugFrame,
-          },
-        ]"
-      >
+      <div :class="['character-text', { 'debug-frame': isVisibleFrame }]">
         <SpanText :text="user.name" />
       </div>
-      <div
-        :class="[
-          'character-text',
-          {
-            'debug-frame': isVisibleDebugFrame,
-          },
-        ]"
-      >
+      <div :class="['character-text', { 'debug-frame': isVisibleFrame }]">
         <SpanText :text="dispSubText" />
       </div>
     </div>
@@ -68,9 +50,19 @@ import CharacterImage from "@/components/organisms/CharacterImage.vue";
 import SpanText from "@/components/atoms/SpanText.vue";
 import { UIColor } from "../../ui/uiColor";
 import { useUIStore } from "../../stores/ui";
+import { SelectedUserColorType, useSettingStore } from "@/stores/setting";
+import { storeToRefs } from "pinia";
+import { useDevStore } from "@/stores/develop";
+import { Character } from "@/domain/character";
+import { ChatCharacterUser, ChatMessage } from "@/domain/type";
 
 const props = withDefaults(
-  defineProps<{ user: any; messages: any[]; bubbleAreaHeight: number; isDark?: boolean }>(),
+  defineProps<{
+    user: ChatCharacterUser;
+    messages: ChatMessage[];
+    bubbleAreaHeight?: number;
+    isDark?: boolean;
+  }>(),
   { bubbleAreaHeight: 300, isDark: undefined },
 );
 const emits = defineEmits<{
@@ -87,20 +79,21 @@ const typedCharacterEl: Ref<HTMLDivElement | undefined> = computed(
 // ストア
 const store = useStore();
 const uiStore = useUIStore();
-const isVisibleDebugFrame = computed(() => store.state.developer.isVisibleFrame);
-const selectedUsersIhashes = computed(() => store.state.setting.selectedUsersIhashes);
-const isKBMode = computed(() => store.state.setting.kbMode);
+const settingStore = useSettingStore();
+const devStore = useDevStore();
+
+const { isKBMode, selectedUsersIhashes } = storeToRefs(settingStore);
+const { isVisibleFrame } = storeToRefs(devStore);
+
 const silentUsers = computed(() => store.getters.silentUsers);
 
-const dispTrip = computed(() => {
-  if (props.user.trip) {
-    return `◆${props.user.trip.slice(0, 10)}`;
-  }
-  return `◇${props.user.ihash?.slice(0, 6)}`;
-});
 const dispSubText = computed(() => {
-  const { isMobile } = props.user;
-  return `${dispTrip.value}${isMobile ? "ﾓ" : ""}`;
+  const character = Character.create({
+    name: props.user.name,
+    trip: props.user.trip,
+    ihash: props.user.ihash,
+  });
+  return `${character.tripTag()}${props.user.isMobile ? "ﾓ" : ""}`;
 });
 const depthRate = computed(() => {
   let result = 1 - (uiStore.height - props.user.dispY) / uiStore.height;
@@ -109,19 +102,18 @@ const depthRate = computed(() => {
 });
 const isSilent = computed(() => silentUsers.value[props.user.id] != null);
 const shouldBeDark = computed(() => {
-  const isDarkModeFromStore = store?.state?.setting?.darkMode;
-  if (isDarkModeFromStore !== undefined) {
-    return isDarkModeFromStore;
+  const isDarkModeFromStore = useSettingStore().isDarkMode;
+  if (props.isDark !== undefined) {
+    return props.isDark;
   }
-  return props.isDark ?? false;
+  return isDarkModeFromStore;
 });
 const selectedBorderColor = computed(() => {
-  const color: string | undefined = selectedUsersIhashes.value[props.user.ihash];
-  const candidates = ["red", "blue", "green", "purple", "orange"] as const;
-  if (color === undefined || !(candidates as readonly string[]).includes(color)) {
+  const color: SelectedUserColorType | undefined = selectedUsersIhashes.value[props.user.ihash];
+  if (color === undefined) {
     return undefined;
   }
-  return new UIColor(color as (typeof candidates)[number]).getCSSColorName(shouldBeDark.value);
+  return new UIColor(color).getCSSColorName(shouldBeDark.value);
 });
 
 const imageUpdated = () => {
@@ -136,10 +128,10 @@ const imageUpdated = () => {
   });
 };
 const toggleUserSelecting = (ihash: string) => {
-  store.dispatch("setting/toggleUserSelecting", { ihash });
+  settingStore.toggleUserSelecting(ihash);
 };
 const changeSelectedUsersColor = (ihash: string) => {
-  store.dispatch("setting/changeSelectedUsersColor", { ihash });
+  settingStore.changeSelectedUserColor(ihash);
 };
 const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messageID: string }) => {
   emits("bubbleDeleted", { characterID, messageID });
@@ -176,7 +168,7 @@ onUpdated(() => {
   .character {
     pointer-events: auto;
 
-    .image-frame {
+    .selected-frame {
       box-sizing: border-box;
       border-radius: 5px;
       border-width: 2px;

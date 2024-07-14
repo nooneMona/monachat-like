@@ -4,10 +4,7 @@ import { createStore } from "vuex";
 import { v4 as uuidv4 } from "uuid";
 import io from "socket.io-client";
 import { indexGetters } from "@/store/getters";
-import user from "@/store/modules/user";
-import setting from "@/store/modules/setting";
-import developer from "@/store/modules/developer";
-import Color from "./color";
+import Color from "../stores/color";
 import { piniaInstance } from "../piniaInstance";
 import { useNoticeStore } from "@/stores/notice";
 import { useUIStore } from "../stores/ui";
@@ -21,7 +18,6 @@ const userStore = useUserStore(piniaInstance);
 
 export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
-  modules: { user, setting, developer },
   state() {
     return {
       socket: null, // socket.ioのクライアント
@@ -33,7 +29,6 @@ export default createStore({
       ihashsIgnoredByMe: {}, // 自分が無視したユーザーリスト
       idsIgnoresMe: {}, // 自分が無視されたユーザーリスト
       ihashsSilentIgnoredByMe: {},
-      currentPathName: null, // 現在の部屋（Vue routerの値を同期するためのもの）
     };
   },
   getters: indexGetters,
@@ -43,7 +38,7 @@ export default createStore({
     },
     appendLog(state, logObj) {
       const MAX_LOG_LENGTH = 1_000;
-      if (state.setting.logInfinite) {
+      if (settingStore.isInfiniteLog) {
         state.logMessages = [logObj, ...state.logMessages];
         return;
       }
@@ -125,11 +120,11 @@ export default createStore({
     },
     updateUserIgnore(state, { id, stat, ihash }) {
       const ignores = stat === "on"; // offでもなかった場合は無視を解除する
-      if (id === state.user.myID) {
+      if (id === userStore.myID) {
         state.ihashsIgnoredByMe[ihash] = ignores;
         // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
       }
-      if (ihash === state.user.ihash) {
+      if (ihash === userStore.ihash) {
         state.idsIgnoresMe[id] = ignores;
         // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
         state.chatMessages[id] = [];
@@ -172,7 +167,9 @@ export default createStore({
       if (state.chatMessages[id] === undefined) {
         state.chatMessages[id] = [];
       }
-      state.chatMessages[id].unshift({ messageID: uuidv4(), ...message });
+      // NOTE: どう追加するかは吹き出しの重なり方が依存する
+      // ref: https://developer.mozilla.org/ja/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_without_z-index
+      state.chatMessages[id].push({ messageID: uuidv4(), ...message });
     },
     removeChatMessage(state, { characterID, messageID }) {
       const index = state.chatMessages[characterID].findIndex((v) => v.messageID === messageID);
@@ -186,9 +183,6 @@ export default createStore({
     },
     resetUsers(state) {
       state.users = {};
-    },
-    updateCurrentPathName(state, { name }) {
-      state.currentPathName = name;
     },
   },
   actions: {
@@ -270,7 +264,7 @@ export default createStore({
         context.getters.visibleUsers[id]?.rgbaValue ??
         Color.monaRGBToCSS({ r: 255, g: 255, b: 255 }, 1.0);
       context.commit("appendLog", { head, content, foot, visibleOnReceived, color, ihash });
-      context.commit("setting/saveCurrentLog", context.state.logMessages);
+      settingStore.saveCurrentLog(context.state.logMessages);
     },
     appendUserLog(context, { id, isEnter }) {
       const name = context.getters.visibleUsers[id]?.name;
@@ -301,10 +295,10 @@ export default createStore({
         context.getters.visibleUsers[id]?.rgbaValue ??
         Color.monaRGBToCSS({ r: 255, g: 255, b: 255 }, 1.0);
       context.commit("appendLog", { head, content, foot, visibleOnReceived, color, ihash });
-      context.commit("setting/saveCurrentLog", context.state.logMessages);
+      settingStore.saveCurrentLog(context.state.logMessages);
     },
     // トリップ付き名前文字列`text`を分解しsetting.name, .tripに保管
-    parseNameWithTrip({ commit }, { text }) {
+    parseNameWithTrip(_, { text }) {
       let name = "";
       let trip = "";
       if (text.includes("#")) {
@@ -321,9 +315,9 @@ export default createStore({
     },
     resetLogStorage({ state, commit }) {
       commit("resetLog");
-      commit("setting/saveCurrentLog", state.logMessages);
+      settingStore.saveCurrentLog(state.logMessages);
     },
-    enterName({ state, commit }) {
+    enterName({ state }) {
       // ローカルストレージの内容に頼る
       const trip = settingStore.savedTrip;
       let name = settingStore.savedName;
@@ -334,27 +328,27 @@ export default createStore({
         name,
         trip,
       };
-      if (state.user.myToken !== null) {
+      if (userStore.myToken !== null) {
         // すでにトークンを取得している場合はトークンを付加する
-        enterParams.token = state.user.myToken;
+        enterParams.token = userStore.myToken;
       }
       state.socket.emit("ENTER", enterParams);
       settingStore.updateSavedName(name);
       settingStore.updateSavedTrip(trip);
-      const log = setting.getters.loadLog(state.setting);
+      const log = settingStore.loadedLogFromStorage;
       if (state.logMessages.length === 0 && log.length !== 0) {
         state.logMessages = log;
       }
     },
-    enter({ state, commit }, { room }) {
+    enter({ state }, { room }) {
       const hexColor = settingStore.savedColor;
       const { r, g, b } = Color.hexToMonaRGB(hexColor);
       const randomX = Math.floor(Math.random() * uiStore.width);
       const defaultY = uiStore.height - 150;
-      const x = state.user.x ?? randomX;
-      const y = state.user.y ?? defaultY;
+      const x = userStore.x ?? randomX;
+      const y = userStore.y ?? defaultY;
       state.socket.emit("ENTER", {
-        token: state.user.myToken,
+        token: userStore.myToken,
         room: room.id,
         x,
         y,
@@ -367,46 +361,46 @@ export default createStore({
         b,
         type: settingStore.savedType,
       });
-      const log = setting.getters.loadLog(state.setting);
+      const log = settingStore.loadedLogFromStorage;
       if (state.logMessages.length === 0 && log.length !== 0) {
         state.logMessages = log;
       }
-      commit("user/updateCurrentRoom", { room });
-      commit("user/updateCoordinate", { x, y });
+      userStore.updateCurrentRoom(room);
+      userStore.updateCoordinate({ x, y });
     },
     exit(context) {
       context.state.socket.emit("EXIT", {
-        token: context.state.user.myToken,
+        token: userStore.myToken,
       });
     },
     com(context, { text, shift, typing }) {
       const comParam = {
-        token: context.state.user.myToken,
+        token: userStore.myToken,
         cmt: text,
       };
       if (shift) {
         comParam.style = 2;
       }
-      if (context.state.setting.typingMode && typing !== undefined) {
+      if (settingStore.isTypingMode && typing !== undefined) {
         comParam.typing = { ...typing };
       }
       context.state.socket.emit("COM", comParam);
     },
-    setXY({ state, getters, commit }, { x, y }) {
-      const { scl, stat } = getters["user/me"];
-      state.socket.emit("SET", {
-        token: state.user.myToken,
+    setXY(context, { x, y }) {
+      const { scl, stat } = context.state.users[userStore.myID];
+      context.state.socket.emit("SET", {
+        token: userStore.myToken,
         x,
         y,
         scl,
         stat,
       });
-      commit("user/updateCoordinate", { x, y });
+      userStore.updateCoordinate({ x, y });
     },
     setStat(context, { stat }) {
-      const { x, y, scl } = context.getters["user/me"];
+      const { x, y, scl } = context.state.users[userStore.myID];
       context.state.socket.emit("SET", {
-        token: context.state.user.myToken,
+        token: userStore.myToken,
         x,
         y,
         scl,
@@ -414,10 +408,10 @@ export default createStore({
       });
     },
     setScl(context) {
-      const { x, y, scl, stat } = context.getters["user/me"];
+      const { x, y, scl, stat } = context.state.users[userStore.myID];
       const newScl = scl === 100 ? -100 : 100;
       context.state.socket.emit("SET", {
-        token: context.state.user.myToken,
+        token: userStore.myToken,
         x,
         y,
         scl: newScl,
@@ -430,11 +424,11 @@ export default createStore({
       });
     },
     receivedConnect({ state }) {
-      if (state.user.myToken == null) {
+      if (userStore.myToken == null) {
         return;
       }
       state.socket.emit("AUTH", {
-        token: state.user.myToken,
+        token: userStore.myToken,
       });
     },
     receivedCOM(context, { id, cmt, style, typing }) {
@@ -457,12 +451,12 @@ export default createStore({
     },
     receivedENTER(context, param) {
       context.commit("updateUserByEnter", param);
-      if (param.id === context.state.user.myID) {
+      if (param.id === userStore.myID) {
         settingStore.updateTripResult(param.trip);
-        context.commit("user/updateIhash", { ihash: param.ihash });
+        userStore.updateIhash(param.ihash);
       }
       if (context.getters.visibleUsers[param.id] === undefined) return;
-      if (context.state.user.currentRoom !== null) {
+      if (userStore.currentRoom !== null) {
         context.dispatch("playENTERAudio");
       }
       context.dispatch("appendUserLog", {
@@ -472,7 +466,7 @@ export default createStore({
     },
     async receivedEXIT(context, { id, isEnter }) {
       if (context.getters.visibleUsers[id] !== undefined) {
-        if (context.state.user.currentRoom !== null) {
+        if (userStore.currentRoom !== null) {
           context.dispatch("playENTERAudio");
         }
         // visibleUsersに退室を反映する前にログに書き出さないと、名前の情報がとれない。
@@ -488,26 +482,23 @@ export default createStore({
       if (id === "error") {
         dispatch("returnFromAUTHError");
       }
-      commit("user/updateAuthInfo", { id, token });
       userStore.updateAuthInfo(id, token);
       commit("updateUserExistence", { id, exists: true });
     },
-    returnFromAUTHError({ state, dispatch, commit }) {
-      if (state.currentPathName === "room") {
+    returnFromAUTHError({ dispatch }) {
+      if (userStore.currentPathName === "room") {
         dispatch("enter", {
-          room: state.user.currentRoom,
+          room: userStore.currentRoom,
           isReturned: true,
         });
       }
-      if (state.currentPathName === "select") {
-        dispatch("enter", {
-          room: "/MONA8094",
-        });
+      if (userStore.currentPathName === "select") {
+        dispatch("enterName");
       }
       noticeStore.requestRefresh();
     },
     removeChatMessagesIgnored(context, { id, ihash }) {
-      if (id === context.state.user.myID) {
+      if (id === userStore.myID) {
         context.getters.idsByIhash[ihash].forEach((targetId) => {
           context.commit("removeChatMessages", { id: targetId });
         });
@@ -521,18 +512,18 @@ export default createStore({
       }
     },
     toggleIgnorance(context, { ihash }) {
-      if (ihash === context.state.user.ihash) {
+      if (ihash === userStore.ihash) {
         return;
       }
       const newIgnores = !context.state.ihashsIgnoredByMe[ihash];
       context.state.socket.emit("IG", {
-        token: context.state.user.myToken,
+        token: userStore.myToken,
         stat: newIgnores ? "on" : "off",
         ihash,
       });
     },
     toggleSilentIgnorance(context, { ihash, isActive }) {
-      if (ihash === context.state.user.ihash) {
+      if (ihash === userStore.ihash) {
         return;
       }
       context.commit("updateUserSilentIgnore", { ihash, isActive });
@@ -546,16 +537,16 @@ export default createStore({
     },
     suicide({ state }) {
       state.socket.emit("SUICIDE", {
-        token: state.user.myToken,
+        token: userStore.myToken,
       });
     },
-    playCOMAudio(context) {
-      if (context.state.setting.sound === "off") return;
+    playCOMAudio() {
+      if (settingStore.selectedVolume === "off") return;
       const music = new Audio("sound/mojachat5l1.mp3");
       music.play();
     },
-    playENTERAudio(context) {
-      if (context.state.setting.sound === "off") return;
+    playENTERAudio() {
+      if (settingStore.selectedVolume === "off") return;
       const music = new Audio("sound/mojachat5l0.mp3");
       music.play();
     },

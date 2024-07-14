@@ -20,6 +20,8 @@
             <CharacterImage
               :user="{ type: userType, hexValue: userHexColor, stat: '通常', scl: 100 }"
               :depthRate="1.0"
+              :isKBMode
+              :isSilent="false"
             />
             <div class="character-preview-text"><SpanText :text="savedName" /></div>
             <div class="character-preview-text"><SpanText :text="dispTrip" /></div>
@@ -36,10 +38,10 @@
             <label for="color"> <input id="color" type="color" v-model="userHexColor" />色 </label>
           </div>
           <div class="selection-box-under-buttons">
-            <Button title="名前変更" @onClick="backToHome" />
+            <SimpleButton title="名前変更" @onClick="backToHome" />
           </div>
           <div class="selection-box-under-buttons">
-            <Button title="キャラランダム変更" @onClick="pickRandomCharacter" />
+            <SimpleButton title="キャラランダム変更" @onClick="pickRandomCharacter" />
           </div>
         </div>
       </div>
@@ -49,7 +51,7 @@
           <SpanText text="ステージ選択" :size="18" />
           <SpanText text="最大人数 ∞人" :size="18" />
         </div>
-        <Rooms :rooms="rooms" :roomCount="roomCount" @clickRoom="submitEnter" />
+        <RoomButtons :rooms="rooms" :roomCount="roomCount" @clickRoom="submitEnter" />
       </div>
     </div>
   </div>
@@ -61,18 +63,19 @@ import { useStore } from "vuex";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import axios from "axios";
-import Color from "@/store/color";
+import Color from "@/stores/color";
 import SpanText from "@/components/atoms/SpanText.vue";
-import Button from "@/components/atoms/Button.vue";
+import SimpleButton from "@/components/atoms/SimpleButton.vue";
 import CharacterImage from "@/components/organisms/CharacterImage.vue";
 import SeekBar from "@/components/molecules/SeekBar.vue";
 import ColorPalette from "@/components/molecules/ColorPalette.vue";
 import Dropdown from "@/components/molecules/Dropdown.vue";
-import Rooms from "@/components/organisms/Rooms.vue";
+import RoomButtons from "@/components/organisms/RoomButtons.vue";
 import { useSettingStore } from "@/stores/setting";
 import { useUserStore } from "@/stores/user";
 import { CharactersResponse, ColorResponse, RoomResponse } from "@/infrastructure/api";
 import { CharType } from "@/domain/charType";
+import { Trip, TripFactory } from "@/domain/trip";
 
 const store = useStore();
 const userStore = useUserStore();
@@ -80,8 +83,8 @@ const settingStore = useSettingStore();
 const router = useRouter();
 
 // ストア
-const { savedName, tripResult, savedType, savedColor } = storeToRefs(settingStore);
-const { disconnected } = storeToRefs(userStore);
+const { savedName, tripResult, savedType, savedColor, isKBMode } = storeToRefs(settingStore);
+const { ihash, disconnected } = storeToRefs(userStore);
 const rooms = computed(() => store.state.roomMetadata); // APIから取得した部屋一覧
 const displayingMyID = computed(() => userStore.displayingMyID(10)); // 自分のID
 const roomCount = computed(() => store.state.rooms); // 同期された部屋人数情報
@@ -115,10 +118,14 @@ const characterOptions = computed(() =>
   })),
 );
 const dispTrip = computed(() => {
-  if (!tripResult.value) {
-    return store.state.user.ihash ? `◇${store.state.user.ihash?.slice(0, 6)}` : "Loading...";
+  let trip: Trip | undefined;
+  if (tripResult.value) {
+    trip = TripFactory.create("black", tripResult.value);
   }
-  return `◆${tripResult.value.slice(0, 11)}`;
+  if (!tripResult.value && ihash.value !== null) {
+    trip = TripFactory.create("white", ihash.value);
+  }
+  return trip?.toString() ?? "Loading...";
 });
 const topRightText = computed(() => {
   if (!disconnected.value) {
@@ -134,7 +141,7 @@ onMounted(async () => {
   const charactersRes = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/characters`);
   charactersResponse.value = charactersRes.data.characters;
 
-  store.commit("user/updateCurrentRoom", { room: null });
+  userStore.updateCurrentRoom(null);
   store.commit("resetChatMessages");
   await store.dispatch("enterName", { text: null });
 });

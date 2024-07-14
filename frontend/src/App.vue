@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <Notice v-if="isRequiredRefresh" @click="onClickErrorTextButton" />
+    <NoticeBar v-if="isRequiredRefresh" @click="onClickErrorTextButton" />
     <div class="panel-container" :style="{ width: `${width}px`, height: `${height}px` }">
       <router-view></router-view>
     </div>
@@ -16,11 +16,13 @@ import { useStore } from "vuex";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import InfoPanel from "@/components/pages/InfoPanel.vue";
-import Notice from "@/components/organisms/Notice.vue";
+import NoticeBar from "@/components/organisms/NoticeBar.vue";
+import { useUserStore } from "./stores/user";
 import { useNoticeStore } from "./stores/notice";
 import { useUIStore } from "./stores/ui";
 
 const store = useStore();
+const userStore = useUserStore();
 const noticeStore = useNoticeStore();
 const uiStore = useUIStore();
 const router = useRouter();
@@ -43,7 +45,7 @@ onMounted(() => {
   };
 });
 router.beforeEach((to, _, next) => {
-  store.commit("updateCurrentPathName", { name: to.name });
+  userStore.updateCurrentPathName(to.name?.toString());
   next();
 });
 
@@ -73,5 +75,10 @@ const onClickErrorTextButton = () => store.dispatch("reloadPage");
 body {
   margin: 0;
   padding: 0;
+}
+
+.debug-frame {
+  box-sizing: border-box;
+  border: solid 1px red;
 }
 </style>

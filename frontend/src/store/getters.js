@@ -1,3 +1,8 @@
+import { useSettingStore } from "../stores/setting";
+import { piniaInstance } from "../piniaInstance";
+
+const settingStore = useSettingStore(piniaInstance);
+
 export const indexGetters = {
   // idでRoomオブジェクトを取得
   roomObj: (state) => (id) => {
@@ -8,7 +13,7 @@ export const indexGetters = {
   },
   // ログに表示するための順序が考慮されたリスト
   logMessages(state) {
-    if (state.setting.descendingLog) {
+    if (settingStore.isDescendingLog) {
       return state.logMessages.slice().reverse();
     }
     return state.logMessages;

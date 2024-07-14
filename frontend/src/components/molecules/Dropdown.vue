@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import SpanText from "../atoms/SpanText.vue";
-import { useStore } from "vuex";
+import { useSettingStore } from "@/stores/setting";
 
 type Option = {
   value: string;
@@ -44,14 +44,12 @@ const props = withDefaults(
 );
 const emits = defineEmits<{ (e: "select", value: string): void }>();
 
-const store = useStore();
-
 const shouldBeDark = computed(() => {
-  const isDarkModeFromStore = store?.state?.setting?.darkMode;
-  if (isDarkModeFromStore !== undefined) {
-    return isDarkModeFromStore;
+  const isDarkModeFromStore = useSettingStore().isDarkMode;
+  if (props.isDark !== undefined) {
+    return props.isDark;
   }
-  return props.isDark ?? false;
+  return isDarkModeFromStore;
 });
 
 const isVisibleSelectionBox = ref(false);
