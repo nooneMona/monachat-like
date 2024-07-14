@@ -29,7 +29,6 @@ export default createStore({
       ihashsIgnoredByMe: {}, // 自分が無視したユーザーリスト
       idsIgnoresMe: {}, // 自分が無視されたユーザーリスト
       ihashsSilentIgnoredByMe: {},
-      currentPathName: null, // 現在の部屋（Vue routerの値を同期するためのもの）
     };
   },
   getters: indexGetters,
@@ -184,9 +183,6 @@ export default createStore({
     },
     resetUsers(state) {
       state.users = {};
-    },
-    updateCurrentPathName(state, { name }) {
-      state.currentPathName = name;
     },
   },
   actions: {
@@ -489,17 +485,15 @@ export default createStore({
       userStore.updateAuthInfo(id, token);
       commit("updateUserExistence", { id, exists: true });
     },
-    returnFromAUTHError({ state, dispatch }) {
-      if (state.currentPathName === "room") {
+    returnFromAUTHError({ dispatch }) {
+      if (userStore.currentPathName === "room") {
         dispatch("enter", {
           room: userStore.currentRoom,
           isReturned: true,
         });
       }
-      if (state.currentPathName === "select") {
-        dispatch("enter", {
-          room: "/MONA8094",
-        });
+      if (userStore.currentPathName === "select") {
+        dispatch("enterName");
       }
       noticeStore.requestRefresh();
     },

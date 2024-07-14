@@ -90,7 +90,7 @@ export const useSettingStore = defineStore("setting", () => {
   const selectedVolume = ref(getValueWithDefault("sound", ""));
   const updateSelectedVolume = (value: string) =>
     updateValueWithPerpetuation(selectedVolume, "sound", value);
-  const selectedTime = ref(getValueWithDefault("time", "medium"));
+  const selectedTime = ref(getValueWithDefault("time", "short"));
   const updateSelectedTime = (value: string) =>
     updateValueWithPerpetuation(selectedTime, "time", value);
   // 設定情報（下部パネル）

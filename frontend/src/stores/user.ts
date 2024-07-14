@@ -23,6 +23,7 @@ export const useUserStore = defineStore("user", () => {
   const myToken = ref<string | null>(null); // サーバーから付与されたトークン
   const myID = ref<string | null>(null); // サーバから付与されたID
   const ihash = ref<string | null>(null); // サーバーから付与されたihash
+  const currentPathName = ref<string | undefined>(undefined); // 現在のパス（Vue routerの値を同期するためのもの）
   const currentRoom = ref<{ id: string; name: string; img_url: string } | null>(null); // 現在いる部屋(部屋にいない場合はnull)
   const coordinate = ref<{ x: number; y: number } | null>(null);
   const disconnected = ref(false); // サーバーから切断されているかどうか
@@ -33,6 +34,9 @@ export const useUserStore = defineStore("user", () => {
   };
   const updateIhash = (value: string) => {
     ihash.value = value;
+  };
+  const updateCurrentPathName = (value: string | undefined) => {
+    currentPathName.value = value;
   };
   const updateCurrentRoom = (room: { id: string; name: string; img_url: string } | null) => {
     if (room === null) {
@@ -63,11 +67,13 @@ export const useUserStore = defineStore("user", () => {
     myID,
     myToken,
     ihash,
+    currentPathName,
     currentRoom,
     coordinate,
     disconnected,
     updateAuthInfo,
     updateIhash,
+    updateCurrentPathName,
     updateCurrentRoom,
     updateCoordinate,
     updateDisconnected,

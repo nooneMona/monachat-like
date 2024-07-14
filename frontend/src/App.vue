@@ -17,10 +17,12 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import InfoPanel from "@/components/pages/InfoPanel.vue";
 import NoticeBar from "@/components/organisms/NoticeBar.vue";
+import { useUserStore } from "./stores/user";
 import { useNoticeStore } from "./stores/notice";
 import { useUIStore } from "./stores/ui";
 
 const store = useStore();
+const userStore = useUserStore();
 const noticeStore = useNoticeStore();
 const uiStore = useUIStore();
 const router = useRouter();
@@ -43,7 +45,7 @@ onMounted(() => {
   };
 });
 router.beforeEach((to, _, next) => {
-  store.commit("updateCurrentPathName", { name: to.name });
+  userStore.updateCurrentPathName(to.name?.toString());
   next();
 });
 
