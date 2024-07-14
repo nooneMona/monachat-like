@@ -62,7 +62,6 @@
 
 <script setup lang="ts">
 import { computed, watch } from "vue";
-import { useStore } from "vuex";
 import PrimeButton from "primevue/button";
 import Accordion from "primevue/accordion";
 import AccordionPanel from "primevue/accordionpanel";
@@ -70,8 +69,9 @@ import AccordionHeader from "primevue/accordionheader";
 import AccordionContent from "primevue/accordioncontent";
 import SwitchField from "@/components/molecules/SwitchField.vue";
 import { useSettingStore } from "@/stores/setting";
+import { useLogStore } from "@/stores/log";
 
-const store = useStore();
+const logStore = useLogStore();
 const settingStore = useSettingStore();
 
 const isKBMode = computed({
@@ -102,7 +102,7 @@ const isDarkMode = computed({
   get: () => settingStore.isDarkMode,
   set: (value) => settingStore.updateIsDarkMode(value),
 });
-const deleteLog = () => store.dispatch("resetLogStorage");
+const deleteLog = () => logStore.resetLog();
 
 watch(
   isDarkMode,

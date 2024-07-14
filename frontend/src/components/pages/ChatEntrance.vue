@@ -50,8 +50,10 @@ import SpanText from "@/components/atoms/SpanText.vue";
 import SubmittableField from "@/components/molecules/SubmittableField.vue";
 import { useSettingStore } from "@/stores/setting";
 import { NewsResponse } from "@/infrastructure/api";
+import { useLogStore } from "@/stores/log";
 
 const store = useStore();
+const logStore = useLogStore();
 const settingStore = useSettingStore();
 const router = useRouter();
 
@@ -89,7 +91,7 @@ onUnmounted(() => window.removeEventListener("keydown", onKeyDown));
 const submitName = async ({ text }: { text: string }) => {
   // 解析が無事に終わってから移動しないと引き継がれないのでawaitする。
   await store.dispatch("parseNameWithTrip", { text });
-  await store.dispatch("resetLogStorage");
+  logStore.resetLog();
   router.push({
     path: "/select",
   });

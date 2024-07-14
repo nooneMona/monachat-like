@@ -31,7 +31,9 @@ export const useLogStore = defineStore("log", () => {
     logs.value = [log, ...logs.value.slice(0, MAX_LOG_LENGTH - 1)];
   };
   const resetLog = () => {
+    const settingStore = useSettingStore();
     logs.value.splice(0);
+    settingStore.saveCurrentLog(logs.value);
   };
 
   // ログに表示するための順序が考慮されたリスト

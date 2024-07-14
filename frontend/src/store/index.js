@@ -266,10 +266,6 @@ export default createStore({
       settingStore.updateSavedName(name);
       settingStore.updateSavedTrip(trip);
     },
-    resetLogStorage() {
-      logStore.resetLog();
-      settingStore.saveCurrentLog(logStore.logs);
-    },
     enterName({ state }) {
       // ローカルストレージの内容に頼る
       const trip = settingStore.savedTrip;
