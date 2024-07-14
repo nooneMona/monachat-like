@@ -1,34 +1,22 @@
-import { useSettingStore } from "../stores/setting";
 import { piniaInstance } from "../piniaInstance";
+import { useLogStore } from "../stores/log";
+import { useUsersStore } from "../stores/users";
 
-const settingStore = useSettingStore(piniaInstance);
+const usersStore = useUsersStore(piniaInstance);
+const logStore = useLogStore(piniaInstance);
 
 export const indexGetters = {
-  // idでRoomオブジェクトを取得
-  roomObj: (state) => (id) => {
-    if (id == null) {
-      return undefined;
-    }
-    return state.roomMetadata.filter((r) => r.id === id)[0];
-  },
-  // ログに表示するための順序が考慮されたリスト
-  logMessages(state) {
-    if (settingStore.isDescendingLog) {
-      return state.logMessages.slice().reverse();
-    }
-    return state.logMessages;
-  },
-  visibleLogMessages(state, getters) {
-    return getters.logMessages
-      .filter((e) => !state.ihashsSilentIgnoredByMe[e.ihash])
-      .filter((e) => !state.ihashsIgnoredByMe[e.ihash]);
+  visibleLogMessages() {
+    return logStore.logMessages
+      .filter((e) => !usersStore.ihashsSilentIgnoredByMe[e.ihash])
+      .filter((e) => !usersStore.ihashsIgnoredByMe[e.ihash]);
   },
   // 画面に表示されているユーザー
   visibleUsers(state) {
     return Object.keys(state.users)
       .filter((id) => state.users[id].alive)
-      .filter((id) => !state.idsIgnoresMe[id])
-      .filter((id) => !state.ihashsIgnoredByMe[state.users[id].ihash])
+      .filter((id) => !usersStore.idsIgnoresMe[id])
+      .filter((id) => !usersStore.ihashsIgnoredByMe[state.users[id].ihash])
       .reduce((result, id) => {
         const resultRef = result;
         resultRef[id] = state.users[id];
@@ -39,18 +27,18 @@ export const indexGetters = {
   manageableUsers(state) {
     return Object.keys(state.users)
       .filter((id) => state.users[id].alive)
-      .filter((id) => !state.idsIgnoresMe[id]) // 自分が無視したユーザーは解除できるべきである
+      .filter((id) => !usersStore.idsIgnoresMe[id]) // 自分が無視したユーザーは解除できるべきである
       .reduce((result, id) => {
         const resultRef = result;
         resultRef[id] = state.users[id];
-        resultRef[id].isIgnored = state.ihashsIgnoredByMe[state.users[id].ihash] ?? false;
+        resultRef[id].isIgnored = usersStore.ihashsIgnoredByMe[state.users[id].ihash] ?? false;
         return result;
       }, {});
   },
   // サイレント無視したユーザー
   silentUsers(state) {
     return Object.keys(state.users)
-      .filter((id) => state.ihashsSilentIgnoredByMe[state.users[id].ihash])
+      .filter((id) => usersStore.ihashsSilentIgnoredByMe[state.users[id].ihash])
       .reduce((result, id) => {
         const resultRef = result;
         resultRef[id] = state.users[id];

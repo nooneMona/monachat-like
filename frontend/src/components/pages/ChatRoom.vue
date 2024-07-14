@@ -15,7 +15,7 @@
         left: user.dispX + 'px',
         top: user.dispY - bubbleAreaHeight + 'px',
         // TODO: 可動域の高さが400pxを超えたときに破綻するので修正する
-        zIndex: `${user.dispY + isMine(id as unknown as string) ? 500 : 100}`,
+        zIndex: `${user.dispY + (isMine(id as unknown as string) ? 500 : 100)}`,
       }"
       :key="id"
       :ref="
@@ -101,9 +101,13 @@ import { useUIStore } from "../../stores/ui";
 import { useUserStore } from "../../stores/user";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores/setting";
+import { useRoomStore } from "../../stores/room";
+import { useUsersStore } from "../../stores/users";
 
 const store = useStore();
 const userStore = useUserStore();
+const usersStore = useUsersStore();
+const roomStore = useRoomStore();
 const uiStore = useUIStore();
 const settingStore = useSettingStore();
 const router = useRouter();
@@ -129,6 +133,7 @@ const typingStartTime = ref(0); // タイピング開始時刻
 
 // ストア
 const { disconnected, myID } = storeToRefs(userStore);
+const { chatMessages } = storeToRefs(usersStore);
 const { isDarkMode } = storeToRefs(settingStore);
 const selectedVolume = computed({
   get: () => settingStore.selectedVolume,
@@ -139,7 +144,6 @@ const selectedTime = computed({
   set: (value) => settingStore.updateSelectedTime(value),
 });
 const visibleUsers = computed(() => store.getters.visibleUsers);
-const chatMessages = computed(() => store.state.chatMessages);
 const displayingMyID = computed(() => userStore.displayingMyID(3));
 const currentRoom = computed({
   get: () => userStore.currentRoom,
@@ -165,12 +169,14 @@ onMounted(async () => {
   // 以前いた部屋のユーザー情報を削除する。
   store.commit("resetUsers");
   const res = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/rooms`);
-  store.commit("updateRoomMetadata", res.data.rooms);
-  const roomObj = store.getters.roomObj(`/${route.params.id}`);
+  roomStore.updateRoomMetadata(res.data.rooms);
+
+  const roomObj = roomStore.roomObj(`/${route.params.id}`);
   if (roomObj === undefined) {
     router.push({
       path: "/select",
     });
+    return;
   }
   currentRoom.value = { ...roomObj };
   store.dispatch("enter", { room: currentRoom.value });
@@ -281,7 +287,7 @@ const sizeUpdated = (e: { id: string; width: number; height: number }) => {
 };
 
 const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messageID: string }) => {
-  store.commit("removeChatMessage", { characterID, messageID });
+  usersStore.removeChatMessage(characterID, messageID);
 };
 </script>
 

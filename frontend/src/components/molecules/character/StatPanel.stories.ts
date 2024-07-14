@@ -1,3 +1,4 @@
+import { StoryFn } from "@storybook/vue3";
 import StatPanel from "./StatPanel.vue";
 
 export default {
@@ -5,7 +6,12 @@ export default {
   component: StatPanel,
 };
 
-const Template = (args) => ({
+interface Args {
+  text: string;
+  isDark?: boolean;
+}
+
+const Template: StoryFn<Args> = (args) => ({
   components: { StatPanel },
   setup() {
     return { args };

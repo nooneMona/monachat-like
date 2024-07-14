@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { ColorType, UIColor } from "@/ui/uiColor";
-import { useSettingStore } from "../../stores/setting";
+import { useSettingStore } from "@/stores/setting";
 
 const props = withDefaults(
   defineProps<{ text: string | undefined; type?: ColorType; size?: number; isDark?: boolean }>(),
@@ -44,4 +44,3 @@ span {
   overflow: "hidden";
 }
 </style>
-@/ui/uiColor

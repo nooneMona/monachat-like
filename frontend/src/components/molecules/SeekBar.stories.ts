@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import { StoryFn } from "@storybook/vue3";
 import SeekBar from "./SeekBar.vue";
 
 export default {
@@ -6,7 +7,12 @@ export default {
   component: SeekBar,
 };
 
-const Template = (args) => ({
+interface Args {
+  sequence: string[];
+  index?: number;
+}
+
+const Template: StoryFn<Args> = (args) => ({
   components: { SeekBar },
   setup() {
     const index = ref(2);

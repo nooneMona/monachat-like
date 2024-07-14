@@ -11,7 +11,11 @@
         <div><SpanText text="キャラ選択" :size="18" /></div>
         <div class="charceter-selection-box">
           <div class="selection-index-container">
-            <Dropdown title="インデックス" :options="characterOptions" @select="onSelectGenre" />
+            <MonaDropdown
+              title="インデックス"
+              :options="characterOptions"
+              @select="onSelectGenre"
+            />
           </div>
           <div class="color-palette-container">
             <ColorPalette :hexColors="hexColors" @click="updateColor" />
@@ -51,7 +55,7 @@
           <SpanText text="ステージ選択" :size="18" />
           <SpanText text="最大人数 ∞人" :size="18" />
         </div>
-        <RoomButtons :rooms="rooms" :roomCount="roomCount" @clickRoom="submitEnter" />
+        <RoomButtons :rooms="roomMetadata" :roomCount="rooms" @clickRoom="submitEnter" />
       </div>
     </div>
   </div>
@@ -69,25 +73,28 @@ import SimpleButton from "@/components/atoms/SimpleButton.vue";
 import CharacterImage from "@/components/organisms/CharacterImage.vue";
 import SeekBar from "@/components/molecules/SeekBar.vue";
 import ColorPalette from "@/components/molecules/ColorPalette.vue";
-import Dropdown from "@/components/molecules/Dropdown.vue";
+import MonaDropdown from "@/components/molecules/MonaDropdown.vue";
 import RoomButtons from "@/components/organisms/RoomButtons.vue";
 import { useSettingStore } from "@/stores/setting";
 import { useUserStore } from "@/stores/user";
 import { CharactersResponse, ColorResponse, RoomResponse } from "@/infrastructure/api";
 import { CharType } from "@/domain/charType";
 import { Trip, TripFactory } from "@/domain/trip";
+import { useRoomStore } from "../../stores/room";
+import { useUsersStore } from "../../stores/users";
 
 const store = useStore();
 const userStore = useUserStore();
+const usersStore = useUsersStore();
+const roomStore = useRoomStore();
 const settingStore = useSettingStore();
 const router = useRouter();
 
 // ストア
 const { savedName, tripResult, savedType, savedColor, isKBMode } = storeToRefs(settingStore);
 const { ihash, disconnected } = storeToRefs(userStore);
-const rooms = computed(() => store.state.roomMetadata); // APIから取得した部屋一覧
+const { roomMetadata, rooms } = storeToRefs(roomStore); // APIから取得した部屋一覧
 const displayingMyID = computed(() => userStore.displayingMyID(10)); // 自分のID
-const roomCount = computed(() => store.state.rooms); // 同期された部屋人数情報
 const userType = computed({
   // 画面で選択されているキャラタイプ
   get: () => savedType.value,
@@ -142,7 +149,7 @@ onMounted(async () => {
   charactersResponse.value = charactersRes.data.characters;
 
   userStore.updateCurrentRoom(null);
-  store.commit("resetChatMessages");
+  usersStore.resetChatMessages();
   await store.dispatch("enterName", { text: null });
 });
 

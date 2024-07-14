@@ -1,7 +1,6 @@
 import moment from "moment";
 import axios from "axios";
 import { createStore } from "vuex";
-import { v4 as uuidv4 } from "uuid";
 import io from "socket.io-client";
 import { indexGetters } from "@/store/getters";
 import Color from "../stores/color";
@@ -10,11 +9,17 @@ import { useNoticeStore } from "@/stores/notice";
 import { useUIStore } from "../stores/ui";
 import { useSettingStore } from "@/stores/setting";
 import { useUserStore } from "../stores/user";
+import { useUsersStore } from "../stores/users";
+import { useRoomStore } from "../stores/room";
+import { useLogStore } from "../stores/log";
 
 const noticeStore = useNoticeStore(piniaInstance);
 const uiStore = useUIStore(piniaInstance);
 const settingStore = useSettingStore(piniaInstance);
 const userStore = useUserStore(piniaInstance);
+const usersStore = useUsersStore(piniaInstance);
+const roomStore = useRoomStore(piniaInstance);
+const logStore = useLogStore(piniaInstance);
 
 export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
@@ -22,31 +27,10 @@ export default createStore({
     return {
       socket: null, // socket.ioのクライアント
       users: {}, // 現在のコンテキストにいるユーザー
-      roomMetadata: [], // 部屋情報
-      rooms: {}, // 部屋の人数情報
-      chatMessages: {}, // 吹き出し
-      logMessages: [], // ログ
-      ihashsIgnoredByMe: {}, // 自分が無視したユーザーリスト
-      idsIgnoresMe: {}, // 自分が無視されたユーザーリスト
-      ihashsSilentIgnoredByMe: {},
     };
   },
   getters: indexGetters,
   mutations: {
-    updateRoomMetadata(state, array) {
-      state.roomMetadata = array;
-    },
-    appendLog(state, logObj) {
-      const MAX_LOG_LENGTH = 1_000;
-      if (settingStore.isInfiniteLog) {
-        state.logMessages = [logObj, ...state.logMessages];
-        return;
-      }
-      state.logMessages = [logObj, ...state.logMessages.slice(0, MAX_LOG_LENGTH - 1)];
-    },
-    resetLog(state) {
-      state.logMessages.splice(0);
-    },
     initializeSocket(state) {
       state.socket = io(import.meta.env.VITE_APP_SOCKET_HOST, {
         path: "/monachatchat/",
@@ -54,13 +38,6 @@ export default createStore({
         reconnectionDelay: 200,
         closeOnBeforeunload: false,
       });
-    },
-    updateRooms(state, countParam) {
-      const rooms = {};
-      countParam.rooms.forEach((e) => {
-        rooms[e.n] = e.c;
-      });
-      state.rooms = rooms;
     },
     initializeUsers(state, users) {
       state.users = {};
@@ -121,13 +98,15 @@ export default createStore({
     updateUserIgnore(state, { id, stat, ihash }) {
       const ignores = stat === "on"; // offでもなかった場合は無視を解除する
       if (id === userStore.myID) {
-        state.ihashsIgnoredByMe[ihash] = ignores;
+        // 自分が無視した場合
+        usersStore.updateUserIgnore(ihash, ignores);
         // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
       }
       if (ihash === userStore.ihash) {
-        state.idsIgnoresMe[id] = ignores;
+        // 自分が無視された場合
+        usersStore.updateIDsIgnoresMe(id, ignores);
         // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
-        state.chatMessages[id] = [];
+        usersStore.removeChatMessages(id);
       }
     },
     // キャラの座標とサイズから実際の表示座標を更新する
@@ -149,9 +128,6 @@ export default createStore({
         userRef.dispY = userRef.y;
       }
     },
-    updateUserSilentIgnore(state, { ihash, isActive }) {
-      state.ihashsSilentIgnoredByMe[ihash] = isActive;
-    },
     updateUserExistence(state, { id, exists }) {
       const userRef = state.users[id];
       if (!userRef) return;
@@ -163,32 +139,14 @@ export default createStore({
       userRef.width = width;
       userRef.height = height;
     },
-    appendChatMessage(state, { id, message }) {
-      if (state.chatMessages[id] === undefined) {
-        state.chatMessages[id] = [];
-      }
-      // NOTE: どう追加するかは吹き出しの重なり方が依存する
-      // ref: https://developer.mozilla.org/ja/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_without_z-index
-      state.chatMessages[id].push({ messageID: uuidv4(), ...message });
-    },
-    removeChatMessage(state, { characterID, messageID }) {
-      const index = state.chatMessages[characterID].findIndex((v) => v.messageID === messageID);
-      state.chatMessages[characterID].splice(index, 1);
-    },
-    removeChatMessages(state, { id }) {
-      state.chatMessages[id] = [];
-    },
-    resetChatMessages(state) {
-      state.chatMessages = {};
-    },
     resetUsers(state) {
       state.users = {};
     },
   },
   actions: {
-    async loadPreData({ commit }) {
+    async loadPreData() {
       const res = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/rooms`);
-      commit("updateRoomMetadata", res.data.rooms);
+      roomStore.updateRoomMetadata(res.data.rooms);
     },
     registerSocketEvents({ state, commit, dispatch }) {
       state.socket.on("connect", () => {
@@ -223,7 +181,7 @@ export default createStore({
         commit("initializeUsers", param);
       });
       state.socket.on("COUNT", (param) => {
-        commit("updateRooms", param);
+        roomStore.updateRooms(param);
       });
       state.socket.on("AUTH", ({ id, token }) => {
         dispatch("receivedAUTH", {
@@ -233,7 +191,7 @@ export default createStore({
       });
       state.socket.on("SLEEP", (param) => {
         commit("updateUserExistence", { id: param.id, exists: false });
-        commit("removeChatMessages", { id: param.id });
+        usersStore.removeChatMessages(param.id);
       });
       state.socket.on("AWAKE", (param) => {
         commit("updateUserExistence", { id: param.id, exists: true });
@@ -263,8 +221,8 @@ export default createStore({
       const color =
         context.getters.visibleUsers[id]?.rgbaValue ??
         Color.monaRGBToCSS({ r: 255, g: 255, b: 255 }, 1.0);
-      context.commit("appendLog", { head, content, foot, visibleOnReceived, color, ihash });
-      settingStore.saveCurrentLog(context.state.logMessages);
+      logStore.appendLog({ head, content, foot, visibleOnReceived, color, ihash });
+      settingStore.saveCurrentLog(logStore.logs);
     },
     appendUserLog(context, { id, isEnter }) {
       const name = context.getters.visibleUsers[id]?.name;
@@ -294,8 +252,8 @@ export default createStore({
       const color =
         context.getters.visibleUsers[id]?.rgbaValue ??
         Color.monaRGBToCSS({ r: 255, g: 255, b: 255 }, 1.0);
-      context.commit("appendLog", { head, content, foot, visibleOnReceived, color, ihash });
-      settingStore.saveCurrentLog(context.state.logMessages);
+      logStore.appendLog({ head, content, foot, visibleOnReceived, color, ihash });
+      settingStore.saveCurrentLog(logStore.logs);
     },
     // トリップ付き名前文字列`text`を分解しsetting.name, .tripに保管
     parseNameWithTrip(_, { text }) {
@@ -313,9 +271,9 @@ export default createStore({
       settingStore.updateSavedName(name);
       settingStore.updateSavedTrip(trip);
     },
-    resetLogStorage({ state, commit }) {
-      commit("resetLog");
-      settingStore.saveCurrentLog(state.logMessages);
+    resetLogStorage() {
+      logStore.resetLog();
+      settingStore.saveCurrentLog(logStore.logs);
     },
     enterName({ state }) {
       // ローカルストレージの内容に頼る
@@ -336,8 +294,8 @@ export default createStore({
       settingStore.updateSavedName(name);
       settingStore.updateSavedTrip(trip);
       const log = settingStore.loadedLogFromStorage;
-      if (state.logMessages.length === 0 && log.length !== 0) {
-        state.logMessages = log;
+      if (logStore.logs.length === 0 && log.length !== 0) {
+        logStore.$patch({ logs: log });
       }
     },
     enter({ state }, { room }) {
@@ -345,8 +303,8 @@ export default createStore({
       const { r, g, b } = Color.hexToMonaRGB(hexColor);
       const randomX = Math.floor(Math.random() * uiStore.width);
       const defaultY = uiStore.height - 150;
-      const x = userStore.x ?? randomX;
-      const y = userStore.y ?? defaultY;
+      const x = userStore.coordinate?.x ?? randomX;
+      const y = userStore.coordinate?.y ?? defaultY;
       state.socket.emit("ENTER", {
         token: userStore.myToken,
         room: room.id,
@@ -362,8 +320,8 @@ export default createStore({
         type: settingStore.savedType,
       });
       const log = settingStore.loadedLogFromStorage;
-      if (state.logMessages.length === 0 && log.length !== 0) {
-        state.logMessages = log;
+      if (logStore.logs.length === 0 && log.length !== 0) {
+        logStore.$patch({ logs: log });
       }
       userStore.updateCurrentRoom(room);
       userStore.updateCoordinate({ x, y });
@@ -444,7 +402,7 @@ export default createStore({
       };
       // フォーカスから外れているときに吹き出しをためない
       if (document.visibilityState === "visible") {
-        context.commit("appendChatMessage", { id, message });
+        usersStore.appendChatMessage(id, message);
       }
       context.dispatch("appendLog", message);
       context.commit("updateUserExistence", { id, exists: true });
@@ -476,7 +434,7 @@ export default createStore({
         });
       }
       context.commit("updateUserExistence", { id, exists: false });
-      context.commit("removeChatMessages", { id });
+      usersStore.removeChatMessages(id);
     },
     receivedAUTH({ commit, dispatch }, { id, token }) {
       if (id === "error") {
@@ -500,14 +458,14 @@ export default createStore({
     removeChatMessagesIgnored(context, { id, ihash }) {
       if (id === userStore.myID) {
         context.getters.idsByIhash[ihash].forEach((targetId) => {
-          context.commit("removeChatMessages", { id: targetId });
+          usersStore.removeChatMessages(targetId);
         });
       }
     },
     removeChatMessagesSilentIgnored(context, { ihash, isActive }) {
       if (isActive) {
         context.getters.idsByIhash[ihash].forEach((targetId) => {
-          context.commit("removeChatMessages", { id: targetId });
+          usersStore.removeChatMessages(targetId);
         });
       }
     },
@@ -515,7 +473,7 @@ export default createStore({
       if (ihash === userStore.ihash) {
         return;
       }
-      const newIgnores = !context.state.ihashsIgnoredByMe[ihash];
+      const newIgnores = !usersStore.ihashsIgnoredByMe[ihash];
       context.state.socket.emit("IG", {
         token: userStore.myToken,
         stat: newIgnores ? "on" : "off",
@@ -526,7 +484,7 @@ export default createStore({
       if (ihash === userStore.ihash) {
         return;
       }
-      context.commit("updateUserSilentIgnore", { ihash, isActive });
+      usersStore.updateUserSilentIgnore(ihash, isActive);
       context.dispatch("removeChatMessagesSilentIgnored", { ihash, isActive });
     },
     simulateReconnection({ state }) {

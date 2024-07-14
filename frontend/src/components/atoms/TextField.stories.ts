@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import { StoryFn } from "@storybook/vue3";
 import TextField from "./TextField.vue";
 
 export default {
@@ -6,7 +7,12 @@ export default {
   component: TextField,
 };
 
-const Template = (args) => ({
+interface Args {
+  text: string;
+  isDark?: boolean;
+}
+
+const Template: StoryFn<Args> = (args) => ({
   components: { TextField },
   setup() {
     const value = ref("テキスト");

@@ -1,3 +1,4 @@
+import { StoryFn } from "@storybook/vue3";
 import SpanText from "./SpanText.vue";
 
 export default {
@@ -5,7 +6,13 @@ export default {
   component: SpanText,
 };
 
-const Template = (args) => ({
+interface Args {
+  text: string;
+  type?: "black" | "white" | "notice";
+  size?: string;
+}
+
+const Template: StoryFn<Args> = (args) => ({
   components: { SpanText },
   setup() {
     return { args };

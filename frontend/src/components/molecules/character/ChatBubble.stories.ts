@@ -1,3 +1,4 @@
+import { StoryFn } from "@storybook/vue3";
 import Bubble from "./ChatBubble.vue";
 
 export default {
@@ -5,7 +6,13 @@ export default {
   component: Bubble,
 };
 
-const Template = (args) => ({
+interface Args {
+  msg: { cmt: string; style: 1 | 2 };
+  color: string;
+  isDark?: boolean;
+}
+
+const Template: StoryFn<Args> = (args) => ({
   components: { Bubble },
   setup() {
     return { args };
