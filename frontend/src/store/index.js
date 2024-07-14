@@ -303,8 +303,8 @@ export default createStore({
       const { r, g, b } = Color.hexToMonaRGB(hexColor);
       const randomX = Math.floor(Math.random() * uiStore.width);
       const defaultY = uiStore.height - 150;
-      const x = userStore.x ?? randomX;
-      const y = userStore.y ?? defaultY;
+      const x = userStore.coordinate?.x ?? randomX;
+      const y = userStore.coordinate?.y ?? defaultY;
       state.socket.emit("ENTER", {
         token: userStore.myToken,
         room: room.id,
