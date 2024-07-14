@@ -145,10 +145,10 @@ const onChangeSilentIgnore = (ihash: string, isActive: boolean) => {
   store.dispatch("toggleSilentIgnorance", { ihash, isActive });
 };
 const onClickDisconnect = () => {
-  store.dispatch("simulateReconnection");
+  devStore.simulateReconnection();
 };
 const onClickKicked = () => {
-  store.dispatch("suicide");
+  devStore.suicide();
 };
 </script>
 

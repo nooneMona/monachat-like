@@ -134,10 +134,15 @@ export default createStore({
     },
   },
   actions: {
-    registerSocketEvents({ commit, dispatch }) {
+    registerSocketEvents({ commit, dispatch, getters }) {
       socketIOInstance.on("connect", () => {
         userStore.updateDisconnected(false);
-        dispatch("receivedConnect");
+        if (userStore.myToken == null) {
+          return;
+        }
+        socketIOInstance.emit("AUTH", {
+          token: userStore.myToken,
+        });
       });
       socketIOInstance.on("disconnect", () => {
         userStore.updateDisconnected(true);
@@ -155,7 +160,11 @@ export default createStore({
       });
       socketIOInstance.on("IG", (param) => {
         commit("updateUserIgnore", param);
-        dispatch("removeChatMessagesIgnored", { id: param.id, ihash: param.ihash });
+        if (param.id === userStore.myID) {
+          getters.idsByIhash[param.ihash].forEach((targetId) => {
+            usersStore.removeChatMessages(targetId);
+          });
+        }
       });
       socketIOInstance.on("EXIT", (param) => {
         dispatch("receivedEXIT", {
@@ -273,14 +282,6 @@ export default createStore({
         stat,
       });
     },
-    receivedConnect() {
-      if (userStore.myToken == null) {
-        return;
-      }
-      socketIOInstance.emit("AUTH", {
-        token: userStore.myToken,
-      });
-    },
     receivedCOM(context, { id, cmt, style, typing }) {
       context.commit("updateUserExistence", { id, exists: true });
       if (context.getters.visibleUsers[id] === undefined) return;
@@ -328,35 +329,18 @@ export default createStore({
       context.commit("updateUserExistence", { id, exists: false });
       usersStore.removeChatMessages(id);
     },
-    receivedAUTH({ commit, dispatch }, { id, token }) {
+    receivedAUTH({ commit }, { id, token }) {
       if (id === "error") {
-        dispatch("returnFromAUTHError");
+        if (userStore.currentPathName === "room") {
+          userStore.enter(userStore.currentRoom);
+        }
+        if (userStore.currentPathName === "select") {
+          userStore.enterName();
+        }
+        noticeStore.requestRefresh();
       }
       userStore.updateAuthInfo(id, token);
       commit("updateUserExistence", { id, exists: true });
-    },
-    returnFromAUTHError() {
-      if (userStore.currentPathName === "room") {
-        userStore.enter(userStore.currentRoom);
-      }
-      if (userStore.currentPathName === "select") {
-        userStore.enterName();
-      }
-      noticeStore.requestRefresh();
-    },
-    removeChatMessagesIgnored(context, { id, ihash }) {
-      if (id === userStore.myID) {
-        context.getters.idsByIhash[ihash].forEach((targetId) => {
-          usersStore.removeChatMessages(targetId);
-        });
-      }
-    },
-    removeChatMessagesSilentIgnored(context, { ihash, isActive }) {
-      if (isActive) {
-        context.getters.idsByIhash[ihash].forEach((targetId) => {
-          usersStore.removeChatMessages(targetId);
-        });
-      }
     },
     toggleIgnorance(_, { ihash }) {
       if (ihash === userStore.ihash) {
@@ -374,18 +358,11 @@ export default createStore({
         return;
       }
       usersStore.updateUserSilentIgnore(ihash, isActive);
-      context.dispatch("removeChatMessagesSilentIgnored", { ihash, isActive });
-    },
-    simulateReconnection() {
-      socketIOInstance.disconnect();
-      setTimeout(() => {
-        socketIOInstance.connect();
-      }, 3000);
-    },
-    suicide() {
-      socketIOInstance.emit("SUICIDE", {
-        token: userStore.myToken,
-      });
+      if (isActive) {
+        context.getters.idsByIhash[ihash].forEach((targetId) => {
+          usersStore.removeChatMessages(targetId);
+        });
+      }
     },
     playCOMAudio() {
       if (settingStore.selectedVolume === "off") return;
