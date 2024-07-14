@@ -63,7 +63,6 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from "vue";
-import { useStore } from "vuex";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import axios from "axios";
@@ -83,7 +82,6 @@ import { Trip, TripFactory } from "@/domain/trip";
 import { useRoomStore } from "../../stores/room";
 import { useUsersStore } from "../../stores/users";
 
-const store = useStore();
 const userStore = useUserStore();
 const usersStore = useUsersStore();
 const roomStore = useRoomStore();

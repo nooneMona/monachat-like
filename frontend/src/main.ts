@@ -10,7 +10,6 @@ import { definePreset } from "@primevue/themes";
 import Lara from "@primevue/themes/lara";
 import "primeicons/primeicons.css";
 
-import store from "@/store";
 import App from "@/App.vue";
 import ChatEntrance from "@/components/pages/ChatEntrance.vue";
 import RoomSelection from "@/components/pages/RoomSelection.vue";
@@ -46,7 +45,6 @@ const LaraIndigo = definePreset(Lara, {
 
 const app = createApp(App);
 app.use(router);
-app.use(store);
 app.use(piniaInstance);
 app.use(PrimeVue, {
   theme: {

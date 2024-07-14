@@ -6,6 +6,7 @@ import { useSettingStore } from "./setting";
 import { RoomResponse } from "../infrastructure/api";
 import { useUIStore } from "./ui";
 import Color from "./color";
+import { useUsersStore } from "./users";
 
 export interface IUser {
   myID: string | null;
@@ -163,6 +164,80 @@ export const useUserStore = defineStore("user", () => {
     socketIOInstance.emit("COM", comParam);
   };
 
+  const setXY = (x: number, y: number) => {
+    const userStore = useUserStore();
+    const usersStore = useUsersStore();
+
+    const { scl, stat } = usersStore.users[userStore.myID];
+    socketIOInstance.emit("SET", {
+      token: userStore.myToken,
+      x,
+      y,
+      scl,
+      stat,
+    });
+    userStore.updateCoordinate({ x, y });
+  };
+
+  const setStat = (stat: string) => {
+    const userStore = useUserStore();
+    const usersStore = useUsersStore();
+
+    const { x, y, scl } = usersStore.users[userStore.myID];
+    socketIOInstance.emit("SET", {
+      token: userStore.myToken,
+      x,
+      y,
+      scl,
+      stat,
+    });
+  };
+
+  const setScl = () => {
+    const userStore = useUserStore();
+    const usersStore = useUsersStore();
+
+    const { x, y, scl, stat } = usersStore.users[userStore.myID];
+    const newScl = scl === 100 ? -100 : 100;
+    socketIOInstance.emit("SET", {
+      token: userStore.myToken,
+      x,
+      y,
+      scl: newScl,
+      stat,
+    });
+  };
+
+  const toggleIgnorance = (ihash: string) => {
+    const userStore = useUserStore();
+    const usersStore = useUsersStore();
+
+    if (ihash === userStore.ihash) {
+      return;
+    }
+    const newIgnores = !usersStore.ihashsIgnoredByMe[ihash];
+    socketIOInstance.emit("IG", {
+      token: userStore.myToken,
+      stat: newIgnores ? "on" : "off",
+      ihash,
+    });
+  };
+
+  const toggleSilentIgnorance = (ihash: string, isActive: boolean) => {
+    const userStore = useUserStore();
+    const usersStore = useUsersStore();
+
+    if (ihash === userStore.ihash) {
+      return;
+    }
+    usersStore.updateUserSilentIgnore(ihash, isActive);
+    if (isActive) {
+      usersStore.idsByIhash[ihash].forEach((targetId) => {
+        usersStore.removeChatMessages(targetId);
+      });
+    }
+  };
+
   const sendError = (text: string) => {
     socketIOInstance.emit("ERROR", {
       text: JSON.stringify(text),
@@ -188,6 +263,11 @@ export const useUserStore = defineStore("user", () => {
     enter,
     exit,
     com,
+    setXY,
+    setStat,
+    setScl,
+    toggleIgnorance,
+    toggleSilentIgnorance,
     sendError,
   };
 });
