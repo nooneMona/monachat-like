@@ -11,7 +11,11 @@
         <div><SpanText text="キャラ選択" :size="18" /></div>
         <div class="charceter-selection-box">
           <div class="selection-index-container">
-            <Dropdown title="インデックス" :options="characterOptions" @select="onSelectGenre" />
+            <MonaDropdown
+              title="インデックス"
+              :options="characterOptions"
+              @select="onSelectGenre"
+            />
           </div>
           <div class="color-palette-container">
             <ColorPalette :hexColors="hexColors" @click="updateColor" />
@@ -69,7 +73,7 @@ import SimpleButton from "@/components/atoms/SimpleButton.vue";
 import CharacterImage from "@/components/organisms/CharacterImage.vue";
 import SeekBar from "@/components/molecules/SeekBar.vue";
 import ColorPalette from "@/components/molecules/ColorPalette.vue";
-import Dropdown from "@/components/molecules/Dropdown.vue";
+import MonaDropdown from "@/components/molecules/MonaDropdown.vue";
 import RoomButtons from "@/components/organisms/RoomButtons.vue";
 import { useSettingStore } from "@/stores/setting";
 import { useUserStore } from "@/stores/user";

@@ -1,12 +1,19 @@
 import { ref } from "vue";
-import Dropdown from "./Dropdown.vue";
+import { StoryFn } from "@storybook/vue3";
+import Dropdown from "./MonaDropdown.vue";
 
 export default {
-  title: "Molecules/Dropdown",
+  title: "Molecules/MonaDropdown",
   component: Dropdown,
 };
 
-const Template = (args) => ({
+interface Args {
+  title: string;
+  options: { value: string; text: string }[];
+  isDark?: boolean;
+}
+
+const Template: StoryFn<Args> = (args) => ({
   components: { Dropdown },
   setup() {
     const index = ref(2);
@@ -28,12 +35,6 @@ Normal.args = {
 
 export const Dark = Template.bind({});
 Dark.args = {
-  title: "血液型",
-  options: [
-    { value: "a", text: "A型" },
-    { value: "b", text: "B型" },
-    { value: "o", text: "O型" },
-    { value: "ab", text: "AB型" },
-  ],
+  ...Normal.args,
   isDark: true,
 };

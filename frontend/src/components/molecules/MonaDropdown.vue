@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import SpanText from "../atoms/SpanText.vue";
+import SpanText from "@/components/atoms/SpanText.vue";
 import { useSettingStore } from "@/stores/setting";
 
 type Option = {
@@ -58,13 +58,11 @@ const isKeepingVisibleSelectionBox = ref(false); // ドロップダウンの選�
 const hoverOn = () => {
   isVisibleSelectionBox.value = true;
 };
-
 const hoverOff = () => {
   if (!isKeepingVisibleSelectionBox.value) {
     isVisibleSelectionBox.value = false;
   }
 };
-
 const toggleKeepingSelectionBox = () => {
   isKeepingVisibleSelectionBox.value = !isKeepingVisibleSelectionBox.value;
 };
