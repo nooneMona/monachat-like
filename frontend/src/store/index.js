@@ -85,22 +85,6 @@ export default createStore({
       userRef.stat = userObj.stat;
       userRef.alive = true;
     },
-    updateUserIgnore(_, { id, stat, ihash }) {
-      const ignores = stat === "on"; // offでもなかった場合は無視を解除する
-      if (id === userStore.myID) {
-        // 自分が無視した場合
-        usersStore.updateUserIgnore(ihash, ignores);
-        // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
-      }
-      if (ihash === userStore.ihash) {
-        // 自分が無視された場合
-        usersStore.updateIDsIgnoresMe(id, ignores);
-        // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
-        usersStore.removeChatMessages(id);
-      }
-    },
-    // キャラの座標とサイズから実際の表示座標を更新する
-    // サイズが未定の場合はwidthとheightに0を入れる
     updateUserDispLocation(state, { id }) {
       const userRef = state.users[id];
       if (userRef.x < 0) {
@@ -159,7 +143,20 @@ export default createStore({
         commit("updateUserDispLocation", { id: param.id });
       });
       socketIOInstance.on("IG", (param) => {
-        commit("updateUserIgnore", param);
+        // キャラの座標とサイズから実際の表示座標を更新する
+        // サイズが未定の場合はwidthとheightに0を入れる
+        const ignores = param.stat === "on"; // offでもなかった場合は無視を解除する
+        if (param.id === userStore.myID) {
+          // 自分が無視した場合
+          usersStore.updateUserIgnore(param.ihash, ignores);
+          // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
+        }
+        if (param.ihash === userStore.ihash) {
+          // 自分が無視された場合
+          usersStore.updateIDsIgnoresMe(param.id, ignores);
+          // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
+          usersStore.removeChatMessages(param.id);
+        }
         if (param.id === userStore.myID) {
           getters.idsByIhash[param.ihash].forEach((targetId) => {
             usersStore.removeChatMessages(targetId);
@@ -286,7 +283,7 @@ export default createStore({
       context.commit("updateUserExistence", { id, exists: true });
       if (context.getters.visibleUsers[id] === undefined) return;
       if (context.getters.silentUsers[id] != null) return;
-      context.dispatch("playCOMAudio");
+      noticeStore.playCOMAudio();
       const message = {
         id,
         cmt,
@@ -308,7 +305,7 @@ export default createStore({
       }
       if (context.getters.visibleUsers[param.id] === undefined) return;
       if (userStore.currentRoom !== null) {
-        context.dispatch("playENTERAudio");
+        noticeStore.playENTERAudio();
       }
       context.dispatch("appendUserLog", {
         id: param.id,
@@ -318,7 +315,7 @@ export default createStore({
     async receivedEXIT(context, { id, isEnter }) {
       if (context.getters.visibleUsers[id] !== undefined) {
         if (userStore.currentRoom !== null) {
-          context.dispatch("playENTERAudio");
+          noticeStore.playENTERAudio();
         }
         // visibleUsersに退室を反映する前にログに書き出さないと、名前の情報がとれない。
         await context.dispatch("appendUserLog", {
@@ -363,19 +360,6 @@ export default createStore({
           usersStore.removeChatMessages(targetId);
         });
       }
-    },
-    playCOMAudio() {
-      if (settingStore.selectedVolume === "off") return;
-      const music = new Audio("sound/mojachat5l1.mp3");
-      music.play();
-    },
-    playENTERAudio() {
-      if (settingStore.selectedVolume === "off") return;
-      const music = new Audio("sound/mojachat5l0.mp3");
-      music.play();
-    },
-    reloadPage() {
-      window.location.reload();
     },
   },
 });

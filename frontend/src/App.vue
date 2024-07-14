@@ -50,7 +50,7 @@ router.beforeEach((to, _, next) => {
   next();
 });
 
-const onClickErrorTextButton = () => store.dispatch("reloadPage");
+const onClickErrorTextButton = () => noticeStore.reloadPage();
 </script>
 
 <style lang="scss" scoped>
