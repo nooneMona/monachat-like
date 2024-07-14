@@ -1,5 +1,5 @@
-import SubmittableField from "./SubmittableField.vue";
 import { StoryFn } from "@storybook/vue3";
+import SubmittableField from "./SubmittableField.vue";
 
 export default {
   title: "molecules/SubmittableField",
