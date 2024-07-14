@@ -3,22 +3,27 @@
     :class="{ dark: shouldBeDark, light: !shouldBeDark }"
     ref="inputEl"
     type="text"
-    v-model="text"
+    v-model="model"
     @keydown="onKeydown"
   />
 </template>
 
 <script setup lang="ts">
 import { computed, Ref, ref } from "vue";
-import { useSettingStore } from "../../stores/setting";
+import { useSettingStore } from "@/stores/setting";
 
-const props = withDefaults(defineProps<{ modelValue: string; isDark?: boolean }>(), {
+const props = withDefaults(defineProps<{ isDark?: boolean }>(), {
   isDark: undefined,
 });
 const emits = defineEmits<{
-  (e: "update:modelValue", value: string): void;
   (e: "typed", value: string): void;
 }>();
+const model = defineModel();
+
+const inputEl = ref(null);
+const typedInputEl: Ref<HTMLInputElement | undefined> = computed(
+  () => inputEl.value as unknown as HTMLInputElement | undefined,
+);
 
 const shouldBeDark = computed(() => {
   const isDarkModeFromStore = useSettingStore().isDarkMode;
@@ -26,20 +31,6 @@ const shouldBeDark = computed(() => {
     return props.isDark;
   }
   return isDarkModeFromStore;
-});
-
-const inputEl = ref(null);
-const typedInputEl: Ref<HTMLInputElement | undefined> = computed(
-  () => inputEl.value as unknown as HTMLInputElement | undefined,
-);
-
-const text = computed({
-  get: () => {
-    return props.modelValue;
-  },
-  set: (value) => {
-    emits("update:modelValue", value);
-  },
 });
 
 const onKeydown = (e: KeyboardEvent) => {
