@@ -168,7 +168,7 @@ const isMine = (id: string) => {
 onMounted(async () => {
   // 以前いた部屋のユーザー情報を削除する。
   store.commit("resetUsers");
-  roomStore.syncRoomMetadata(); // NOTE: これがないと、直接入った部屋が有効な部屋なのか判断ができない
+  await roomStore.syncRoomMetadata(); // NOTE: これがないと、直接入った部屋が有効な部屋なのか判断ができない
 
   const roomObj = roomStore.roomObj(`/${route.params.id}`);
   if (roomObj === undefined) {
