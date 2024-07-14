@@ -180,7 +180,7 @@ onMounted(async () => {
   userStore.enter(currentRoom.value);
 
   const unloadAppendExitLog = () => {
-    store.dispatch("exit");
+    userStore.exit();
     window.location.reload();
     window.onbeforeunload = null;
   };
@@ -223,7 +223,7 @@ const clickInvert = () => {
   store.dispatch("setScl");
 };
 const clickExit = async () => {
-  await store.dispatch("exit");
+  userStore.exit();
   router.push({
     path: "/select",
   });

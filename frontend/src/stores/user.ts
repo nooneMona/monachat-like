@@ -125,6 +125,12 @@ export const useUserStore = defineStore("user", () => {
     updateCoordinate({ x, y });
   };
 
+  const exit = () => {
+    socketIOInstance.emit("EXIT", {
+      token: myToken.value,
+    });
+  };
+
   return {
     myID,
     myToken,
@@ -142,5 +148,6 @@ export const useUserStore = defineStore("user", () => {
     displayingMyID,
     enterName,
     enter,
+    exit,
   };
 });

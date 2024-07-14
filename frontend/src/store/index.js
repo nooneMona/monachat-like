@@ -241,11 +241,6 @@ export default createStore({
       logStore.appendLog({ head, content, foot, visibleOnReceived, color, ihash });
       settingStore.saveCurrentLog(logStore.logs);
     },
-    exit() {
-      socketIOInstance.emit("EXIT", {
-        token: userStore.myToken,
-      });
-    },
     com(_, { text, shift, typing }) {
       const comParam = {
         token: userStore.myToken,
