@@ -63,7 +63,7 @@ import { useStore } from "vuex";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import axios from "axios";
-import Color from "@/store/color";
+import Color from "@/stores/color";
 import SpanText from "@/components/atoms/SpanText.vue";
 import SimpleButton from "@/components/atoms/SimpleButton.vue";
 import CharacterImage from "@/components/organisms/CharacterImage.vue";

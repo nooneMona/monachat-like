@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import SpanText from "@/components/atoms/SpanText.vue";
-import Color from "@/store/color";
+import Color from "@/stores/color";
 import { useSettingStore } from "@/stores/setting";
 import { computed } from "vue";
 

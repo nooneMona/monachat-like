@@ -14,8 +14,8 @@
 
 <script setup lang="ts">
 // TODO: セルの大きさを指定して上から割り振っていく方法で実現できるようにする (カラーパレットの数が増減したときに耐えられるように)
-import { MonaHexColor } from "../../store/color";
 import { computed } from "vue";
+import { MonaHexColor } from "@/stores/color";
 import { useSettingStore } from "@/stores/setting";
 
 type Color = { hexColor: MonaHexColor };

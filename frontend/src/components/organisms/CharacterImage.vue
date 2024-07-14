@@ -12,7 +12,7 @@
 import { computed, ref, watch } from "vue";
 import axios from "axios";
 import { Stat } from "@/domain/stat";
-import defaultCharhanSVG from "@/store/defaultCharhan";
+import defaultCharhanSVG from "@/stores/defaultCharhan";
 import StatPanel from "@/components/molecules/character/StatPanel.vue";
 import { ChatCharacterUser } from "@/domain/type";
 
