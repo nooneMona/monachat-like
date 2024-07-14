@@ -10,7 +10,6 @@ import ToggleSwitch from "primevue/toggleswitch";
 import SpanText from "../atoms/SpanText.vue";
 
 defineProps<{ label: string; labelId: string; modelValue: boolean }>();
-
 const model = defineModel();
 </script>
 

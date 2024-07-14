@@ -1,10 +1,10 @@
 <template>
   <form>
     <div class="text-field">
-      <TextField ref="inputEl" v-model="text" @typed="onTyped" />
+      <TextField ref="inputEl" v-model="model" @typed="onTyped" />
     </div>
     <div class="button">
-      <Button title="OK" @onClick="submit" :disabled="disabled" />
+      <SimpleButton title="OK" @onClick="submit" :disabled />
     </div>
   </form>
 </template>
@@ -12,49 +12,44 @@
 <script setup lang="ts">
 import { Ref, computed, ref, watchEffect } from "vue";
 import TextField from "@/components/atoms/TextField.vue";
-import Button from "@/components/atoms/Button.vue";
+import SimpleButton from "@/components/atoms/SimpleButton.vue";
 
 const inputEl = ref(null);
 const typedInputEl: Ref<HTMLInputElement | undefined> = computed(
   () => inputEl.value as unknown as HTMLInputElement | undefined,
 );
 
-const props = withDefaults(
-  defineProps<{ modelValue: string; allowedEmpty: boolean; disabled: boolean }>(),
-  { allowedEmpty: true, disabled: false },
-);
+const props = withDefaults(defineProps<{ allowedEmpty: boolean; disabled: boolean }>(), {
+  allowedEmpty: true,
+  disabled: false,
+});
 const emits = defineEmits<{
-  (e: "delete-all"): void;
-  (e: "submit", data: { text: string; shift: string }): void;
-  (e: "update:modelValue", data: string): void;
+  (e: "submit", data: { text: string; shift: boolean }): void;
   (e: "typed", value: string): void;
+  (e: "delete-all"): void;
 }>();
+const model = defineModel({ type: String });
 
-const text = computed({
-  get: () => props.modelValue,
-  set: (value) => emits("update:modelValue", value),
-});
-
-watchEffect(() => {
-  if (text.value.length === 0) {
-    emits("delete-all");
-  }
-});
-
-const submit = (event: any) => {
-  if (!props.allowedEmpty && text.value.length === 0) {
+const isValidSubmitting = computed(() => props.allowedEmpty || model.value?.length !== 0);
+const submit = (event: Event & { shiftKey: boolean }) => {
+  if (!isValidSubmitting.value) {
     return;
   }
   emits("submit", {
-    text: text.value,
+    text: model.value ?? "",
     shift: event.shiftKey,
   });
-  text.value = "";
+  model.value = "";
 };
-
 const onTyped = (value: string) => {
   emits("typed", value);
 };
+
+watchEffect(() => {
+  if (model.value?.length === 0) {
+    emits("delete-all");
+  }
+});
 
 const focus = () => {
   typedInputEl.value?.focus();

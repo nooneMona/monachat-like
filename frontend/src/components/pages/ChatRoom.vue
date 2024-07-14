@@ -80,7 +80,7 @@
       </div>
       <div class="setting-bar-right">
         <InvertButton @click="clickInvert" />
-        <Button title="戻る" class="return-button" @click="clickExit" />
+        <SimpleButton title="戻る" class="return-button" @click="clickExit" />
       </div>
     </div>
   </div>
@@ -93,7 +93,7 @@ import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 import { Stat } from "@/domain/stat";
 import SpanText from "@/components/atoms/SpanText.vue";
-import Button from "@/components/atoms/Button.vue";
+import SimpleButton from "@/components/atoms/SimpleButton.vue";
 import InvertButton from "@/components/molecules/InvertButton.vue";
 import SubmittableField from "@/components/molecules/SubmittableField.vue";
 import ChatCharacter from "@/components/organisms/ChatCharacter.vue";

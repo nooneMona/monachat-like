@@ -5,7 +5,7 @@
         <template v-for="room in rooms" :key="room.id">
           <div class="room-cell">
             <div class="room-button-frame">
-              <Button :title="room.name" @onClick="onClick(room)" :textSize="16" />
+              <SimpleButton :title="room.name" @onClick="onClick(room)" :textSize="16" />
             </div>
             <SpanText :text="`${roomCount[room.id] ?? 0}人`" :size="18" />
           </div>
@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import Button from "@/components/atoms/Button.vue";
+import SimpleButton from "@/components/atoms/SimpleButton.vue";
 import SpanText from "@/components/atoms/SpanText.vue";
 import { RoomResponse } from "@/infrastructure/api";
 

@@ -1,9 +1,9 @@
-import Button from "./Button.vue";
+import SimpleButton from "./SimpleButton.vue";
 import { StoryFn } from "@storybook/vue3";
 
 export default {
-  title: "atoms/Button",
-  component: Button,
+  title: "atoms/SimpleButton",
+  component: SimpleButton,
 };
 
 interface Args {
@@ -14,11 +14,11 @@ interface Args {
 }
 
 const Template: StoryFn<Args> = (args) => ({
-  components: { Button },
+  components: { SimpleButton },
   setup() {
     return { args };
   },
-  template: `<Button v-bind="args" :style="{width: '100px', height: '50px'}"/>`,
+  template: `<SimpleButton v-bind="args" :style="{width: '100px', height: '50px'}"/>`,
 });
 
 export const OK = Template.bind({});

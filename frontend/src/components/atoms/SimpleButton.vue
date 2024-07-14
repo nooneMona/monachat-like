@@ -22,7 +22,8 @@ const props = withDefaults(
   }>(),
   { disabled: undefined, isDark: undefined, textSize: 20 },
 );
-const emits = defineEmits<{ (e: "onClick", event: Event): void }>();
+// TODO: 適切なEvent型を探してくる
+const emits = defineEmits<{ (e: "onClick", event: Event & { shiftKey: boolean }): void }>();
 
 const shouldBeDark = computed(() => {
   const isDarkModeFromStore = useSettingStore().isDarkMode;
@@ -32,7 +33,7 @@ const shouldBeDark = computed(() => {
   return isDarkModeFromStore;
 });
 
-const onClick = (e: Event) => {
+const onClick = (e: Event & { shiftKey: boolean }) => {
   emits("onClick", e);
 };
 </script>

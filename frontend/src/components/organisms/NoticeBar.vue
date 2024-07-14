@@ -6,14 +6,14 @@
       type="notice"
     />
     <div class="button">
-      <Button title="更新" @onClick="onClick" />
+      <SimpleButton title="更新" @onClick="onClick" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import SpanText from "@/components/atoms/SpanText.vue";
-import Button from "@/components/atoms/Button.vue";
+import SimpleButton from "@/components/atoms/SimpleButton.vue";
 
 const emits = defineEmits<{ (e: "click"): void }>();
 

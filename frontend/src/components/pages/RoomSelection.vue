@@ -38,10 +38,10 @@
             <label for="color"> <input id="color" type="color" v-model="userHexColor" />色 </label>
           </div>
           <div class="selection-box-under-buttons">
-            <Button title="名前変更" @onClick="backToHome" />
+            <SimpleButton title="名前変更" @onClick="backToHome" />
           </div>
           <div class="selection-box-under-buttons">
-            <Button title="キャラランダム変更" @onClick="pickRandomCharacter" />
+            <SimpleButton title="キャラランダム変更" @onClick="pickRandomCharacter" />
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import Color from "@/store/color";
 import SpanText from "@/components/atoms/SpanText.vue";
-import Button from "@/components/atoms/Button.vue";
+import SimpleButton from "@/components/atoms/SimpleButton.vue";
 import CharacterImage from "@/components/organisms/CharacterImage.vue";
 import SeekBar from "@/components/molecules/SeekBar.vue";
 import ColorPalette from "@/components/molecules/ColorPalette.vue";
