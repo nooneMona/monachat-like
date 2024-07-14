@@ -19,7 +19,7 @@ const typedInputEl: Ref<HTMLInputElement | undefined> = computed(
   () => inputEl.value as unknown as HTMLInputElement | undefined,
 );
 
-const props = withDefaults(defineProps<{ allowedEmpty: boolean; disabled: boolean }>(), {
+const props = withDefaults(defineProps<{ allowedEmpty?: boolean; disabled?: boolean }>(), {
   allowedEmpty: true,
   disabled: false,
 });
