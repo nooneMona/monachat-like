@@ -168,7 +168,9 @@ export default createStore({
       if (state.chatMessages[id] === undefined) {
         state.chatMessages[id] = [];
       }
-      state.chatMessages[id].unshift({ messageID: uuidv4(), ...message });
+      // NOTE: どう追加するかは吹き出しの重なり方が依存する
+      // ref: https://developer.mozilla.org/ja/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_without_z-index
+      state.chatMessages[id].push({ messageID: uuidv4(), ...message });
     },
     removeChatMessage(state, { characterID, messageID }) {
       const index = state.chatMessages[characterID].findIndex((v) => v.messageID === messageID);

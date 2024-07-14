@@ -41,18 +41,31 @@
 
     <div class="setting-bar">
       <div class="setting-bar-left">
-        <select v-model="selectedStat" @change="onChangeStat">
-          <option disabled value="">状態</option>
-          <option disabled value="free">フリー</option>
-          <option v-for="option in statOptions" :key="option">
-            {{ option }}
-          </option>
-        </select>
-        <select v-model="selectedVolume">
-          <option disabled value="" selected>音量</option>
-          <option value="on">ON</option>
-          <option value="off">OFF</option>
-        </select>
+        <div class="setting-item">
+          <select v-model="selectedVolume">
+            <option disabled value="" selected>音量</option>
+            <option value="on">ON</option>
+            <option value="off">OFF</option>
+          </select>
+        </div>
+        <div class="setting-item">
+          <select v-model="selectedTime">
+            <option disabled value="" selected>時間</option>
+            <option value="long">LONG</option>
+            <option value="medium">MEDIUM</option>
+            <option value="short">SHORT</option>
+            <option value="quick">QUICK</option>
+          </select>
+        </div>
+        <div class="setting-item">
+          <select v-model="selectedStat" @change="onChangeStat">
+            <option disabled value="">状態</option>
+            <option disabled value="free">フリー</option>
+            <option v-for="option in statOptions" :key="option">
+              {{ option }}
+            </option>
+          </select>
+        </div>
       </div>
       <div class="setting-bar-center">
         <SubmittableField
@@ -120,6 +133,10 @@ const { isDarkMode } = storeToRefs(settingStore);
 const selectedVolume = computed({
   get: () => settingStore.selectedVolume,
   set: (value) => settingStore.updateSelectedVolume(value),
+});
+const selectedTime = computed({
+  get: () => settingStore.selectedTime,
+  set: (value) => settingStore.updateSelectedTime(value),
 });
 const visibleUsers = computed(() => store.getters.visibleUsers);
 const chatMessages = computed(() => store.state.chatMessages);
@@ -314,6 +331,15 @@ const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messag
     .setting-bar-left {
       display: flex;
       flex-direction: row;
+
+      .setting-item {
+        display: flex;
+        flex-direction: row;
+
+        select {
+          width: 60px;
+        }
+      }
     }
     .setting-bar-center {
       width: 40%;

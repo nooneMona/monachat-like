@@ -74,4 +74,9 @@ body {
   margin: 0;
   padding: 0;
 }
+
+.debug-frame {
+  box-sizing: border-box;
+  border: solid 1px red;
+}
 </style>

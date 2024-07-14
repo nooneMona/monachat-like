@@ -14,26 +14,7 @@ import axios from "axios";
 import { Stat } from "@/domain/stat";
 import defaultCharhanSVG from "@/store/defaultCharhan";
 import StatPanel from "@/components/molecules/character/StatPanel.vue";
-
-type ChatCharacterUser = {
-  id: string;
-  x: number;
-  y: number;
-  dispX: number;
-  dispY: number;
-  scl: number;
-  stat: string;
-  trip: string;
-  ihash: string;
-  name: string;
-  rgbaValue: string;
-  hexValue: string;
-  type: string;
-  isMobile: boolean;
-  alive: boolean;
-  width: number;
-  height: number;
-};
+import { ChatCharacterUser } from "@/domain/type";
 
 const props = defineProps<{
   user: ChatCharacterUser;

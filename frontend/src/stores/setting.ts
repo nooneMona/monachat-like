@@ -14,6 +14,7 @@ type StorageKey =
   | "tripResult"
   | "darkMode"
   | "sound"
+  | "time"
   | "kbMode"
   | "typingMode"
   | "scrollableLog"
@@ -27,6 +28,7 @@ const FALSE = "false";
 
 export const SelectedUserColors = ["red", "blue", "green", "purple", "orange"] as const;
 export type SelectedUserColorType = (typeof SelectedUserColors)[number];
+export type TimeOptionsType = "quick" | "short" | "medium" | "long";
 
 const getBooleanValueWithDefault = (key: StorageKey, defaultValue: boolean) => {
   const serializedValue = localStorage.getItem(`${storageKeyPrefix}/${key}`);
@@ -88,6 +90,9 @@ export const useSettingStore = defineStore("setting", () => {
   const selectedVolume = ref(getValueWithDefault("sound", ""));
   const updateSelectedVolume = (value: string) =>
     updateValueWithPerpetuation(selectedVolume, "sound", value);
+  const selectedTime = ref(getValueWithDefault("time", "medium"));
+  const updateSelectedTime = (value: string) =>
+    updateValueWithPerpetuation(selectedTime, "time", value);
   // 設定情報（下部パネル）
   const isKBMode = ref(getBooleanValueWithDefault("kbMode", false)); // KBモード ON/OFF
   const updateIsKBMode = (value: boolean) =>
@@ -113,6 +118,8 @@ export const useSettingStore = defineStore("setting", () => {
   const settingSetupResult = {
     selectedVolume,
     updateSelectedVolume,
+    selectedTime,
+    updateSelectedTime,
     isKBMode,
     updateIsKBMode,
     isDarkMode,

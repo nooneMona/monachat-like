@@ -7,6 +7,7 @@
       class="bubble-area"
       :user="user"
       :messages="messages"
+      :bubbleAreaHeight
       @bubbleDeleted="bubbleDeleted"
     />
     <div ref="characterEl" class="character">
@@ -53,39 +54,12 @@ import { SelectedUserColorType, useSettingStore } from "@/stores/setting";
 import { storeToRefs } from "pinia";
 import { useDevStore } from "@/stores/develop";
 import { Character } from "@/domain/character";
-
-type ChatCharacterUser = {
-  id: string;
-  x: number;
-  y: number;
-  dispX: number;
-  dispY: number;
-  scl: number;
-  stat: string;
-  trip: string;
-  ihash: string;
-  name: string;
-  rgbaValue: string;
-  hexValue: string;
-  type: string;
-  isMobile: boolean;
-  alive: boolean;
-  width: number;
-  height: number;
-};
-
-type ChatMessages = {
-  messageID: string;
-  id: string;
-  cmt: string;
-  style: number;
-  typing: string;
-}[];
+import { ChatCharacterUser, ChatMessage } from "@/domain/type";
 
 const props = withDefaults(
   defineProps<{
     user: ChatCharacterUser;
-    messages: ChatMessages;
+    messages: ChatMessage[];
     bubbleAreaHeight?: number;
     isDark?: boolean;
   }>(),
