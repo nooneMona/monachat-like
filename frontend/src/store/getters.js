@@ -1,16 +1,9 @@
 import { piniaInstance } from "../piniaInstance";
-import { useLogStore } from "../stores/log";
 import { useUsersStore } from "../stores/users";
 
 const usersStore = useUsersStore(piniaInstance);
-const logStore = useLogStore(piniaInstance);
 
 export const indexGetters = {
-  visibleLogMessages() {
-    return logStore.logMessages
-      .filter((e) => !usersStore.ihashsSilentIgnoredByMe[e.ihash])
-      .filter((e) => !usersStore.ihashsIgnoredByMe[e.ihash]);
-  },
   // 画面に表示されているユーザー
   visibleUsers(state) {
     return Object.keys(state.users)

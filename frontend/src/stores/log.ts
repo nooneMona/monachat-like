@@ -1,6 +1,7 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useSettingStore } from "@/stores/setting";
+import { useUsersStore } from "./users";
 
 export const useLogStore = defineStore("log", () => {
   const logs = ref<
@@ -44,6 +45,12 @@ export const useLogStore = defineStore("log", () => {
     }
     return logs.value;
   });
+  const visibleLogMessages = computed(() => {
+    const usersStore = useUsersStore();
+    return logMessages.value
+      .filter((e) => !usersStore.ihashsSilentIgnoredByMe[e.ihash])
+      .filter((e) => !usersStore.ihashsIgnoredByMe[e.ihash]);
+  });
 
-  return { logs, appendLog, resetLog, logMessages };
+  return { logs, appendLog, resetLog, logMessages, visibleLogMessages };
 });
