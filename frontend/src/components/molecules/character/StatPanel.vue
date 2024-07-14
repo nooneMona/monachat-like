@@ -5,9 +5,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import SpanText from "@/components/atoms/SpanText.vue";
 import { useSettingStore } from "@/stores/setting";
-import { computed } from "vue";
 
 const props = withDefaults(defineProps<{ text: string; isDark?: boolean }>(), {
   isDark: undefined,
