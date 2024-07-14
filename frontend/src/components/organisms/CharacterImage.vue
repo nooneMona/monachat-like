@@ -33,7 +33,7 @@ const imageFilePath = computed(() => {
   // NOTE: 存在しないキャラコかどうかは問い合わせがないとわからないため、
   //       バリデーションはここでは行わない。空白も存在しないキャラコかわからない扱い。
   // TODO: サニタイズでは完全なディレクトリトラバーサルの対策になっていない
-  const sanitizedType = props.user.type.replace(/[^0-9a-z]/gi, "");
+  const sanitizedType = props.user.type.replace(/[^0-9a-z_-]/gi, "");
   if (props.isKBMode) {
     return `/img/kb/${sanitizedType}.svg`;
   }
