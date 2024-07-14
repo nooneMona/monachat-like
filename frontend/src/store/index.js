@@ -241,34 +241,6 @@ export default createStore({
       logStore.appendLog({ head, content, foot, visibleOnReceived, color, ihash });
       settingStore.saveCurrentLog(logStore.logs);
     },
-    enter(_, { room }) {
-      const hexColor = settingStore.savedColor;
-      const { r, g, b } = Color.hexToMonaRGB(hexColor);
-      const randomX = Math.floor(Math.random() * uiStore.width);
-      const defaultY = uiStore.height - 150;
-      const x = userStore.coordinate?.x ?? randomX;
-      const y = userStore.coordinate?.y ?? defaultY;
-      socketIOInstance.emit("ENTER", {
-        token: userStore.myToken,
-        room: room.id,
-        x,
-        y,
-        scl: 100,
-        stat: "通常",
-        name: settingStore.savedName,
-        trip: settingStore.savedInputTrip,
-        r,
-        g,
-        b,
-        type: settingStore.savedType,
-      });
-      const log = settingStore.loadedLogFromStorage;
-      if (logStore.logs.length === 0 && log.length !== 0) {
-        logStore.$patch({ logs: log });
-      }
-      userStore.updateCurrentRoom(room);
-      userStore.updateCoordinate({ x, y });
-    },
     exit() {
       socketIOInstance.emit("EXIT", {
         token: userStore.myToken,
@@ -386,12 +358,9 @@ export default createStore({
       userStore.updateAuthInfo(id, token);
       commit("updateUserExistence", { id, exists: true });
     },
-    returnFromAUTHError({ dispatch }) {
+    returnFromAUTHError() {
       if (userStore.currentPathName === "room") {
-        dispatch("enter", {
-          room: userStore.currentRoom,
-          isReturned: true,
-        });
+        userStore.enter(userStore.currentRoom);
       }
       if (userStore.currentPathName === "select") {
         userStore.enterName();

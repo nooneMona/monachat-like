@@ -177,7 +177,7 @@ onMounted(async () => {
     return;
   }
   currentRoom.value = { ...roomObj };
-  store.dispatch("enter", { room: currentRoom.value });
+  userStore.enter(currentRoom.value);
 
   const unloadAppendExitLog = () => {
     store.dispatch("exit");

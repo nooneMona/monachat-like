@@ -3,6 +3,9 @@ import { computed, ref } from "vue";
 import { socketIOInstance } from "../socketIOInstance";
 import { useLogStore } from "./log";
 import { useSettingStore } from "./setting";
+import { RoomResponse } from "../infrastructure/api";
+import { useUIStore } from "./ui";
+import Color from "./color";
 
 export interface IUser {
   myID: string | null;
@@ -89,6 +92,39 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
+  const enter = (room: RoomResponse["rooms"][number]) => {
+    const logStore = useLogStore();
+    const uiStore = useUIStore();
+    const settingStore = useSettingStore();
+
+    const hexColor = settingStore.savedColor;
+    const { r, g, b } = Color.hexToMonaRGB(hexColor);
+    const randomX = Math.floor(Math.random() * uiStore.width);
+    const defaultY = uiStore.height - 150;
+    const x = coordinate.value?.x ?? randomX;
+    const y = coordinate.value?.y ?? defaultY;
+    socketIOInstance.emit("ENTER", {
+      token: myToken.value,
+      room: room.id,
+      x,
+      y,
+      scl: 100,
+      stat: "通常",
+      name: settingStore.savedName,
+      trip: settingStore.savedInputTrip,
+      r,
+      g,
+      b,
+      type: settingStore.savedType,
+    });
+    const log = settingStore.loadedLogFromStorage;
+    if (logStore.logs.length === 0 && log.length !== 0) {
+      logStore.$patch({ logs: log });
+    }
+    updateCurrentRoom(room);
+    updateCoordinate({ x, y });
+  };
+
   return {
     myID,
     myToken,
@@ -105,5 +141,6 @@ export const useUserStore = defineStore("user", () => {
     updateDisconnected,
     displayingMyID,
     enterName,
+    enter,
   };
 });
