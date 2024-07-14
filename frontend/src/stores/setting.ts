@@ -63,8 +63,9 @@ export const useSettingStore = defineStore("setting", () => {
   // キャラクター情報
   const savedName = ref(getValueWithDefault("name", ""));
   const updateSavedName = (value: string) => updateValueWithPerpetuation(savedName, "name", value);
-  const savedTrip = ref(getValueWithDefault("trip", ""));
-  const updateSavedTrip = (value: string) => updateValueWithPerpetuation(savedTrip, "trip", value);
+  const savedInputTrip = ref(getValueWithDefault("trip", ""));
+  const updateSavedInputTrip = (value: string) =>
+    updateValueWithPerpetuation(savedInputTrip, "trip", value);
   const tripResult = ref(getValueWithDefault("tripResult", ""));
   const updateTripResult = (value: string) =>
     updateValueWithPerpetuation(tripResult, "tripResult", value);
@@ -76,8 +77,8 @@ export const useSettingStore = defineStore("setting", () => {
   const characterSetupResult = {
     savedName,
     updateSavedName,
-    savedTrip,
-    updateSavedTrip,
+    savedInputTrip,
+    updateSavedInputTrip,
     tripResult,
     updateTripResult,
     savedType,
@@ -191,10 +192,10 @@ export const useSettingStore = defineStore("setting", () => {
   };
 
   const savedNameWithTrip = computed(() => {
-    if (savedTrip.value === "") {
+    if (savedInputTrip.value === "") {
       return savedName.value;
     }
-    return `${savedName.value}#${savedTrip.value}`;
+    return `${savedName.value}#${savedInputTrip.value}`;
   });
 
   return {

@@ -91,7 +91,7 @@ const submitName = async ({ text }: { text: string }) => {
   // 解析が無事に終わってから移動しないと引き継がれないのでawaitする。
   const character = Character.createFromText(text);
   settingStore.updateSavedName(character.name);
-  settingStore.updateSavedTrip(character.tripInput);
+  settingStore.updateSavedInputTrip(character.tripInput);
   logStore.resetLog();
   router.push({
     path: "/select",

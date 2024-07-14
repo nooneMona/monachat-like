@@ -241,29 +241,6 @@ export default createStore({
       logStore.appendLog({ head, content, foot, visibleOnReceived, color, ihash });
       settingStore.saveCurrentLog(logStore.logs);
     },
-    enterName() {
-      // ローカルストレージの内容に頼る
-      const trip = settingStore.savedTrip;
-      let name = settingStore.savedName;
-      name = name.trim() === "" ? "名無しさん" : name;
-      const enterParams = {
-        room: "/MONA8094",
-        attrib: "no",
-        name,
-        trip,
-      };
-      if (userStore.myToken !== null) {
-        // すでにトークンを取得している場合はトークンを付加する
-        enterParams.token = userStore.myToken;
-      }
-      socketIOInstance.emit("ENTER", enterParams);
-      settingStore.updateSavedName(name);
-      settingStore.updateSavedTrip(trip);
-      const log = settingStore.loadedLogFromStorage;
-      if (logStore.logs.length === 0 && log.length !== 0) {
-        logStore.$patch({ logs: log });
-      }
-    },
     enter(_, { room }) {
       const hexColor = settingStore.savedColor;
       const { r, g, b } = Color.hexToMonaRGB(hexColor);
@@ -279,7 +256,7 @@ export default createStore({
         scl: 100,
         stat: "通常",
         name: settingStore.savedName,
-        trip: settingStore.savedTrip,
+        trip: settingStore.savedInputTrip,
         r,
         g,
         b,
@@ -417,7 +394,7 @@ export default createStore({
         });
       }
       if (userStore.currentPathName === "select") {
-        dispatch("enterName");
+        userStore.enterName();
       }
       noticeStore.requestRefresh();
     },

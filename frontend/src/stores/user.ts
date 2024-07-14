@@ -1,5 +1,8 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { socketIOInstance } from "../socketIOInstance";
+import { useLogStore } from "./log";
+import { useSettingStore } from "./setting";
 
 export interface IUser {
   myID: string | null;
@@ -63,6 +66,29 @@ export const useUserStore = defineStore("user", () => {
     return myID.value.slice(0, end);
   });
 
+  const enterName = () => {
+    const logStore = useLogStore();
+    const settingStore = useSettingStore();
+    // ローカルストレージの内容に頼る
+    const trip = settingStore.savedInputTrip;
+    let name = settingStore.savedName;
+    name = name.trim() === "" ? "名無しさん" : name;
+    const enterParams = {
+      room: "/MONA8094",
+      attrib: "no",
+      name,
+      trip,
+      token: undefined,
+    };
+    socketIOInstance.emit("ENTER", { ...enterParams, token: myToken.value ?? undefined });
+    settingStore.updateSavedName(name);
+    settingStore.updateSavedInputTrip(trip);
+    const log = settingStore.loadedLogFromStorage;
+    if (logStore.logs.length === 0 && log.length !== 0) {
+      logStore.$patch({ logs: log });
+    }
+  };
+
   return {
     myID,
     myToken,
@@ -78,5 +104,6 @@ export const useUserStore = defineStore("user", () => {
     updateCoordinate,
     updateDisconnected,
     displayingMyID,
+    enterName,
   };
 });

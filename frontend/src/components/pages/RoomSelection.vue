@@ -150,7 +150,7 @@ onMounted(async () => {
 
   userStore.updateCurrentRoom(null);
   usersStore.resetChatMessages();
-  await store.dispatch("enterName", { text: null });
+  userStore.enterName();
 });
 
 const updateColor = (hexColor: string) => {
