@@ -17,7 +17,7 @@ import StatPanel from "@/components/molecules/character/StatPanel.vue";
 import { ChatCharacterUser } from "@/domain/type";
 
 const props = defineProps<{
-  user: ChatCharacterUser;
+  user: Pick<ChatCharacterUser, "type" | "scl" | "hexValue" | "stat">;
   depthRate: number;
   isKBMode: boolean;
   isSilent: boolean;

@@ -24,7 +24,6 @@ export default createStore({
     return {
       socket: null, // socket.ioのクライアント
       users: {}, // 現在のコンテキストにいるユーザー
-      rooms: {}, // 部屋の人数情報
       chatMessages: {}, // 吹き出し
       logMessages: [], // ログ
       ihashsIgnoredByMe: {}, // 自分が無視したユーザーリスト
@@ -52,13 +51,6 @@ export default createStore({
         reconnectionDelay: 200,
         closeOnBeforeunload: false,
       });
-    },
-    updateRooms(state, countParam) {
-      const rooms = {};
-      countParam.rooms.forEach((e) => {
-        rooms[e.n] = e.c;
-      });
-      state.rooms = rooms;
     },
     initializeUsers(state, users) {
       state.users = {};
@@ -221,7 +213,7 @@ export default createStore({
         commit("initializeUsers", param);
       });
       state.socket.on("COUNT", (param) => {
-        commit("updateRooms", param);
+        roomStore.updateRooms(param);
       });
       state.socket.on("AUTH", ({ id, token }) => {
         dispatch("receivedAUTH", {
