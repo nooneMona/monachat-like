@@ -15,4 +15,16 @@ describe("Character", () => {
     const character = Character.create({ name: "名無しさん", ihash: "ihash", trip: undefined });
     expect(character.nameTag()).toBe("名無しさん◇ihash");
   });
+
+  it("should create from text with trip", () => {
+    const character = Character.createFromText("名無しさん#trip");
+    expect(character.name).toBe("名無しさん");
+    expect(character.tripInput).toBe("trip");
+  });
+
+  it("should create from text without trip", () => {
+    const character = Character.createFromText("名無しさん");
+    expect(character.name).toBe("名無しさん");
+    expect(character.tripInput).toBe("");
+  });
 });

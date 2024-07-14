@@ -90,7 +90,6 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
-import axios from "axios";
 import { Stat } from "@/domain/stat";
 import SpanText from "@/components/atoms/SpanText.vue";
 import SimpleButton from "@/components/atoms/SimpleButton.vue";

@@ -1,5 +1,4 @@
 import moment from "moment";
-import axios from "axios";
 import { createStore } from "vuex";
 import { indexGetters } from "@/store/getters";
 import Color from "../stores/color";
@@ -241,22 +240,6 @@ export default createStore({
         Color.monaRGBToCSS({ r: 255, g: 255, b: 255 }, 1.0);
       logStore.appendLog({ head, content, foot, visibleOnReceived, color, ihash });
       settingStore.saveCurrentLog(logStore.logs);
-    },
-    // トリップ付き名前文字列`text`を分解しsetting.name, .tripに保管
-    parseNameWithTrip(_, { text }) {
-      let name = "";
-      let trip = "";
-      if (text.includes("#")) {
-        const splitNames = text.split("#");
-        [name] = splitNames;
-        trip = splitNames.slice(1).join("#");
-      } else {
-        // トリップの予約語 `#` が含まれていない場合
-        name = text;
-      }
-      name = name.trim() === "" ? "名無しさん" : name;
-      settingStore.updateSavedName(name);
-      settingStore.updateSavedTrip(trip);
     },
     enterName() {
       // ローカルストレージの内容に頼る

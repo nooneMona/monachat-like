@@ -43,7 +43,6 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed, onUnmounted, Ref } from "vue";
-import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import SpanText from "@/components/atoms/SpanText.vue";
@@ -51,8 +50,8 @@ import SubmittableField from "@/components/molecules/SubmittableField.vue";
 import { useSettingStore } from "@/stores/setting";
 import { NewsResponse } from "@/infrastructure/api";
 import { useLogStore } from "@/stores/log";
+import { Character } from "../../domain/character";
 
-const store = useStore();
 const logStore = useLogStore();
 const settingStore = useSettingStore();
 const router = useRouter();
@@ -90,7 +89,9 @@ onUnmounted(() => window.removeEventListener("keydown", onKeyDown));
 // メソッド
 const submitName = async ({ text }: { text: string }) => {
   // 解析が無事に終わってから移動しないと引き継がれないのでawaitする。
-  await store.dispatch("parseNameWithTrip", { text });
+  const character = Character.createFromText(text);
+  settingStore.updateSavedName(character.name);
+  settingStore.updateSavedTrip(character.tripInput);
   logStore.resetLog();
   router.push({
     path: "/select",
