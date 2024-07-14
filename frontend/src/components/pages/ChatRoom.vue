@@ -101,9 +101,11 @@ import { useUIStore } from "../../stores/ui";
 import { useUserStore } from "../../stores/user";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores/setting";
+import { useRoomStore } from "../../stores/room";
 
 const store = useStore();
 const userStore = useUserStore();
+const roomStore = useRoomStore();
 const uiStore = useUIStore();
 const settingStore = useSettingStore();
 const router = useRouter();
@@ -165,12 +167,14 @@ onMounted(async () => {
   // 以前いた部屋のユーザー情報を削除する。
   store.commit("resetUsers");
   const res = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/rooms`);
-  store.commit("updateRoomMetadata", res.data.rooms);
-  const roomObj = store.getters.roomObj(`/${route.params.id}`);
+  roomStore.updateRoomMetadata(res.data.rooms);
+
+  const roomObj = roomStore.roomObj(`/${route.params.id}`);
   if (roomObj === undefined) {
     router.push({
       path: "/select",
     });
+    return;
   }
   currentRoom.value = { ...roomObj };
   store.dispatch("enter", { room: currentRoom.value });

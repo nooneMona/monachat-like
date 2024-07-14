@@ -10,11 +10,13 @@ import { useNoticeStore } from "@/stores/notice";
 import { useUIStore } from "../stores/ui";
 import { useSettingStore } from "@/stores/setting";
 import { useUserStore } from "../stores/user";
+import { useRoomStore } from "../stores/room";
 
 const noticeStore = useNoticeStore(piniaInstance);
 const uiStore = useUIStore(piniaInstance);
 const settingStore = useSettingStore(piniaInstance);
 const userStore = useUserStore(piniaInstance);
+const roomStore = useRoomStore(piniaInstance);
 
 export default createStore({
   // strict: import.meta.env.NODE_ENV !== "production",
@@ -22,7 +24,6 @@ export default createStore({
     return {
       socket: null, // socket.ioのクライアント
       users: {}, // 現在のコンテキストにいるユーザー
-      roomMetadata: [], // 部屋情報
       rooms: {}, // 部屋の人数情報
       chatMessages: {}, // 吹き出し
       logMessages: [], // ログ
@@ -33,9 +34,6 @@ export default createStore({
   },
   getters: indexGetters,
   mutations: {
-    updateRoomMetadata(state, array) {
-      state.roomMetadata = array;
-    },
     appendLog(state, logObj) {
       const MAX_LOG_LENGTH = 1_000;
       if (settingStore.isInfiniteLog) {
@@ -186,9 +184,9 @@ export default createStore({
     },
   },
   actions: {
-    async loadPreData({ commit }) {
+    async loadPreData() {
       const res = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/rooms`);
-      commit("updateRoomMetadata", res.data.rooms);
+      roomStore.updateRoomMetadata(res.data.rooms);
     },
     registerSocketEvents({ state, commit, dispatch }) {
       state.socket.on("connect", () => {

@@ -55,7 +55,7 @@
           <SpanText text="ステージ選択" :size="18" />
           <SpanText text="最大人数 ∞人" :size="18" />
         </div>
-        <RoomButtons :rooms="rooms" :roomCount="roomCount" @clickRoom="submitEnter" />
+        <RoomButtons :rooms="roomMetadata" :roomCount="roomCount" @clickRoom="submitEnter" />
       </div>
     </div>
   </div>
@@ -80,16 +80,18 @@ import { useUserStore } from "@/stores/user";
 import { CharactersResponse, ColorResponse, RoomResponse } from "@/infrastructure/api";
 import { CharType } from "@/domain/charType";
 import { Trip, TripFactory } from "@/domain/trip";
+import { useRoomStore } from "../../stores/room";
 
 const store = useStore();
 const userStore = useUserStore();
+const roomStore = useRoomStore();
 const settingStore = useSettingStore();
 const router = useRouter();
 
 // ストア
 const { savedName, tripResult, savedType, savedColor, isKBMode } = storeToRefs(settingStore);
 const { ihash, disconnected } = storeToRefs(userStore);
-const rooms = computed(() => store.state.roomMetadata); // APIから取得した部屋一覧
+const { roomMetadata } = storeToRefs(roomStore); // APIから取得した部屋一覧
 const displayingMyID = computed(() => userStore.displayingMyID(10)); // 自分のID
 const roomCount = computed(() => store.state.rooms); // 同期された部屋人数情報
 const userType = computed({

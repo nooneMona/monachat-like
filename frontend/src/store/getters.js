@@ -4,13 +4,6 @@ import { piniaInstance } from "../piniaInstance";
 const settingStore = useSettingStore(piniaInstance);
 
 export const indexGetters = {
-  // idでRoomオブジェクトを取得
-  roomObj: (state) => (id) => {
-    if (id == null) {
-      return undefined;
-    }
-    return state.roomMetadata.filter((r) => r.id === id)[0];
-  },
   // ログに表示するための順序が考慮されたリスト
   logMessages(state) {
     if (settingStore.isDescendingLog) {
