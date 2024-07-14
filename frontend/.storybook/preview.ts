@@ -1,9 +1,9 @@
-import { setup } from '@storybook/vue3'
-import { piniaInstance } from '../src/piniaInstance'
+import { setup } from "@storybook/vue3";
+import { piniaInstance } from "../src/piniaInstance";
 
 setup((app) => {
-  app.use(piniaInstance)
-})
+  app.use(piniaInstance);
+});
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -13,4 +13,4 @@ export const parameters = {
       date: /Date$/,
     },
   },
-}
+};
