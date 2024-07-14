@@ -1,7 +1,6 @@
 import moment from "moment";
 import axios from "axios";
 import { createStore } from "vuex";
-import io from "socket.io-client";
 import { indexGetters } from "@/store/getters";
 import Color from "../stores/color";
 import { piniaInstance } from "../piniaInstance";
@@ -12,6 +11,7 @@ import { useUserStore } from "../stores/user";
 import { useUsersStore } from "../stores/users";
 import { useRoomStore } from "../stores/room";
 import { useLogStore } from "../stores/log";
+import { socketIOInstance } from "../socketIOInstance";
 
 const noticeStore = useNoticeStore(piniaInstance);
 const uiStore = useUIStore(piniaInstance);
@@ -32,12 +32,7 @@ export default createStore({
   getters: indexGetters,
   mutations: {
     initializeSocket(state) {
-      state.socket = io(import.meta.env.VITE_APP_SOCKET_HOST, {
-        path: "/monachatchat/",
-        withCredentials: true,
-        reconnectionDelay: 200,
-        closeOnBeforeunload: false,
-      });
+      state.socket = socketIOInstance;
     },
     initializeUsers(state, users) {
       state.users = {};
