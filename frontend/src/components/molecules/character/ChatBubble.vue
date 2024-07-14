@@ -15,10 +15,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import SpanText from "@/components/atoms/SpanText.vue";
 import Color from "@/stores/color";
 import { useSettingStore } from "@/stores/setting";
-import { computed } from "vue";
 
 type Message = {
   cmt: string;
