@@ -15,7 +15,7 @@
         left: user.dispX + 'px',
         top: user.dispY - bubbleAreaHeight + 'px',
         // TODO: 可動域の高さが400pxを超えたときに破綻するので修正する
-        zIndex: `${user.dispY + isMine(id as unknown as string) ? 500 : 100}`,
+        zIndex: `${user.dispY + (isMine(id as unknown as string) ? 500 : 100)}`,
       }"
       :key="id"
       :ref="
