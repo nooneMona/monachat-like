@@ -8,7 +8,6 @@ on:
     branches: [main, feature/**]
   pull_request:
     branches: [main]
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,6 +31,9 @@ jobs:
         working-directory: ./backend
       - name: install frontend npm packages
         run: yarn
+        working-directory: ./frontend
+      - name: install playwright
+        run: yarn playwright install
         working-directory: ./frontend
       - name: test frontend
         run: yarn test
