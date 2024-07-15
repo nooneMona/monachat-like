@@ -67,8 +67,8 @@ export const useSettingStore = defineStore("setting", () => {
   const updateSavedInputTrip = (value: string) =>
     updateValueWithPerpetuation(savedInputTrip, "trip", value);
   const tripResult = ref(getValueWithDefault("tripResult", ""));
-  const updateTripResult = (value: string) =>
-    updateValueWithPerpetuation(tripResult, "tripResult", value);
+  const updateTripResult = (value: string | undefined) =>
+    updateValueWithPerpetuation(tripResult, "tripResult", value ?? "");
   const savedType = ref(getValueWithDefault("type", "charhan"));
   const updateSavedType = (value: string) => updateValueWithPerpetuation(savedType, "type", value);
   const savedColor = ref(getValueWithDefault("color", "#ffffff"));

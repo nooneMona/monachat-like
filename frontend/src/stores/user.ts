@@ -39,8 +39,8 @@ export const useUserStore = defineStore("user", () => {
     myID.value = id;
     myToken.value = token;
   };
-  const updateIhash = (value: string) => {
-    ihash.value = value;
+  const updateIhash = (value: string | undefined) => {
+    ihash.value = value ?? null;
   };
   const updateCurrentPathName = (value: string | undefined) => {
     currentPathName.value = value;

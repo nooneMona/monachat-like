@@ -1,3 +1,4 @@
+// TODO: どこがOptionalなのか見極める
 export type ChatCharacterUser = {
   id: string;
   x: number;
@@ -16,12 +17,18 @@ export type ChatCharacterUser = {
   alive: boolean;
   width: number;
   height: number;
+  r: number;
+  g: number;
+  b: number;
 };
 
+export type ChatCharacterUserDict = { [key in string]: ChatCharacterUser };
+
 export type ChatMessage = {
-  messageID: string;
   id: string;
   cmt: string;
   style: number;
-  typing: string;
+  typing: { count: number; milliTime: number };
 };
+
+export type ChatMessages = (ChatMessage & { messageID: string })[];

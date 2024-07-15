@@ -1,13 +1,19 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
-import { ChatMessage } from "../domain/type";
+import {
+  ChatCharacterUser,
+  ChatCharacterUserDict,
+  ChatMessage,
+  ChatMessages,
+} from "../domain/type";
 import Color from "./color";
 import { useUIStore } from "./ui";
+import { ENTERResParam, SETResParam } from "../socketIOInstance";
 
 export const useUsersStore = defineStore("users", () => {
-  const users = ref<{ [id in string]: any }>({}); // 現在のコンテキストにいるユーザー
-  const chatMessages = ref<{ [key in string]: ChatMessage[] }>({});
+  const users = ref<{ [id in string]: ChatCharacterUser }>({}); // 現在のコンテキストにいるユーザー
+  const chatMessages = ref<{ [key in string]: ChatMessages }>({});
   const ihashsIgnoredByMe = ref<{ [key in string]: boolean }>({});
   const idsIgnoresMe = ref<{ [key in string]: boolean }>({});
   const ihashsSilentIgnoredByMe = ref<{ [key in string]: boolean }>({});
@@ -15,14 +21,14 @@ export const useUsersStore = defineStore("users", () => {
   // 画面に表示されているユーザー
   const visibleUsers = computed(() => {
     return Object.keys(users.value)
-      .filter((id) => users.value[id].alive)
+      .filter((id) => users.value[id]?.alive ?? false)
       .filter((id) => !idsIgnoresMe.value[id])
-      .filter((id) => !ihashsIgnoredByMe.value[users.value[id].ihash])
+      .filter((id) => !ihashsIgnoredByMe.value[users.value[id]?.ihash ?? ""])
       .reduce((result, id) => {
-        const resultRef = result;
-        resultRef[id] = users.value[id];
-        return result;
-      }, {});
+        const currentResult: ChatCharacterUserDict = { ...result };
+        currentResult[id] = users.value[id] as ChatCharacterUser;
+        return currentResult;
+      }, {} as ChatCharacterUserDict);
   });
   // 設定上表示されているユーザー
   const manageableUsers = computed(() => {
@@ -39,12 +45,12 @@ export const useUsersStore = defineStore("users", () => {
   // サイレント無視したユーザー
   const silentUsers = computed(() => {
     return Object.keys(users.value)
-      .filter((id) => ihashsSilentIgnoredByMe.value[users.value[id].ihash])
+      .filter((id) => ihashsSilentIgnoredByMe.value[users.value[id]?.ihash ?? ""])
       .reduce((result, id) => {
-        const resultRef = result;
-        resultRef[id] = users.value[id];
-        return result;
-      }, {});
+        const currentResult: ChatCharacterUserDict = { ...result };
+        currentResult[id] = users.value[id] as ChatCharacterUser;
+        return currentResult;
+      }, {} as ChatCharacterUserDict);
   });
   const idsByIhash = computed(() => {
     const ids = Object.keys(users.value);
@@ -84,36 +90,44 @@ export const useUsersStore = defineStore("users", () => {
       userRef.alive = true;
     });
   };
-  const updateUserByEnter = (newUser: any) => {
-    const { id } = newUser;
-    let userRef = users.value[id];
-    if (!userRef) {
+  const updateUserByEnter = (enterRes: ENTERResParam) => {
+    const id = enterRes.id;
+    if (users.value[id] === undefined) {
       // 初めてみかけたIDがあったらキャラのプロパティを作成する
-      users.value[id] = {};
-      userRef = users.value[id];
+      // TODO: あまり型安全でないので修正
+      users.value[id] = {} as ChatCharacterUser;
     }
-    userRef.x = newUser.x;
-    userRef.y = newUser.y;
-    userRef.scl = newUser.scl;
-    userRef.stat = newUser.stat;
-    userRef.trip = newUser.trip;
-    userRef.ihash = newUser.ihash;
-    userRef.name = newUser.name;
-    userRef.rgbaValue = Color.monaRGBToCSS({ r: newUser.r, g: newUser.g, b: newUser.b }, 1.0);
-    userRef.hexValue = Color.monaRGBToHex({ r: newUser.r, g: newUser.g, b: newUser.b });
-    userRef.type = newUser.type;
-    userRef.isMobile = newUser.isMobile;
-    userRef.alive = true;
+    users.value[id].x = enterRes.x;
+    users.value[id].y = enterRes.y;
+    users.value[id].scl = enterRes.scl;
+    users.value[id].stat = enterRes.stat;
+    users.value[id].trip = enterRes.trip;
+    users.value[id].ihash = enterRes.ihash;
+    users.value[id].name = enterRes.name;
+    users.value[id].rgbaValue = Color.monaRGBToCSS(
+      { r: enterRes.r, g: enterRes.g, b: enterRes.b },
+      1.0,
+    );
+    users.value[id].hexValue = Color.monaRGBToHex({
+      r: enterRes.r,
+      g: enterRes.g,
+      b: enterRes.b,
+    });
+    users.value[id].type = enterRes.type;
+    users.value[id].isMobile = enterRes.isMobile;
+    users.value[id].alive = true;
   };
-  const updateUserBySet = (newUser: any) => {
-    const { id } = newUser;
+  const updateUserBySet = (setRes: SETResParam) => {
+    const { id } = setRes;
     const userRef = users.value[id];
-    userRef.x = newUser.x;
-    userRef.y = newUser.y;
-    userRef.scl = newUser.scl;
-    userRef.stat = newUser.stat;
+    userRef.x = setRes.x;
+    userRef.y = setRes.y;
+    userRef.scl = setRes.scl;
+    userRef.stat = setRes.stat;
     userRef.alive = true;
   };
+  // キャラの座標とサイズから実際の表示座標を更新する
+  // サイズが未定の場合はwidthとheightに0を入れる
   const updateUserDispLocation = (id: string) => {
     const uiStore = useUIStore();
     const userRef = users.value[id];
