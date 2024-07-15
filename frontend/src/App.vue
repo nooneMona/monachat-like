@@ -12,18 +12,18 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import InfoPanel from "@/components/pages/InfoPanel.vue";
-import NoticeBar from "@/components/organisms/NoticeBar.vue";
+import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
 import { useNoticeStore } from "@/stores/notice";
 import { useUIStore } from "@/stores/ui";
 import { useRoomStore } from "@/stores/room";
-import { socketIOInstance } from "./socketIOInstance";
-import { useUsersStore } from "./stores/users";
-import { useLogStore } from "./stores/log";
-import { useSettingStore } from "./stores/setting";
+import { socketIOInstance } from "@/socketIOInstance";
+import { useUsersStore } from "@/stores/users";
+import { useLogStore } from "@/stores/log";
+import { useSettingStore } from "@/stores/setting";
+import InfoPanel from "@/components/pages/InfoPanel.vue";
+import NoticeBar from "@/components/organisms/NoticeBar.vue";
 
 const userStore = useUserStore();
 const usersStore = useUsersStore();
@@ -44,9 +44,6 @@ const registerSocketEvents = () => {
     if (userStore.myToken == null) {
       return;
     }
-    socketIOInstance.emit("AUTH", {
-      token: userStore.myToken,
-    });
   });
   socketIOInstance.on("disconnect", () => {
     userStore.updateDisconnected(true);

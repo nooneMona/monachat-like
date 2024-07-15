@@ -233,6 +233,12 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
+  const sendAuth = () => {
+    socketIOInstance.emit("AUTH", {
+      token: myToken.value,
+    });
+  };
+
   const sendError = (text: string) => {
     socketIOInstance.emit("ERROR", {
       text: JSON.stringify(text),
@@ -263,6 +269,7 @@ export const useUserStore = defineStore("user", () => {
     setScl,
     toggleIgnorance,
     toggleSilentIgnorance,
+    sendAuth,
     sendError,
   };
 });
