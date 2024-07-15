@@ -215,7 +215,7 @@ export const useUserStore = defineStore("user", () => {
     socketIOInstance.emit("IG", {
       token: myToken.value,
       stat: newIgnores ? "on" : "off",
-      ihash,
+      ihash: targetIhash,
     });
   };
 
