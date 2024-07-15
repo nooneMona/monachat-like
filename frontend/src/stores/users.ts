@@ -9,7 +9,7 @@ import {
 } from "../domain/type";
 import Color from "./color";
 import { useUIStore } from "./ui";
-import { ENTERResParam, SETResParam } from "../socketIOInstance";
+import { ENTERResParam, SETResParam, USERResParam } from "../socketIOInstance";
 
 export const useUsersStore = defineStore("users", () => {
   const users = ref<{ [id in string]: ChatCharacterUser }>({}); // 現在のコンテキストにいるユーザー
@@ -21,72 +21,82 @@ export const useUsersStore = defineStore("users", () => {
   // 画面に表示されているユーザー
   const visibleUsers = computed(() => {
     return Object.keys(users.value)
-      .filter((id) => users.value[id]?.alive ?? false)
+      .filter((id) => users.value[id]!.alive)
       .filter((id) => !idsIgnoresMe.value[id])
-      .filter((id) => !ihashsIgnoredByMe.value[users.value[id]?.ihash ?? ""])
+      .filter((id) => !ihashsIgnoredByMe.value[users.value[id]!.ihash])
       .reduce((result, id) => {
         const currentResult: ChatCharacterUserDict = { ...result };
-        currentResult[id] = users.value[id] as ChatCharacterUser;
+        currentResult[id] = users.value[id]!;
         return currentResult;
       }, {} as ChatCharacterUserDict);
   });
   // 設定上表示されているユーザー
   const manageableUsers = computed(() => {
-    return Object.keys(users.value ?? {})
-      .filter((id) => users.value[id].alive)
-      .filter((id) => !idsIgnoresMe.value[id]) // 自分が無視したユーザーは解除できるべきである
-      .reduce((result, id) => {
-        const resultRef = result;
-        resultRef[id] = users.value[id];
-        resultRef[id].isIgnored = ihashsIgnoredByMe.value[users.value[id].ihash] ?? false;
-        return result;
-      }, {});
+    return (
+      Object.keys(users.value)
+        .filter((id) => users.value[id]!.alive)
+        .filter((id) => !idsIgnoresMe.value[id])
+        // 自分が無視したユーザーは解除できるべきである (ihashIgnoraedByMeを含めていない理由)
+        .reduce((result, id) => {
+          const currentResult: ChatCharacterUserDict = { ...result };
+          currentResult[id] = users.value[id]!;
+          currentResult[id].isIgnored = ihashsIgnoredByMe.value[users.value[id]!.ihash] ?? false;
+          return currentResult;
+        }, {} as ChatCharacterUserDict)
+    );
   });
   // サイレント無視したユーザー
   const silentUsers = computed(() => {
     return Object.keys(users.value)
-      .filter((id) => ihashsSilentIgnoredByMe.value[users.value[id]?.ihash ?? ""])
+      .filter((id) => ihashsSilentIgnoredByMe.value[users.value[id]!.ihash])
       .reduce((result, id) => {
         const currentResult: ChatCharacterUserDict = { ...result };
-        currentResult[id] = users.value[id] as ChatCharacterUser;
+        currentResult[id] = users.value[id]!;
         return currentResult;
       }, {} as ChatCharacterUserDict);
   });
   const idsByIhash = computed(() => {
-    const ids = Object.keys(users.value);
-    const obj: any = {};
-    ids.forEach((id) => {
-      if (obj[users.value[id].ihash] == null) {
-        obj[users.value[id].ihash] = [];
+    const obj: { [ihash in string]: string[] } = {};
+    Object.keys(users.value).forEach((id) => {
+      if (obj[users.value[id]!.ihash] == null) {
+        obj[users.value[id]!.ihash] = [];
+      } else {
+        obj[users.value[id]!.ihash]?.push(id);
       }
-      obj[users.value[id].ihash].push(id);
     });
     return obj;
   });
 
-  const initializeUsers = (newUsers: any) => {
+  const initializeUsers = (newUsers: USERResParam) => {
     users.value = {};
-    newUsers.forEach((userObj: any) => {
+    newUsers.forEach((userObj: USERResParam[number]) => {
       const { id } = userObj;
       let userRef = users.value[id];
       if (!userRef) {
         // 初めてみかけたIDがあったらキャラのプロパティを作成する
-        users.value[id] = {};
+        users.value[id] = {} as ChatCharacterUser;
         userRef = users.value[id];
       }
-      userRef.x = userObj.x;
-      userRef.y = userObj.y;
-      userRef.dispX = userObj.x;
-      userRef.dispY = userObj.y;
-      userRef.scl = userObj.scl;
-      userRef.stat = userObj.stat;
-      userRef.trip = userObj.trip;
-      userRef.ihash = userObj.ihash;
-      userRef.name = userObj.name;
-      userRef.rgbaValue = Color.monaRGBToCSS({ r: userObj.r, g: userObj.g, b: userObj.b }, 1.0);
-      userRef.hexValue = Color.monaRGBToHex({ r: userObj.r, g: userObj.g, b: userObj.b });
-      userRef.type = userObj.type;
-      userRef.isMobile = userObj.isMobile;
+      userRef.x = userObj.x ?? 0;
+      userRef.y = userObj.y ?? 0;
+      userRef.dispX = userObj.x ?? 0;
+      userRef.dispY = userObj.y ?? 0;
+      userRef.scl = userObj.scl ?? 100;
+      userRef.stat = userObj.stat ?? "通常";
+      userRef.trip = userObj.trip ?? "";
+      userRef.ihash = userObj.ihash ?? "";
+      userRef.name = userObj.name ?? "名無しさん";
+      userRef.rgbaValue = Color.monaRGBToCSS(
+        { r: userObj.r ?? 0, g: userObj.g ?? 0, b: userObj.b ?? 0 },
+        1.0,
+      );
+      userRef.hexValue = Color.monaRGBToHex({
+        r: userObj.r ?? 0,
+        g: userObj.g ?? 0,
+        b: userObj.b ?? 0,
+      });
+      userRef.type = userObj.type ?? "charhan";
+      userRef.isMobile = userObj.isMobile ?? false;
       userRef.alive = true;
     });
   };
@@ -97,29 +107,32 @@ export const useUsersStore = defineStore("users", () => {
       // TODO: あまり型安全でないので修正
       users.value[id] = {} as ChatCharacterUser;
     }
-    users.value[id].x = enterRes.x;
-    users.value[id].y = enterRes.y;
-    users.value[id].scl = enterRes.scl;
-    users.value[id].stat = enterRes.stat;
-    users.value[id].trip = enterRes.trip;
-    users.value[id].ihash = enterRes.ihash;
-    users.value[id].name = enterRes.name;
+    users.value[id].x = enterRes.x ?? 0;
+    users.value[id].y = enterRes.y ?? 0;
+    users.value[id].scl = enterRes.scl ?? 100;
+    users.value[id].stat = enterRes.stat ?? "通常";
+    users.value[id].trip = enterRes.trip ?? "";
+    users.value[id].ihash = enterRes.ihash ?? "";
+    users.value[id].name = enterRes.name ?? "名無しさん";
     users.value[id].rgbaValue = Color.monaRGBToCSS(
-      { r: enterRes.r, g: enterRes.g, b: enterRes.b },
+      { r: enterRes.r ?? 0, g: enterRes.g ?? 0, b: enterRes.b ?? 0 },
       1.0,
     );
     users.value[id].hexValue = Color.monaRGBToHex({
-      r: enterRes.r,
-      g: enterRes.g,
-      b: enterRes.b,
+      r: enterRes.r ?? 0,
+      g: enterRes.g ?? 0,
+      b: enterRes.b ?? 0,
     });
-    users.value[id].type = enterRes.type;
+    users.value[id].type = enterRes.type ?? "charhan";
     users.value[id].isMobile = enterRes.isMobile;
     users.value[id].alive = true;
   };
   const updateUserBySet = (setRes: SETResParam) => {
     const { id } = setRes;
     const userRef = users.value[id];
+    if (userRef === undefined) {
+      return;
+    }
     userRef.x = setRes.x;
     userRef.y = setRes.y;
     userRef.scl = setRes.scl;
@@ -131,6 +144,9 @@ export const useUsersStore = defineStore("users", () => {
   const updateUserDispLocation = (id: string) => {
     const uiStore = useUIStore();
     const userRef = users.value[id];
+    if (userRef === undefined) {
+      return;
+    }
     if (userRef.x < 0) {
       userRef.dispX = 0;
     } else if (userRef.x > uiStore.width - userRef.width) {

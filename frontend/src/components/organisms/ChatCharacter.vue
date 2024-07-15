@@ -53,13 +53,13 @@ import { SelectedUserColorType, useSettingStore } from "@/stores/setting";
 import { storeToRefs } from "pinia";
 import { useDevStore } from "@/stores/develop";
 import { Character } from "@/domain/character";
-import { ChatCharacterUser, ChatMessage } from "@/domain/type";
+import { ChatCharacterUser, ChatMessages } from "@/domain/type";
 import { useUsersStore } from "@/stores/users";
 
 const props = withDefaults(
   defineProps<{
     user: ChatCharacterUser;
-    messages: ChatMessage[];
+    messages: ChatMessages;
     bubbleAreaHeight?: number;
     isDark?: boolean;
   }>(),

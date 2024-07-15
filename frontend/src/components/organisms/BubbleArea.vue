@@ -14,16 +14,16 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
+import { storeToRefs } from "pinia";
 import ChatBubble from "@/components/molecules/character/ChatBubble.vue";
-import { ChatCharacterUser, ChatMessage } from "@/domain/type";
+import { ChatCharacterUser, ChatMessages } from "@/domain/type";
 import { useSettingStore } from "@/stores/setting";
 import { useDevStore } from "@/stores/develop";
-import { storeToRefs } from "pinia";
-import { computed } from "vue";
 
 const props = defineProps<{
   user: ChatCharacterUser;
-  messages: ChatMessage[];
+  messages: ChatMessages;
   bubbleAreaHeight: number;
 }>();
 const emits = defineEmits<{

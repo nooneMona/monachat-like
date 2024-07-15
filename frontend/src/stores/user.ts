@@ -167,13 +167,19 @@ export const useUserStore = defineStore("user", () => {
   const setXY = (x: number, y: number) => {
     const usersStore = useUsersStore();
 
-    const { scl, stat } = usersStore.users[myID.value];
+    if (myID.value === null) {
+      return;
+    }
+    const user = usersStore.users[myID.value];
+    if (user === undefined) {
+      return;
+    }
     socketIOInstance.emit("SET", {
       token: myToken.value,
       x,
       y,
-      scl,
-      stat,
+      scl: user.scl,
+      stat: user.stat,
     });
     updateCoordinate({ x, y });
   };
@@ -181,12 +187,18 @@ export const useUserStore = defineStore("user", () => {
   const setStat = (stat: string) => {
     const usersStore = useUsersStore();
 
-    const { x, y, scl } = usersStore.users[myID.value];
+    if (myID.value === null) {
+      return;
+    }
+    const user = usersStore.users[myID.value];
+    if (user === undefined) {
+      return;
+    }
     socketIOInstance.emit("SET", {
       token: myToken.value,
-      x,
-      y,
-      scl,
+      x: user.x,
+      y: user.y,
+      scl: user.scl,
       stat,
     });
   };
@@ -194,14 +206,20 @@ export const useUserStore = defineStore("user", () => {
   const setScl = () => {
     const usersStore = useUsersStore();
 
-    const { x, y, scl, stat } = usersStore.users[myID.value];
-    const newScl = scl === 100 ? -100 : 100;
+    if (myID.value === null) {
+      return;
+    }
+    const user = usersStore.users[myID.value];
+    if (user === undefined) {
+      return;
+    }
+    const newScl = user.scl === 100 ? -100 : 100;
     socketIOInstance.emit("SET", {
       token: myToken.value,
-      x,
-      y,
+      x: user.x,
+      y: user.y,
       scl: newScl,
-      stat,
+      stat: user.stat,
     });
   };
 
@@ -227,7 +245,7 @@ export const useUserStore = defineStore("user", () => {
     }
     usersStore.updateUserSilentIgnore(targetIhash, isActive);
     if (isActive) {
-      usersStore.idsByIhash[targetIhash].forEach((targetId) => {
+      usersStore.idsByIhash[targetIhash].forEach((targetId: string) => {
         usersStore.removeChatMessages(targetId);
       });
     }

@@ -107,13 +107,13 @@ const userDisp = (user: { name: string; trip: string; ihash: string }, id: strin
 
 const manageableUsers = computed(() => {
   const usersObj = usersStore.manageableUsers;
-  return Object.keys(usersObj).map((key) => {
+  return Object.keys(usersObj).map((id) => {
     return {
-      id: key,
-      ...usersObj[key],
-      disp: userDisp(usersObj[key], key),
-      ihash: usersObj[key].ihash,
-      isSilentUser: usersStore.silentUsers[key] != null,
+      id,
+      ...usersObj[id],
+      disp: userDisp(usersObj[id]!, id),
+      ihash: usersObj[id]!.ihash,
+      isSilentUser: usersStore.silentUsers[id] != undefined,
     };
   });
 });

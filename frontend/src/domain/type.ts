@@ -20,6 +20,7 @@ export type ChatCharacterUser = {
   r: number;
   g: number;
   b: number;
+  isIgnored: boolean;
 };
 
 export type ChatCharacterUserDict = { [key in string]: ChatCharacterUser };
