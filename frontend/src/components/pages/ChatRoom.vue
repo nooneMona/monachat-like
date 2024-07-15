@@ -88,9 +88,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
-import axios from "axios";
 import { Stat } from "@/domain/stat";
 import SpanText from "@/components/atoms/SpanText.vue";
 import SimpleButton from "@/components/atoms/SimpleButton.vue";
@@ -104,7 +102,6 @@ import { useSettingStore } from "@/stores/setting";
 import { useRoomStore } from "../../stores/room";
 import { useUsersStore } from "../../stores/users";
 
-const store = useStore();
 const userStore = useUserStore();
 const usersStore = useUsersStore();
 const roomStore = useRoomStore();
@@ -133,7 +130,7 @@ const typingStartTime = ref(0); // タイピング開始時刻
 
 // ストア
 const { disconnected, myID } = storeToRefs(userStore);
-const { chatMessages } = storeToRefs(usersStore);
+const { chatMessages, visibleUsers } = storeToRefs(usersStore);
 const { isDarkMode } = storeToRefs(settingStore);
 const selectedVolume = computed({
   get: () => settingStore.selectedVolume,
@@ -143,7 +140,6 @@ const selectedTime = computed({
   get: () => settingStore.selectedTime,
   set: (value) => settingStore.updateSelectedTime(value),
 });
-const visibleUsers = computed(() => store.getters.visibleUsers);
 const displayingMyID = computed(() => userStore.displayingMyID(3));
 const currentRoom = computed({
   get: () => userStore.currentRoom,
@@ -152,7 +148,7 @@ const currentRoom = computed({
 // TODO: キャラクターの配置範囲をdivで限定できれば、この処理を書く必要がない
 const bottomBarHeight = computed(() => `${uiStore.bottomBarHeight}px`);
 const totalUser = computed(() => {
-  return Object.keys(store.getters.visibleUsers).length;
+  return Object.keys(visibleUsers.value).length;
 });
 
 const disabledSubmitButton = computed(() => disconnected.value || !permittedSubmitting.value);
@@ -166,10 +162,8 @@ const isMine = (id: string) => {
 
 // ライフサイクル
 onMounted(async () => {
-  // 以前いた部屋のユーザー情報を削除する。
-  store.commit("resetUsers");
-  const res = await axios.get(`${import.meta.env.VITE_APP_API_HOST}api/rooms`);
-  roomStore.updateRoomMetadata(res.data.rooms);
+  usersStore.resetUsers(); // 以前いた部屋のユーザー情報を削除する。
+  await roomStore.syncRoomMetadata(); // NOTE: これがないと、直接入った部屋が有効な部屋なのか判断ができない
 
   const roomObj = roomStore.roomObj(`/${route.params.id}`);
   if (roomObj === undefined) {
@@ -179,10 +173,10 @@ onMounted(async () => {
     return;
   }
   currentRoom.value = { ...roomObj };
-  store.dispatch("enter", { room: currentRoom.value });
+  userStore.enter(currentRoom.value);
 
   const unloadAppendExitLog = () => {
-    store.dispatch("exit");
+    userStore.exit();
     window.location.reload();
     window.onbeforeunload = null;
   };
@@ -200,10 +194,7 @@ onUnmounted(() => window.removeEventListener("keydown", onKeyDown));
 const drop = (e: DragEvent) => {
   if (e.target === root.value) {
     // なにもないところにドロップしたとき
-    store.dispatch("setXY", {
-      x: e.offsetX - gripX.value,
-      y: e.offsetY - gripY.value,
-    });
+    userStore.setXY(e.offsetX - gripX.value, e.offsetY - gripY.value);
     return;
   }
   //何か別の要素にドロップしてしまったとき
@@ -214,27 +205,25 @@ const drop = (e: DragEvent) => {
   });
   if (targetId !== undefined) {
     // キャラクターの要素にドロップしたとき
-    store.dispatch("setXY", {
-      x: store.state.users[targetId].x + e.offsetX - gripX.value,
-      y: store.state.users[targetId].y + e.offsetY - gripY.value,
-    });
+    userStore.setXY(
+      usersStore.users[targetId].x + e.offsetX - gripX.value,
+      usersStore.users[targetId].y + e.offsetY - gripY.value,
+    );
   }
   // TODO: 画像、名前とトリップにドロップしたときに変なふうになる
 };
 const clickInvert = () => {
-  store.dispatch("setScl");
+  userStore.setScl();
 };
 const clickExit = async () => {
-  await store.dispatch("exit");
+  userStore.exit();
   router.push({
     path: "/select",
   });
 };
-const submitCOM = (param: { text: string }) => {
+const submitCOM = (param: { text: string; shift: boolean }) => {
   if (param.text.match(/^(状態|stat)(:|：)/)) {
-    store.dispatch("setStat", {
-      stat: param.text.replace(/(状態|stat)(:|：)/, ""),
-    });
+    userStore.setStat(param.text.replace(/(状態|stat)(:|：)/, ""));
     selectedStat.value = "free";
     return;
   }
@@ -242,7 +231,7 @@ const submitCOM = (param: { text: string }) => {
   setTimeout(function () {
     permittedSubmitting.value = true;
   }, commentIntervalMilliSec);
-  store.dispatch("com", {
+  userStore.com({
     ...param,
     typing: {
       count: keyCount.value,
@@ -266,9 +255,7 @@ const onChangeStat = (e: Event) => {
   if (!(e.target instanceof HTMLSelectElement)) {
     return;
   }
-  store.dispatch("setStat", {
-    stat: e.target.value,
-  });
+  userStore.setStat(e.target.value);
 };
 const dragStart = (e: DragEvent) => {
   gripX.value = e.offsetX;
@@ -276,14 +263,8 @@ const dragStart = (e: DragEvent) => {
 };
 // キャラクターの画像が変化した時
 const sizeUpdated = (e: { id: string; width: number; height: number }) => {
-  store.commit("updateUserSize", {
-    id: e.id,
-    width: e.width,
-    height: e.height,
-  });
-  store.commit("updateUserDispLocation", {
-    id: e.id,
-  });
+  usersStore.updateUserSize(e.id, e.width, e.height);
+  usersStore.updateUserDispLocation(e.id);
 };
 
 const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messageID: string }) => {

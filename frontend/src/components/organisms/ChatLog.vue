@@ -11,8 +11,8 @@
     <!-- TODO: コンポーネント化する -->
     <div
       class="log-row"
-      v-for="msg in messages"
-      :key="msg"
+      v-for="msg in visibleLogMessages"
+      :key="msg.head + msg.foot"
       :style="{
         backgroundColor: msg.visibleOnReceived ? 'none' : greyBackgroundColor,
         /*rgbaが渡されているが、alphaの値が1.0でありrgbに変換されるため、rgbに0.4を新たに加える。そうすると勝手にrgbaに変換され、線が薄くなる*/
@@ -37,32 +37,32 @@
       </template>
       <SpanText :text="msg.foot" :type="selectedUsersIhashes[msg.ihash]" />
     </div>
-    <div class="log-info-container" v-if="!isDescendingLog && messages.length !== 0">
-      <SpanText :text="`現在のログ: ${messages.length}件`" type="text" />
+    <div class="log-info-container" v-if="!isDescendingLog && visibleLogMessages.length !== 0">
+      <SpanText :text="`現在のログ: ${visibleLogMessages.length}件`" type="text" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, watch, ref, nextTick, onUnmounted } from "vue";
-import { useStore } from "vuex";
+import { onMounted, watch, ref, nextTick, onUnmounted } from "vue";
 import SpanText from "@/components/atoms/SpanText.vue";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores/setting";
 import { useUIStore } from "@/stores/ui";
+import { useLogStore } from "@/stores/log";
 
 const pageTitle = document.title;
 const wrapperEl = ref<HTMLDivElement>();
 
 // ストア
-const store = useStore();
+const logStore = useLogStore();
 const settingStore = useSettingStore();
 const uiStore = useUIStore();
 
+const { visibleLogMessages } = storeToRefs(logStore);
 const { isScrollableLog, isDescendingLog, isDrawnUnderlineLog, selectedUsersIhashes } =
   storeToRefs(settingStore);
 const { greyBackgroundColor } = storeToRefs(uiStore);
-const messages = computed(() => store.getters.visibleLogMessages);
 
 // スクロール位置が下端にあるか
 const isLatestScrollPosition = ref(true);
@@ -136,7 +136,7 @@ onUnmounted(() => {
 // fixes the scroll position to show latest message.
 // However, if the scroll position isn't on edge, doesn't that.
 watch(
-  () => [...messages.value],
+  () => [...visibleLogMessages.value],
   () => {
     if (isLatestScrollPosition.value) {
       if (isDescendingLog) {

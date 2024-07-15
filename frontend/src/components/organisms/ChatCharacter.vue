@@ -44,7 +44,6 @@
 
 <script setup lang="ts">
 import { computed, ref, onUpdated, Ref } from "vue";
-import { useStore } from "vuex";
 import BubbleArea from "@/components/organisms/BubbleArea.vue";
 import CharacterImage from "@/components/organisms/CharacterImage.vue";
 import SpanText from "@/components/atoms/SpanText.vue";
@@ -55,6 +54,7 @@ import { storeToRefs } from "pinia";
 import { useDevStore } from "@/stores/develop";
 import { Character } from "@/domain/character";
 import { ChatCharacterUser, ChatMessage } from "@/domain/type";
+import { useUsersStore } from "@/stores/users";
 
 const props = withDefaults(
   defineProps<{
@@ -77,15 +77,14 @@ const typedCharacterEl: Ref<HTMLDivElement | undefined> = computed(
 );
 
 // ストア
-const store = useStore();
+const usersStore = useUsersStore();
 const uiStore = useUIStore();
 const settingStore = useSettingStore();
 const devStore = useDevStore();
 
+const { silentUsers } = storeToRefs(usersStore);
 const { isKBMode, selectedUsersIhashes } = storeToRefs(settingStore);
 const { isVisibleFrame } = storeToRefs(devStore);
-
-const silentUsers = computed(() => store.getters.silentUsers);
 
 const dispSubText = computed(() => {
   const character = Character.create({

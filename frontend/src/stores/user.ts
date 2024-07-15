@@ -1,5 +1,12 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { socketIOInstance } from "../socketIOInstance";
+import { useLogStore } from "./log";
+import { useSettingStore } from "./setting";
+import { RoomResponse } from "../infrastructure/api";
+import { useUIStore } from "./ui";
+import Color from "./color";
+import { useUsersStore } from "./users";
 
 export interface IUser {
   myID: string | null;
@@ -63,6 +70,175 @@ export const useUserStore = defineStore("user", () => {
     return myID.value.slice(0, end);
   });
 
+  const enterName = () => {
+    const logStore = useLogStore();
+    const settingStore = useSettingStore();
+    // ローカルストレージの内容に頼る
+    const trip = settingStore.savedInputTrip;
+    let name = settingStore.savedName;
+    name = name.trim() === "" ? "名無しさん" : name;
+    const enterParams = {
+      room: "/MONA8094",
+      attrib: "no",
+      name,
+      trip,
+      token: undefined,
+    };
+    socketIOInstance.emit("ENTER", { ...enterParams, token: myToken.value ?? undefined });
+    settingStore.updateSavedName(name);
+    settingStore.updateSavedInputTrip(trip);
+    const log = settingStore.loadedLogFromStorage;
+    if (logStore.logs.length === 0 && log.length !== 0) {
+      logStore.$patch({ logs: log });
+    }
+  };
+
+  const enter = (room: RoomResponse["rooms"][number]) => {
+    const logStore = useLogStore();
+    const uiStore = useUIStore();
+    const settingStore = useSettingStore();
+
+    const hexColor = settingStore.savedColor;
+    const { r, g, b } = Color.hexToMonaRGB(hexColor);
+    const randomX = Math.floor(Math.random() * uiStore.width);
+    const defaultY = uiStore.height - 150;
+    const x = coordinate.value?.x ?? randomX;
+    const y = coordinate.value?.y ?? defaultY;
+    socketIOInstance.emit("ENTER", {
+      token: myToken.value,
+      room: room.id,
+      x,
+      y,
+      scl: 100,
+      stat: "通常",
+      name: settingStore.savedName,
+      trip: settingStore.savedInputTrip,
+      r,
+      g,
+      b,
+      type: settingStore.savedType,
+    });
+    const log = settingStore.loadedLogFromStorage;
+    if (logStore.logs.length === 0 && log.length !== 0) {
+      logStore.$patch({ logs: log });
+    }
+    updateCurrentRoom(room);
+    updateCoordinate({ x, y });
+  };
+
+  const exit = () => {
+    socketIOInstance.emit("EXIT", {
+      token: myToken.value,
+    });
+  };
+
+  const com = ({
+    text,
+    shift,
+    typing,
+  }: {
+    text: string;
+    shift: boolean;
+    typing: { count: number; milliTime: number };
+  }) => {
+    const settingStore = useSettingStore();
+
+    if (myToken.value === null) {
+      return;
+    }
+    const comParam: {
+      token: string;
+      cmt: string;
+      style?: number;
+      typing?: { count: number; milliTime: number };
+    } = {
+      token: myToken.value,
+      cmt: text,
+    };
+    if (shift) {
+      comParam.style = 2;
+    }
+    if (settingStore.isTypingMode && typing !== undefined) {
+      comParam.typing = { ...typing };
+    }
+    socketIOInstance.emit("COM", comParam);
+  };
+
+  const setXY = (x: number, y: number) => {
+    const usersStore = useUsersStore();
+
+    const { scl, stat } = usersStore.users[myID.value];
+    socketIOInstance.emit("SET", {
+      token: myToken.value,
+      x,
+      y,
+      scl,
+      stat,
+    });
+    updateCoordinate({ x, y });
+  };
+
+  const setStat = (stat: string) => {
+    const usersStore = useUsersStore();
+
+    const { x, y, scl } = usersStore.users[myID.value];
+    socketIOInstance.emit("SET", {
+      token: myToken.value,
+      x,
+      y,
+      scl,
+      stat,
+    });
+  };
+
+  const setScl = () => {
+    const usersStore = useUsersStore();
+
+    const { x, y, scl, stat } = usersStore.users[myID.value];
+    const newScl = scl === 100 ? -100 : 100;
+    socketIOInstance.emit("SET", {
+      token: myToken.value,
+      x,
+      y,
+      scl: newScl,
+      stat,
+    });
+  };
+
+  const toggleIgnorance = (targetIhash: string) => {
+    const usersStore = useUsersStore();
+
+    if (targetIhash === ihash.value) {
+      return;
+    }
+    const newIgnores = !usersStore.ihashsIgnoredByMe[targetIhash];
+    socketIOInstance.emit("IG", {
+      token: myToken.value,
+      stat: newIgnores ? "on" : "off",
+      ihash: targetIhash,
+    });
+  };
+
+  const toggleSilentIgnorance = (targetIhash: string, isActive: boolean) => {
+    const usersStore = useUsersStore();
+
+    if (targetIhash === ihash.value) {
+      return;
+    }
+    usersStore.updateUserSilentIgnore(targetIhash, isActive);
+    if (isActive) {
+      usersStore.idsByIhash[targetIhash].forEach((targetId) => {
+        usersStore.removeChatMessages(targetId);
+      });
+    }
+  };
+
+  const sendError = (text: string) => {
+    socketIOInstance.emit("ERROR", {
+      text: JSON.stringify(text),
+    });
+  };
+
   return {
     myID,
     myToken,
@@ -78,5 +254,15 @@ export const useUserStore = defineStore("user", () => {
     updateCoordinate,
     updateDisconnected,
     displayingMyID,
+    enterName,
+    enter,
+    exit,
+    com,
+    setXY,
+    setStat,
+    setScl,
+    toggleIgnorance,
+    toggleSilentIgnorance,
+    sendError,
   };
 });

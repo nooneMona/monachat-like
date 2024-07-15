@@ -89,7 +89,6 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useStore } from "vuex";
 import Checkbox from "primevue/checkbox";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
@@ -105,8 +104,11 @@ import { useSettingStore } from "@/stores/setting";
 import { useDevStore } from "@/stores/develop";
 import { useUIStore } from "@/stores/ui";
 import { Character } from "@/domain/character";
+import { useUsersStore } from "@/stores/users";
+import { useUserStore } from "@/stores/user";
 
-const store = useStore();
+const userStore = useUserStore();
+const usersStore = useUsersStore();
 const uiStore = useUIStore();
 const settingStore = useSettingStore();
 const devStore = useDevStore();
@@ -126,29 +128,29 @@ const userDisp = (user: { name: string; trip: string; ihash: string }, id: strin
 };
 
 const manageableUsers = computed(() => {
-  const usersObj = store.getters.manageableUsers;
+  const usersObj = usersStore.manageableUsers;
   return Object.keys(usersObj).map((key) => {
     return {
       id: key,
       ...usersObj[key],
       disp: userDisp(usersObj[key], key),
       ihash: usersObj[key].ihash,
-      isSilentUser: store.getters.silentUsers[key] != null,
+      isSilentUser: usersStore.silentUsers[key] != null,
     };
   });
 });
 
 const onClickIgnore = (ihash: string) => {
-  store.dispatch("toggleIgnorance", { ihash });
+  userStore.toggleIgnorance(ihash);
 };
 const onChangeSilentIgnore = (ihash: string, isActive: boolean) => {
-  store.dispatch("toggleSilentIgnorance", { ihash, isActive });
+  userStore.toggleSilentIgnorance(ihash, isActive);
 };
 const onClickDisconnect = () => {
-  store.dispatch("simulateReconnection");
+  devStore.simulateReconnection();
 };
 const onClickKicked = () => {
-  store.dispatch("suicide");
+  devStore.suicide();
 };
 </script>
 
