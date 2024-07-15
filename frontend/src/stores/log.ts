@@ -4,6 +4,7 @@ import moment from "moment";
 import { useSettingStore } from "@/stores/setting";
 import { useUsersStore } from "./users";
 import Color from "./color";
+import { ChatMessage } from "../domain/type";
 
 export const useLogStore = defineStore("log", () => {
   const logs = ref<
@@ -54,7 +55,7 @@ export const useLogStore = defineStore("log", () => {
       .filter((e) => !usersStore.ihashsIgnoredByMe[e.ihash]);
   });
 
-  const appendCommentLog = (id: string, cmt: string, typing: any) => {
+  const appendCommentLog = ({ id, cmt, typing }: ChatMessage) => {
     const usersStore = useUsersStore();
     const settingStore = useSettingStore();
 
@@ -125,6 +126,6 @@ export const useLogStore = defineStore("log", () => {
     logMessages,
     visibleLogMessages,
     appendCommentLog,
-    appendUserLog,
+    appendRoomLog: appendUserLog,
   };
 });

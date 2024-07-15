@@ -1,6 +1,7 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { COUNTResParam } from "../socketIOInstance";
 
 export const useRoomStore = defineStore("room", () => {
   // 部屋のメタデータ
@@ -8,10 +9,10 @@ export const useRoomStore = defineStore("room", () => {
   // 部屋の人数情報
   const rooms = ref<{ [key in string]: number }>({});
 
-  const updateRooms = (countParam: { rooms: { n: string; c: string }[] }) => {
+  const updateRooms = (countParam: COUNTResParam) => {
     const newRooms: { [key in string]: number } = {};
     countParam.rooms.forEach((r) => {
-      newRooms[r.n] = parseInt(r.c);
+      newRooms[r.n] = r.c;
     });
     rooms.value = { ...newRooms };
   };

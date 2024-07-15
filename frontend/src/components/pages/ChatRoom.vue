@@ -206,8 +206,8 @@ const drop = (e: DragEvent) => {
   if (targetId !== undefined) {
     // キャラクターの要素にドロップしたとき
     userStore.setXY(
-      usersStore.users[targetId].x + e.offsetX - gripX.value,
-      usersStore.users[targetId].y + e.offsetY - gripY.value,
+      (usersStore.users[targetId]?.x ?? 0) + e.offsetX - gripX.value,
+      (usersStore.users[targetId]?.y ?? 0) + e.offsetY - gripY.value,
     );
   }
   // TODO: 画像、名前とトリップにドロップしたときに変なふうになる

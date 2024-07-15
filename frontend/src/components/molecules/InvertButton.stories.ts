@@ -1,11 +1,14 @@
 import InvertButton from "./InvertButton.vue";
+import { StoryFn } from "@storybook/vue3";
 
 export default {
   title: "molecules/InvertButton",
   component: InvertButton,
 };
 
-const Template: any = (args: any) => ({
+interface Args {}
+
+const Template: StoryFn<Args> = (args) => ({
   components: { InvertButton },
   setup() {
     return { args };

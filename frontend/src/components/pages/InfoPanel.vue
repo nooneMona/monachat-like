@@ -68,21 +68,7 @@
         <span v-if="!isKBMode">開発</span>
         <i v-else class="pi pi-github"></i>
       </template>
-      <SwitchField v-model="isVisibleFrame" label="フレーム表示" labelId="checkedFrame" />
-      <div>
-        <PrimeButton
-          label="切断／再接続テスト（３秒復帰）"
-          class="p-button-raised p-button-text p-button-sm p-button-danger"
-          @click="onClickDisconnect"
-        />
-      </div>
-      <div>
-        <PrimeButton
-          label="サーバーキックテスト"
-          class="p-button-raised p-button-text p-button-sm p-button-danger"
-          @click="onClickKicked"
-        />
-      </div>
+      <DevArea />
     </TabPanel>
   </TabView>
 </template>
@@ -94,14 +80,12 @@ import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import PrimeButton from "primevue/button";
-import SwitchField from "@/components/molecules/SwitchField.vue";
 import ChatLog from "@/components/organisms/ChatLog.vue";
 import SettingsFields from "@/components/organisms/SettingsFields.vue";
 import SpanText from "@/components/atoms/SpanText.vue";
+import DevArea from "@/components/organisms/DevArea.vue";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores/setting";
-import { useDevStore } from "@/stores/develop";
 import { useUIStore } from "@/stores/ui";
 import { Character } from "@/domain/character";
 import { useUsersStore } from "@/stores/users";
@@ -111,15 +95,9 @@ const userStore = useUserStore();
 const usersStore = useUsersStore();
 const uiStore = useUIStore();
 const settingStore = useSettingStore();
-const devStore = useDevStore();
 
 const { isKBMode, selectedUsersIhashes } = storeToRefs(settingStore);
 const { panelBackgroundColor } = storeToRefs(uiStore);
-
-const isVisibleFrame = computed({
-  get: () => devStore.isVisibleFrame,
-  set: (value) => devStore.updateIsVisibleFrame(value),
-});
 
 const userDisp = (user: { name: string; trip: string; ihash: string }, id: string) => {
   const character = Character.create({ name: user.name, trip: user.trip, ihash: user.ihash });
@@ -129,13 +107,13 @@ const userDisp = (user: { name: string; trip: string; ihash: string }, id: strin
 
 const manageableUsers = computed(() => {
   const usersObj = usersStore.manageableUsers;
-  return Object.keys(usersObj).map((key) => {
+  return Object.keys(usersObj).map((id) => {
     return {
-      id: key,
-      ...usersObj[key],
-      disp: userDisp(usersObj[key], key),
-      ihash: usersObj[key].ihash,
-      isSilentUser: usersStore.silentUsers[key] != null,
+      id,
+      ...usersObj[id],
+      disp: userDisp(usersObj[id]!, id),
+      ihash: usersObj[id]!.ihash,
+      isSilentUser: usersStore.silentUsers[id] != undefined,
     };
   });
 });
@@ -145,12 +123,6 @@ const onClickIgnore = (ihash: string) => {
 };
 const onChangeSilentIgnore = (ihash: string, isActive: boolean) => {
   userStore.toggleSilentIgnorance(ihash, isActive);
-};
-const onClickDisconnect = () => {
-  devStore.simulateReconnection();
-};
-const onClickKicked = () => {
-  devStore.suicide();
 };
 </script>
 

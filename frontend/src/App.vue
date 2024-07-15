@@ -12,18 +12,31 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import InfoPanel from "@/components/pages/InfoPanel.vue";
-import NoticeBar from "@/components/organisms/NoticeBar.vue";
+import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
 import { useNoticeStore } from "@/stores/notice";
 import { useUIStore } from "@/stores/ui";
 import { useRoomStore } from "@/stores/room";
-import { socketIOInstance } from "./socketIOInstance";
-import { useUsersStore } from "./stores/users";
-import { useLogStore } from "./stores/log";
-import { useSettingStore } from "./stores/setting";
+import {
+  AUTHResParam,
+  AWAKEResParam,
+  COMResParam,
+  COUNTResParam,
+  ENTERResParam,
+  EXITResParam,
+  IGResParam,
+  SETResParam,
+  SLEEPResParam,
+  socketIOInstance,
+  USERResParam,
+} from "@/socketIOInstance";
+import { useUsersStore } from "@/stores/users";
+import { useLogStore } from "@/stores/log";
+import { useSettingStore } from "@/stores/setting";
+import InfoPanel from "@/components/pages/InfoPanel.vue";
+import NoticeBar from "@/components/organisms/NoticeBar.vue";
+import { ChatMessage } from "./domain/type";
 
 const userStore = useUserStore();
 const usersStore = useUsersStore();
@@ -39,95 +52,102 @@ const { backgroundColor, panelBackgroundColor, width, height } = storeToRefs(uiS
 const { isRequiredRefresh } = storeToRefs(noticeStore);
 
 const registerSocketEvents = () => {
+  socketIOInstance.off("connect");
   socketIOInstance.on("connect", () => {
     userStore.updateDisconnected(false);
-    if (userStore.myToken == null) {
-      return;
+    if (userStore.myToken !== null) {
+      userStore.sendAuth();
     }
-    socketIOInstance.emit("AUTH", {
-      token: userStore.myToken,
-    });
   });
+  socketIOInstance.off("disconnect");
   socketIOInstance.on("disconnect", () => {
     userStore.updateDisconnected(true);
   });
-  socketIOInstance.on("COM", ({ id, cmt, style, typing }) => {
-    usersStore.updateUserExistence(id, true);
+  socketIOInstance.off("COM");
+  socketIOInstance.on("COM", ({ id, cmt, style, typing }: COMResParam) => {
+    usersStore.updateUserExistence(id, true); // TODO: この操作の必要性を検証する必要あり
     if (usersStore.visibleUsers[id] === undefined) return;
-    if (usersStore.silentUsers[id] != null) return;
-    noticeStore.playCOMAudio();
-    const message = {
-      id,
-      cmt,
-      style,
-      typing,
-    };
+    if (usersStore.silentUsers[id] !== undefined) return;
+    const message: ChatMessage = { id, cmt, style, typing };
     // フォーカスから外れているときに吹き出しをためない
     if (document.visibilityState === "visible") {
       usersStore.appendChatMessage(id, message);
     }
-    logStore.appendCommentLog(message.id, message.cmt, message.typing);
-    usersStore.updateUserExistence(id, true);
+    logStore.appendCommentLog(message);
+    usersStore.updateUserExistence(id, true); // TODO: この操作の必要性を検証する必要あり
+
+    noticeStore.playCOMAudio();
   });
-  socketIOInstance.on("ENTER", (param) => {
-    usersStore.updateUserByEnter(param);
+  socketIOInstance.off("ENTER");
+  socketIOInstance.on("ENTER", (param: ENTERResParam) => {
+    usersStore.updateUserByEnter(param); // NOTE: 無視関係にある場合も裏では更新しておく
     if (param.id === userStore.myID) {
+      // ENTERコマンドから自機のメタ情報を取得しておく
       settingStore.updateTripResult(param.trip);
       userStore.updateIhash(param.ihash);
     }
     if (usersStore.visibleUsers[param.id] === undefined) return;
+    logStore.appendRoomLog(param.id, true);
+    usersStore.updateUserDispLocation(param.id);
+
     if (userStore.currentRoom !== null) {
       noticeStore.playENTERAudio();
     }
-    logStore.appendUserLog(param.id, true);
-    usersStore.updateUserDispLocation(param.id);
   });
-  socketIOInstance.on("SET", (param) => {
+  socketIOInstance.off("SET");
+  socketIOInstance.on("SET", (param: SETResParam) => {
     usersStore.updateUserBySet(param);
     usersStore.updateUserDispLocation(param.id);
   });
-  socketIOInstance.on("IG", (param) => {
-    // キャラの座標とサイズから実際の表示座標を更新する
-    // サイズが未定の場合はwidthとheightに0を入れる
+  socketIOInstance.off("IG");
+  socketIOInstance.on("IG", (param: IGResParam) => {
     const ignores = param.stat === "on"; // offでもなかった場合は無視を解除する
     if (param.id === userStore.myID) {
       // 自分が無視した場合
       usersStore.updateUserIgnore(param.ihash, ignores);
       // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
+      //       -> COM受信時、visibleUsersに入ってない限りは吹き出しを保存しないようにしているので、もう外して大丈夫そう？
+      usersStore.idsByIhash[param.ihash].forEach((targetId: string) => {
+        usersStore.removeChatMessages(targetId);
+      });
     }
     if (param.ihash === userStore.ihash) {
       // 自分が無視された場合
       usersStore.updateIDsIgnoresMe(param.id, ignores);
       // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
+      //       -> COM受信時、visibleUsersに入ってない限りは吹き出しを保存しないようにしているので、もう外して大丈夫そう？
       usersStore.removeChatMessages(param.id);
     }
-    if (param.id === userStore.myID) {
-      usersStore.idsByIhash[param.ihash].forEach((targetId) => {
-        usersStore.removeChatMessages(targetId);
-      });
-    }
   });
-  socketIOInstance.on("EXIT", ({ id, isEnter }) => {
+  socketIOInstance.off("EXIT");
+  socketIOInstance.on("EXIT", ({ id }: EXITResParam) => {
     if (usersStore.visibleUsers[id] !== undefined) {
+      // visibleUsersに退室を反映する前にログに書き出さないと、名前の情報がとれない。
+      logStore.appendRoomLog(id, false);
       if (userStore.currentRoom !== null) {
         noticeStore.playENTERAudio();
       }
-      // visibleUsersに退室を反映する前にログに書き出さないと、名前の情報がとれない。
-      logStore.appendUserLog(id, isEnter);
     }
     usersStore.updateUserExistence(id, false);
     usersStore.removeChatMessages(id);
   });
-  socketIOInstance.on("USER", (param) => {
+  socketIOInstance.off("USER");
+  socketIOInstance.on("USER", (param: USERResParam) => {
     usersStore.initializeUsers(param);
   });
-  socketIOInstance.on("COUNT", (param) => {
+  socketIOInstance.off("COUNT");
+  socketIOInstance.on("COUNT", (param: COUNTResParam) => {
     roomStore.updateRooms(param);
   });
-  socketIOInstance.on("AUTH", ({ id, token }) => {
+  socketIOInstance.off("AUTH");
+  socketIOInstance.on("AUTH", ({ id, token }: AUTHResParam) => {
+    // TODO: 設計として微妙なので要検討
     if (id === "error") {
-      if (userStore.currentPathName === "room") {
-        userStore.enter(userStore.currentRoom);
+      // NOTE: AUTHを送ったときにエラーが返ってきた場合は、
+      //       サーバーがリセットされている可能性が高いため、復帰処理を行う。
+      const currentRoom = userStore.currentRoom;
+      if (userStore.currentPathName === "room" && currentRoom !== null) {
+        userStore.enter(currentRoom);
       }
       if (userStore.currentPathName === "select") {
         userStore.enterName();
@@ -137,12 +157,15 @@ const registerSocketEvents = () => {
     userStore.updateAuthInfo(id, token);
     usersStore.updateUserExistence(id, true);
   });
-  socketIOInstance.on("SLEEP", (param) => {
-    usersStore.updateUserExistence(param.id, false);
-    usersStore.removeChatMessages(param.id);
+  socketIOInstance.off("SLEEP");
+  socketIOInstance.on("SLEEP", ({ id }: SLEEPResParam) => {
+    usersStore.updateUserExistence(id, false);
+    // NOTE: 通信断してから戻ってきたときに吹き出しが大量に出てくるのを防ぐ。
+    usersStore.removeChatMessages(id);
   });
-  socketIOInstance.on("AWAKE", (param) => {
-    usersStore.updateUserExistence(param.id, true);
+  socketIOInstance.off("AWAKE");
+  socketIOInstance.on("AWAKE", ({ id }: AWAKEResParam) => {
+    usersStore.updateUserExistence(id, true);
   });
 };
 
