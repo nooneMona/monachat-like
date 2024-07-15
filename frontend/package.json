@@ -1,5 +1,6 @@
 {
   "name": "monachatchat-frontend",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +11,7 @@
     "storybook": "sb dev -p 6006",
     "build-storybook": "sb build",
     "test": "vitest",
+    "test:coverage": "vitest run --coverage",
     "test:browser": "vitest --workspace=vitest.workspace.ts"
   },
   "devDependencies": {
@@ -26,6 +28,7 @@
     "@types/color": "^3.0.5",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vitest/browser": "^2.0.3",
+    "@vitest/coverage-istanbul": "^2.0.3",
     "@vue/test-utils": "^2.0.0-rc.18",
     "axios": "^1.5.0",
     "color": "^4.2.3",
