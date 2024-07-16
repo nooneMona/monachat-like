@@ -1,16 +1,11 @@
 import { IDGeneratable } from "../domain/idGenerator";
 import { BlackTripper, TripperInput, WhiteTripper } from "../domain/tripper";
 
-export const IDGeneratorMock = jest
-  .fn<IDGeneratable, []>()
-  .mockImplementation(() => {
-    return {
-      generate: jest
-        .fn()
-        .mockReturnValueOnce("id")
-        .mockReturnValueOnce("token"),
-    };
-  });
+export const IDGeneratorMock = vi.fn().mockImplementation(() => {
+  return {
+    generate: vi.fn().mockReturnValueOnce("id").mockReturnValueOnce("token"),
+  };
+});
 
 export class MockWhiteTripper extends WhiteTripper {
   execute(input: TripperInput): string {

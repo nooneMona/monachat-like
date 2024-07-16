@@ -2,25 +2,23 @@ import { Server } from "socket.io";
 import { ISystemSendLogger } from "../presenter/userPresenterInterfaces";
 import { ServerCommunicator } from "./serverCommunicator";
 
-const SystemSendLoggerMock = jest
-  .fn<ISystemSendLogger, []>()
-  .mockImplementation(() => {
-    return {
-      logSendCOM: jest.fn(),
-      logSendENTER: jest.fn(),
-      logSendSET: jest.fn(),
-      logSendIG: jest.fn(),
-      logSendEXIT: jest.fn(),
-      logSendSLEEP: jest.fn(),
-      logSendAWAKE: jest.fn(),
-      logSendCOUNT: jest.fn(),
-      logSendUsers: jest.fn(),
-    };
-  });
+const SystemSendLoggerMock = vi.fn().mockImplementation(() => {
+  return {
+    logSendCOM: vi.fn(),
+    logSendENTER: vi.fn(),
+    logSendSET: vi.fn(),
+    logSendIG: vi.fn(),
+    logSendEXIT: vi.fn(),
+    logSendSLEEP: vi.fn(),
+    logSendAWAKE: vi.fn(),
+    logSendCOUNT: vi.fn(),
+    logSendUsers: vi.fn(),
+  };
+});
 
 class MockServer extends Server {
-  in = jest.fn().mockReturnThis();
-  emit = jest.fn().mockReturnThis();
+  in = vi.fn().mockReturnThis();
+  emit = vi.fn().mockReturnThis();
 }
 
 let socketServer: MockServer;
@@ -34,8 +32,8 @@ beforeEach(() => {
     server: socketServer,
     systemLogger: systemSendLogger,
   });
-  socketServer.in = jest.fn().mockReturnThis();
-  socketServer.emit = jest.fn().mockReturnThis();
+  socketServer.in = vi.fn().mockReturnThis();
+  socketServer.emit = vi.fn().mockReturnThis();
 });
 
 describe("ServerCommunicator#sendCOM", () => {

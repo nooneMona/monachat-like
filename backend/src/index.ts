@@ -32,7 +32,7 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "/dist")));
-app.get("/api/rooms", (req: Request, res: Response) => {
+app.get("/api/rooms", (_: Request, res: Response) => {
   readFile(path.join(__dirname, "/config/room.json"), (err, data) => {
     if (err) {
       res.statusCode = 404;

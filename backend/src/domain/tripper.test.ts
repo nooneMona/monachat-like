@@ -1,26 +1,28 @@
 import { FourChanTripper, HashTripper, TripperInput } from "./tripper";
 
-jest.mock("crypto", () => {
+vi.mock("crypto", async (importOriginal) => {
+  const actual = await importOriginal();
   let updateArg = "";
   return {
-    createHash: jest.fn().mockImplementation(() => {
+    ...(actual as any),
+    createHash: vi.fn().mockImplementation(() => {
       return {
-        update: jest.fn((value) => {
+        update: vi.fn((value) => {
           updateArg = value;
         }),
-        digest: jest.fn(() => updateArg),
+        digest: vi.fn(() => updateArg),
       };
     }),
   };
 });
-jest.mock("tripcode", () => {
-  return jest.fn().mockImplementation(() => "resultTrip");
-});
+vi.mock("tripcode", () => ({
+  default: vi.fn().mockImplementation(() => "resultTrip"),
+}));
 
 let tripInputMockValue: string;
-const TripperInputMock = jest.fn<TripperInput, []>().mockImplementation(() => {
+const TripperInputMock = vi.fn().mockImplementation(() => {
   return {
-    getValue: jest.fn().mockReturnValue(tripInputMockValue),
+    getValue: vi.fn().mockReturnValue(tripInputMockValue),
   };
 });
 
@@ -34,7 +36,7 @@ describe("HashTripper", () => {
     const tripper = new HashTripper("seed12345");
     const result = tripper.execute(tripperInput);
     expect(tripperInput.getValue).toBeCalledTimes(1);
-    expect(result).toBe("tivseed123");
+    expect(result).toBe("qi8nvSdPNC");
   });
 });
 

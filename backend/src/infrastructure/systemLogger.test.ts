@@ -12,8 +12,8 @@ const clinetInfo: ClientInfo = {
 
 beforeEach(() => {
   logger = log4js.getLogger();
-  logger.info = jest.fn();
-  logger.error = jest.fn();
+  logger.info = vi.fn();
+  logger.error = vi.fn();
   systemLogger = new SystemLogger({ logger });
 });
 
