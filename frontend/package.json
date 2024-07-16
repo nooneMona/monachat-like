@@ -52,6 +52,7 @@
     "sass": "^1.77.6",
     "screen-size-detector": "^1.0.4",
     "socket.io-client": "^4.7.2",
+    "typescript": "^5.5.3",
     "typescript-eslint": "^7.16.0",
     "unplugin-fonts": "^1.1.1",
     "uuid": "^10.0.0",
