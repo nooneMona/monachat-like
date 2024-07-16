@@ -17,7 +17,7 @@ describe("Character", () => {
       const character = new Character();
       const avatar = new Avatar({
         charType: new CharType("giko"),
-        charColor: Color.instantiateByMona({ r: 20, g: 20, b: 20 })!,
+        charColor: Color.instantiateByMona({ r: 20, g: 20, b: 20 }),
         name: new Name("ほんとのなまえ"),
         blackTrip: new BlackTrip(
           new BlackTripperInput("aa"),
@@ -78,7 +78,7 @@ describe("Character", () => {
         .updateAvatar(
           new Avatar({
             charType: new CharType("giko"),
-            charColor: Color.instantiateByMona({ r: 20, g: 20, b: 20 })!,
+            charColor: Color.instantiateByMona({ r: 20, g: 20, b: 20 }),
             name: new Name("ほんとのなまえ"),
             blackTrip: new BlackTrip(
               new BlackTripperInput("aa"),
@@ -119,7 +119,7 @@ describe("Character", () => {
       character.currentRoom = "/2";
       character.avatar = new Avatar({
         charType: new CharType("ginu"),
-        charColor: Color.instantiateByMona({ r: 30, g: 30, b: 30 })!,
+        charColor: Color.instantiateByMona({ r: 30, g: 30, b: 30 }),
         name: new Name("ほんとのなまえ2"),
         blackTrip: new BlackTrip(
           new BlackTripperInput("aab"),

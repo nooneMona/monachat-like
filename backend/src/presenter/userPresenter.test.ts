@@ -31,7 +31,7 @@ let blackTripper: Tripper;
 const avatarData = new Avatar({
   name: new Name("田中太郎"),
   charType: new CharType("unknown2"),
-  charColor: Color.instantiateByMona({ r: 50, g: 50, b: 50 })!,
+  charColor: Color.instantiateByMona({ r: 50, g: 50, b: 50 }),
   blackTrip: undefined,
   whiteTrip: new WhiteTrip(new IP("000.111.222.333"), new HashTripper("")),
 });
