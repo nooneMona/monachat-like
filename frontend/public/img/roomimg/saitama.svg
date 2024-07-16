@@ -1,199 +1,106 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="721px" height="281px" viewBox="0 0 721 281" enable-background="new 0 0 721 281" xml:space="preserve">  <image id="image0" width="721" height="281" x="0" y="0"
-    href="data:image/png;base64,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" />
+<svg xmlns:ffdec="https://www.free-decompiler.com/flash" xmlns:xlink="http://www.w3.org/1999/xlink" ffdec:objectType="frame" height="280.0px" width="720.0px" xmlns="http://www.w3.org/2000/svg">
+  <g transform="matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)">
+    <use ffdec:characterId="5" height="89.15" id="sai4" transform="matrix(1.0, 0.0, 0.0, 1.0, 239.85, 40.15)" width="92.5" xlink:href="#sprite0"/>
+    <use ffdec:characterId="8" height="100.5" id="sai5" transform="matrix(1.0, 0.0, 0.0, 1.0, 284.45, 130.85)" width="84.5" xlink:href="#sprite1"/>
+    <use ffdec:characterId="11" height="66.2" id="sai6" transform="matrix(1.0, 0.0, 0.0, 1.0, 210.45, 141.35)" width="77.15" xlink:href="#sprite2"/>
+    <use ffdec:characterId="5" height="89.15" id="sai1" transform="matrix(1.0, 0.0, 0.0, 1.0, 65.85, 10.15)" width="92.5" xlink:href="#sprite0"/>
+    <use ffdec:characterId="8" height="100.5" id="sai2" transform="matrix(1.0, 0.0, 0.0, 1.0, 110.45, 100.85)" width="84.5" xlink:href="#sprite1"/>
+    <use ffdec:characterId="11" height="66.2" id="sai3" transform="matrix(1.0, 0.0, 0.0, 1.0, 36.45, 111.35)" width="77.15" xlink:href="#sprite2"/>
+    <use ffdec:characterId="5" height="89.15" id="sai10" transform="matrix(1.0, 0.0, 0.0, 1.0, 549.85, 0.15)" width="92.5" xlink:href="#sprite0"/>
+    <use ffdec:characterId="8" height="100.5" id="sai11" transform="matrix(1.0, 0.0, 0.0, 1.0, 594.45, 90.85)" width="84.5" xlink:href="#sprite1"/>
+    <use ffdec:characterId="11" height="66.2" id="sai12" transform="matrix(1.0, 0.0, 0.0, 1.0, 520.45, 101.35)" width="77.15" xlink:href="#sprite2"/>
+    <use ffdec:characterId="5" height="89.15" id="sai7" transform="matrix(1.0, 0.0, 0.0, 1.0, 405.85, 20.15)" width="92.5" xlink:href="#sprite0"/>
+    <use ffdec:characterId="8" height="100.5" id="sai8" transform="matrix(1.0, 0.0, 0.0, 1.0, 450.45, 110.85)" width="84.5" xlink:href="#sprite1"/>
+    <use ffdec:characterId="11" height="66.2" id="sai9" transform="matrix(1.0, 0.0, 0.0, 1.0, 376.45, 121.35)" width="77.15" xlink:href="#sprite2"/>
+    <use ffdec:characterId="12" height="12.55" transform="matrix(1.0, 0.0, 0.0, 1.0, 273.8, 7.95)" width="179.7" xlink:href="#text0"/>
+  </g>
+  <defs>
+    <g id="sprite0" transform="matrix(1.0, 0.0, 0.0, 1.0, 46.25, 59.5)">
+      <use ffdec:characterId="3" height="59.3" transform="matrix(1.0, 0.0, 0.0, 1.0, -33.05, -29.65)" width="66.1" xlink:href="#shape0"/>
+    </g>
+    <g id="shape0" transform="matrix(1.0, 0.0, 0.0, 1.0, 33.05, 29.65)">
+      <path d="M23.7 -27.7 L14.2 -19.7 13.65 -20.3 23.25 -28.25 23.7 -27.7 M15.45 -7.75 L6.25 -15.45 6.45 -15.65 6.75 -16.0 16.3 -8.05 15.8 -7.45 15.45 -7.75 M5.45 -16.95 L-5.55 -16.95 -5.55 -17.4 5.6 -17.4 5.6 -16.95 5.45 -16.95 M-6.6 -16.0 L-6.15 -15.45 -15.7 -7.45 -16.05 -7.85 -16.2 -8.05 -6.6 -16.0 M-17.7 -4.75 L-17.6 -4.85 -17.15 -4.35 Q-18.25 -3.4 -18.65 -2.45 -19.15 -1.45 -19.15 -0.05 -19.15 1.1 -18.65 2.15 L-17.15 4.3 -17.6 4.85 -18.15 4.2 -19.25 2.5 Q-19.8 1.3 -19.8 -0.05 -19.8 -1.6 -19.25 -2.75 L-18.25 -4.2 -17.7 -4.75 M-15.75 7.4 L-15.7 7.35 -6.15 15.3 -6.55 15.8 -6.6 15.9 -16.2 7.9 -15.75 7.4 M-5.55 16.65 L5.1 16.65 5.6 16.65 5.6 17.15 -5.55 17.15 -5.55 16.65 M6.25 15.3 L15.8 7.35 15.9 7.45 16.3 7.9 6.75 15.9 6.25 15.3 M17.75 4.6 L17.5 4.3 18.0 3.7 19.05 2.15 19.5 -0.05 Q19.5 -1.45 19.05 -2.45 L18.3 -3.55 17.5 -4.35 17.8 -4.65 17.95 -4.85 19.6 -2.75 Q20.15 -1.6 20.15 -0.05 20.15 1.3 19.6 2.5 L17.95 4.85 17.75 4.6 M9.8 -5.15 Q10.1 -5.5 10.5 -5.5 L11.2 -5.15 11.5 -4.45 11.2 -3.75 Q10.9 -3.45 10.5 -3.45 10.1 -3.45 9.8 -3.75 9.5 -4.1 9.5 -4.45 9.5 -4.85 9.8 -5.15 M3.4 -3.85 L4.2 -3.4 0.2 3.95 -3.8 -3.4 -3.0 -3.85 -2.0 -2.05 2.4 -2.05 3.4 -3.85 M9.85 -4.45 Q9.8 -4.15 10.0 -4.0 L10.5 -3.8 11.0 -4.0 11.15 -4.45 11.0 -4.95 10.5 -5.1 10.0 -4.95 Q9.8 -4.8 9.85 -4.45 M33.05 -0.35 L33.05 0.1 21.9 0.1 21.9 -0.35 33.05 -0.35 M0.3 -18.5 L-0.2 -18.5 -0.2 -29.65 0.3 -29.65 0.3 -18.5 M14.2 19.9 L23.7 27.85 23.25 28.45 13.65 20.45 14.2 19.9 M0.3 29.65 L-0.2 29.65 -0.2 18.5 0.3 18.5 0.3 29.65 M2.0 -1.15 L-1.55 -1.15 0.2 2.0 2.0 -1.15 M-23.1 -28.25 L-13.6 -20.3 -14.05 -19.7 -23.65 -27.7 -23.1 -28.25 M-21.85 -0.4 L-21.85 0.05 -33.05 0.05 -33.05 -0.4 -21.85 -0.4 M-10.15 -3.8 Q-9.8 -3.8 -9.6 -4.0 L-9.45 -4.45 -9.6 -4.95 -10.15 -5.1 -10.6 -4.95 -10.8 -4.45 -10.6 -4.0 -10.15 -3.8 M-10.15 -5.5 Q-9.75 -5.5 -9.45 -5.15 -9.1 -4.85 -9.1 -4.45 -9.1 -4.1 -9.45 -3.75 -9.75 -3.45 -10.15 -3.45 -10.5 -3.45 -10.85 -3.75 L-11.1 -4.45 -10.85 -5.15 -10.15 -5.5 M-13.6 20.45 L-23.1 28.45 -23.65 27.85 -14.05 19.9 -13.6 20.45" fill="#000000" fill-rule="evenodd" stroke="none"/>
+      <path d="M6.45 -15.65 L6.25 -15.45 15.45 -7.75 17.75 -4.7 17.8 -4.65 17.5 -4.35 18.3 -3.55 19.05 -2.45 Q19.5 -1.45 19.5 -0.05 L19.05 2.15 18.0 3.7 17.5 4.3 17.75 4.6 15.9 7.45 15.8 7.35 6.25 15.3 5.1 16.65 -5.55 16.65 -6.15 15.3 -15.7 7.35 -15.75 7.4 -17.6 4.85 -17.15 4.3 -18.65 2.15 Q-19.15 1.1 -19.15 -0.05 -19.15 -1.45 -18.65 -2.45 -18.25 -3.4 -17.15 -4.35 L-17.6 -4.85 -17.7 -4.75 -16.05 -7.85 -15.7 -7.45 -6.15 -15.45 -6.6 -16.0 -5.55 -16.95 5.45 -16.95 6.45 -15.65 M9.85 -4.45 Q9.8 -4.8 10.0 -4.95 L10.5 -5.1 11.0 -4.95 11.15 -4.45 11.0 -4.0 10.5 -3.8 10.0 -4.0 Q9.8 -4.15 9.85 -4.45 M3.4 -3.85 L2.4 -2.05 -2.0 -2.05 -3.0 -3.85 -3.8 -3.4 0.2 3.95 4.2 -3.4 3.4 -3.85 M9.8 -5.15 Q9.5 -4.85 9.5 -4.45 9.5 -4.1 9.8 -3.75 10.1 -3.45 10.5 -3.45 10.9 -3.45 11.2 -3.75 L11.5 -4.45 11.2 -5.15 10.5 -5.5 Q10.1 -5.5 9.8 -5.15 M2.0 -1.15 L0.2 2.0 -1.55 -1.15 2.0 -1.15 M-10.15 -5.5 L-10.85 -5.15 -11.1 -4.45 -10.85 -3.75 Q-10.5 -3.45 -10.15 -3.45 -9.75 -3.45 -9.45 -3.75 -9.1 -4.1 -9.1 -4.45 -9.1 -4.85 -9.45 -5.15 -9.75 -5.5 -10.15 -5.5 M-10.15 -3.8 L-10.6 -4.0 -10.8 -4.45 -10.6 -4.95 -10.15 -5.1 -9.6 -4.95 -9.45 -4.45 -9.6 -4.0 Q-9.8 -3.8 -10.15 -3.8" fill="#ffffff" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="sprite1" transform="matrix(1.0, 0.0, 0.0, 1.0, 30.2, 35.6)">
+      <use ffdec:characterId="6" height="71.25" transform="matrix(1.0, 0.0, 0.0, 1.0, -30.15, -35.6)" width="60.35" xlink:href="#shape1"/>
+    </g>
+    <g id="shape1" transform="matrix(1.0, 0.0, 0.0, 1.0, 30.15, 35.6)">
+      <path d="M23.75 -27.15 L23.75 -31.3 Q23.75 -32.85 24.65 -33.75 25.65 -34.75 26.95 -34.7 28.25 -34.75 29.25 -33.75 30.15 -32.85 30.2 -31.3 L30.2 -27.15 29.35 -27.15 29.35 -27.8 29.35 -31.3 Q29.3 -32.45 28.6 -33.15 27.95 -33.85 26.95 -33.8 25.95 -33.85 25.3 -33.15 24.55 -32.45 24.55 -31.3 L24.55 -27.15 23.75 -27.15 M29.1 -25.15 L29.8 -25.15 29.8 -13.95 29.3 -13.95 28.95 -13.95 28.95 -25.15 29.1 -25.15 M27.3 -10.75 L22.8 -2.7 22.35 -2.95 22.6 -3.4 27.0 -11.25 27.3 -11.1 27.3 -10.75 M21.7 -0.75 L22.5 -0.75 22.5 10.45 21.65 10.45 21.65 10.4 21.65 -0.75 21.7 -0.75 M20.05 14.1 L20.2 14.1 20.2 21.95 16.95 21.95 16.95 21.1 19.35 21.1 19.35 14.1 20.05 14.1 M15.45 20.6 L15.0 21.2 5.5 13.25 5.4 13.2 5.9 12.65 15.45 20.6 M4.2 13.15 L4.25 13.2 -5.3 21.2 -5.65 20.8 -5.8 20.6 3.75 12.65 4.2 13.15 M-8.05 24.8 L-7.85 24.6 -7.35 25.15 -16.9 33.15 -17.1 32.95 -17.4 32.55 -8.05 24.8 M-19.35 35.15 L-19.0 35.15 -19.0 35.65 -30.15 35.65 -30.15 35.15 -28.85 35.15 -19.35 35.15 M-26.65 33.0 L-26.7 32.95 -22.1 24.65 -21.95 24.7 -21.65 24.9 -26.3 33.2 -26.65 33.0 M-19.15 20.95 L-14.5 12.7 -14.1 12.9 -18.7 21.25 -19.15 20.95 M-11.85 10.0 L-11.85 -0.75 -11.1 -0.75 -11.0 -0.75 -11.0 10.45 -11.85 10.45 -11.85 10.0 M-11.0 -1.5 L-11.7 -1.5 -11.7 -12.7 -11.2 -12.7 -10.85 -12.7 -10.85 -1.5 -11.0 -1.5 M-11.15 -14.85 L-20.55 -22.7 -20.15 -23.1 -20.0 -23.25 -10.5 -15.3 -10.95 -14.7 -11.15 -14.85 M-20.05 -27.15 L-20.85 -27.15 -20.8 -32.05 Q-20.65 -33.1 -20.0 -33.75 -19.0 -34.75 -17.7 -34.7 -16.4 -34.75 -15.4 -33.75 -14.45 -32.85 -14.45 -31.3 L-14.45 -27.15 -15.3 -27.15 -15.3 -31.3 Q-15.35 -32.45 -16.05 -33.15 -16.7 -33.85 -17.7 -33.8 -18.7 -33.85 -19.3 -33.15 -19.95 -32.6 -20.05 -31.7 L-20.05 -27.15 M-5.25 -21.65 L-5.2 -21.65 -5.2 -21.7 -4.4 -22.9 -4.35 -22.9 -3.55 -23.75 -3.1 -23.3 Q-4.2 -22.35 -4.6 -21.4 -5.1 -20.4 -5.1 -19.05 L-5.1 -18.95 Q-5.15 -18.05 -4.8 -17.25 L-4.6 -16.75 Q-4.2 -15.8 -3.1 -14.6 L-3.55 -14.1 Q-4.65 -15.35 -5.2 -16.45 L-5.4 -16.85 Q-5.75 -17.8 -5.75 -18.8 L-5.75 -18.95 Q-5.8 -20.5 -5.25 -21.65 M-4.45 -26.6 L-4.55 -26.65 -4.9 -26.75 -0.85 -35.6 3.15 -26.75 2.3 -26.4 -0.85 -33.4 -4.05 -26.4 -4.45 -26.6 M12.05 -26.65 L11.8 -26.75 15.8 -35.6 19.85 -26.75 19.75 -26.75 19.0 -26.4 15.8 -33.4 12.65 -26.4 12.05 -26.65 M19.7 -22.95 L20.6 -21.65 21.1 -19.8 21.15 -19.65 21.15 -18.95 Q21.15 -17.6 20.6 -16.45 L18.95 -14.1 18.5 -14.6 20.05 -16.75 20.5 -18.95 Q20.5 -20.35 20.05 -21.4 L18.5 -23.3 18.95 -23.75 19.7 -22.95 M17.3 -23.4 L17.0 -22.7 Q16.7 -22.35 16.3 -22.35 15.9 -22.35 15.6 -22.7 15.3 -23.05 15.3 -23.4 15.3 -23.8 15.6 -24.1 15.9 -24.45 16.3 -24.45 16.7 -24.45 17.0 -24.1 L17.3 -23.4 M16.8 -23.85 L16.3 -24.05 15.8 -23.85 15.65 -23.4 Q15.6 -23.1 15.8 -22.95 L16.3 -22.75 Q16.6 -22.75 16.8 -22.95 L16.95 -23.4 16.8 -23.85 M13.45 -22.35 L9.4 -15.0 5.4 -22.35 6.25 -22.8 7.2 -20.95 11.6 -20.95 12.6 -22.8 13.45 -22.35 M3.15 -23.4 L3.0 -23.85 2.5 -24.05 2.05 -23.85 1.85 -23.4 2.05 -22.95 2.5 -22.75 3.0 -22.95 3.15 -23.4 M3.55 -23.4 L3.2 -22.7 Q2.9 -22.35 2.5 -22.35 2.15 -22.35 1.8 -22.7 1.5 -23.05 1.5 -23.4 1.5 -23.8 1.8 -24.1 2.15 -24.45 2.5 -24.45 2.9 -24.45 3.2 -24.1 L3.55 -23.4 M9.4 -16.95 L11.2 -20.1 7.7 -20.1 9.4 -16.95" fill="#000000" fill-rule="evenodd" stroke="none"/>
+      <path d="M29.35 -27.8 L29.1 -25.15 28.95 -25.15 28.95 -13.95 29.3 -13.95 27.3 -10.75 27.3 -11.1 27.0 -11.25 22.6 -3.4 22.2 -3.0 21.7 -0.75 21.65 -0.75 21.65 10.4 20.05 14.0 20.05 14.1 19.35 14.1 19.35 21.1 16.95 21.1 15.45 20.6 5.9 12.65 5.4 13.2 5.5 13.25 4.25 13.15 4.2 13.15 3.75 12.65 -5.8 20.6 -5.65 20.8 -8.05 24.8 -17.4 32.55 -17.1 32.95 -19.35 35.15 -28.85 35.15 -26.65 33.0 -26.3 33.2 -21.65 24.9 -21.95 24.7 -19.2 20.9 -19.15 20.95 -18.7 21.25 -14.1 12.9 -14.5 12.7 -14.75 12.4 -11.85 10.0 -11.85 10.45 -11.0 10.45 -11.0 -0.75 -11.1 -0.75 -11.0 -1.5 -10.85 -1.5 -10.85 -12.7 -11.2 -12.7 -11.15 -14.85 -10.95 -14.7 -10.5 -15.3 -20.0 -23.25 -20.15 -23.1 -20.05 -27.15 -20.05 -31.7 Q-19.95 -32.6 -19.3 -33.15 -18.7 -33.85 -17.7 -33.8 -16.7 -33.85 -16.05 -33.15 -15.35 -32.45 -15.3 -31.3 L-15.3 -27.15 -14.45 -27.15 -14.2 -27.45 -7.8 -22.15 -5.25 -21.65 Q-5.8 -20.5 -5.75 -18.95 L-5.75 -18.8 Q-5.75 -17.8 -5.4 -16.85 L-5.2 -16.45 Q-4.65 -15.35 -3.55 -14.1 L-3.1 -14.6 Q-4.2 -15.8 -4.6 -16.75 L-4.8 -17.25 Q-5.15 -18.05 -5.1 -18.95 L-5.1 -19.05 Q-5.1 -20.4 -4.6 -21.4 -4.2 -22.35 -3.1 -23.3 L-3.55 -23.75 -4.35 -22.9 -4.75 -23.3 -4.45 -26.6 -4.05 -26.4 -0.85 -33.4 2.3 -26.4 3.15 -26.75 3.15 -26.95 12.05 -26.65 12.65 -26.4 15.8 -33.4 19.0 -26.4 19.75 -26.4 19.7 -22.95 18.95 -23.75 18.5 -23.3 20.05 -21.4 Q20.5 -20.35 20.5 -18.95 L20.05 -16.75 18.5 -14.6 18.95 -14.1 20.6 -16.45 Q21.15 -17.6 21.15 -18.95 L21.15 -19.65 21.1 -19.8 23.95 -22.15 23.75 -27.15 24.55 -27.15 24.55 -31.3 Q24.55 -32.45 25.3 -33.15 25.95 -33.85 26.95 -33.8 27.95 -33.85 28.6 -33.15 29.3 -32.45 29.35 -31.3 L29.35 -27.8 M9.4 -16.95 L7.7 -20.1 11.2 -20.1 9.4 -16.95 M3.55 -23.4 L3.2 -24.1 Q2.9 -24.45 2.5 -24.45 2.15 -24.45 1.8 -24.1 1.5 -23.8 1.5 -23.4 1.5 -23.05 1.8 -22.7 2.15 -22.35 2.5 -22.35 2.9 -22.35 3.2 -22.7 L3.55 -23.4 M3.15 -23.4 L3.0 -22.95 2.5 -22.75 2.05 -22.95 1.85 -23.4 2.05 -23.85 2.5 -24.05 3.0 -23.85 3.15 -23.4 M13.45 -22.35 L12.6 -22.8 11.6 -20.95 7.2 -20.95 6.25 -22.8 5.4 -22.35 9.4 -15.0 13.45 -22.35 M16.8 -23.85 L16.95 -23.4 16.8 -22.95 Q16.6 -22.75 16.3 -22.75 L15.8 -22.95 Q15.6 -23.1 15.65 -23.4 L15.8 -23.85 16.3 -24.05 16.8 -23.85 M17.3 -23.4 L17.0 -24.1 Q16.7 -24.45 16.3 -24.45 15.9 -24.45 15.6 -24.1 15.3 -23.8 15.3 -23.4 15.3 -23.05 15.6 -22.7 15.9 -22.35 16.3 -22.35 16.7 -22.35 17.0 -22.7 L17.3 -23.4" fill="#ffffff" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="sprite2" transform="matrix(1.0, 0.0, 0.0, 1.0, 55.0, 25.1)">
+      <use ffdec:characterId="9" height="47.3" transform="matrix(1.0, 0.0, 0.0, 1.0, -22.15, -23.65)" width="44.3" xlink:href="#shape2"/>
+    </g>
+    <g id="shape2" transform="matrix(1.0, 0.0, 0.0, 1.0, 22.15, 23.65)">
+      <path d="M15.2 -15.2 L15.2 -15.15 16.0 -15.15 16.0 -19.35 Q16.0 -20.45 16.75 -21.2 17.35 -21.9 18.35 -21.85 19.35 -21.9 20.0 -21.2 20.7 -20.5 20.75 -19.45 L20.75 -15.15 20.8 -15.15 21.6 -11.0 17.1 -2.95 17.5 -2.7 16.0 -0.1 15.85 -0.15 12.95 4.9 15.85 9.95 16.6 9.5 16.35 9.1 20.05 14.1 20.0 14.1 20.0 21.1 17.65 21.1 17.65 21.95 16.75 22.2 16.7 21.95 16.7 21.45 13.35 21.45 12.7 20.6 3.2 12.65 2.85 13.0 1.35 13.0 1.05 12.65 -8.55 20.6 -8.1 21.1 -10.4 23.15 -11.0 23.2 -21.65 23.2 -21.65 21.1 -21.45 21.25 -16.8 12.9 -17.2 12.7 -12.6 9.05 -12.6 10.45 -11.8 10.45 -11.8 -0.75 -12.6 -0.75 -13.75 0.4 -16.4 -2.25 -16.3 -2.5 -21.55 -10.4 -21.35 -15.15 -21.1 -15.15 -21.1 -19.35 Q-21.1 -20.45 -20.35 -21.2 -19.7 -21.9 -18.7 -21.85 -17.7 -21.9 -17.05 -21.2 -16.35 -20.45 -16.3 -19.35 L-16.3 -15.15 -16.4 -15.1 -13.75 -11.45 -14.8 -10.15 -15.0 -9.7 Q-15.6 -8.55 -15.55 -7.0 L-15.45 -5.85 -15.0 -4.45 -13.35 -2.15 -12.9 -2.65 -14.4 -4.8 -14.45 -4.9 -14.9 -7.0 Q-14.9 -8.4 -14.4 -9.4 L-14.15 -9.9 -12.9 -11.35 -13.15 -11.6 -13.15 -11.65 -10.9 -14.55 -10.55 -14.45 -7.4 -21.45 -4.2 -14.45 -3.35 -14.8 -3.5 -15.1 3.35 -15.1 3.25 -14.8 4.05 -14.45 7.25 -21.45 10.45 -14.45 11.15 -14.75 12.95 -11.8 15.2 -15.2 M12.6 -11.8 L12.1 -11.35 13.65 -9.4 Q14.1 -8.4 14.1 -7.0 14.1 -5.85 13.65 -4.8 L12.9 -3.6 12.1 -2.65 12.6 -2.15 13.25 -2.95 14.2 -4.45 Q14.75 -5.65 14.8 -7.0 14.75 -8.55 14.2 -9.7 13.75 -10.65 12.8 -11.6 L12.6 -11.8 M3.65 -10.35 L2.8 -10.85 1.85 -9.0 -2.55 -9.0 -3.55 -10.85 -4.4 -10.35 -0.35 -3.0 3.65 -10.35 M7.55 -11.45 L7.4 -11.9 7.2 -12.15 6.5 -12.45 Q6.15 -12.5 5.8 -12.15 L5.65 -11.9 5.5 -11.45 5.8 -10.75 Q6.15 -10.4 6.5 -10.4 6.9 -10.4 7.2 -10.75 L7.55 -11.45 M7.15 -11.45 L7.0 -10.95 6.5 -10.8 6.05 -10.95 5.85 -11.45 6.05 -11.9 Q6.2 -12.1 6.5 -12.1 L7.0 -11.9 7.05 -11.9 7.15 -11.45 M-0.35 -5.0 L-2.1 -8.1 1.4 -8.1 -0.35 -5.0 M-6.6 -10.75 Q-6.25 -11.1 -6.25 -11.45 -6.25 -11.8 -6.6 -12.15 -6.9 -12.5 -7.3 -12.45 L-8.0 -12.15 -8.25 -11.45 -8.0 -10.75 -7.6 -10.45 -7.3 -10.4 -6.65 -10.65 -6.6 -10.75 M-6.65 -11.45 L-6.75 -10.95 -7.3 -10.8 -7.75 -10.95 -7.95 -11.45 -7.75 -11.9 -7.3 -12.1 -6.75 -11.9 -6.65 -11.45" fill="#ffffff" fill-rule="evenodd" stroke="none"/>
+      <path d="M20.8 -15.15 L20.75 -15.15 20.75 -19.45 Q20.7 -20.5 20.0 -21.2 19.35 -21.9 18.35 -21.85 17.35 -21.9 16.75 -21.2 16.0 -20.45 16.0 -19.35 L16.0 -15.15 15.2 -15.15 15.2 -15.2 15.2 -19.35 Q15.2 -20.9 16.1 -21.75 17.05 -22.75 18.35 -22.75 19.65 -22.75 20.65 -21.75 21.6 -20.9 21.6 -19.35 L21.6 -15.15 20.8 -15.15 M11.15 -14.75 L10.45 -14.45 7.25 -21.45 4.05 -14.45 3.25 -14.8 3.35 -15.1 7.25 -23.65 11.25 -14.8 11.15 -14.75 M-3.5 -15.1 L-3.35 -14.8 -4.2 -14.45 -7.4 -21.45 -10.55 -14.45 -10.9 -14.55 -11.4 -14.8 -7.4 -23.65 -3.5 -15.1 M-13.15 -11.6 L-12.9 -11.35 -14.15 -9.9 -14.4 -9.4 Q-14.9 -8.4 -14.9 -7.0 L-14.45 -4.9 -14.4 -4.8 -12.9 -2.65 -13.35 -2.15 -15.0 -4.45 -15.45 -5.85 -15.55 -7.0 Q-15.6 -8.55 -15.0 -9.7 L-14.8 -10.15 -13.75 -11.45 -13.35 -11.8 -13.15 -11.6 M-16.3 -15.15 L-16.3 -19.35 Q-16.35 -20.45 -17.05 -21.2 -17.7 -21.9 -18.7 -21.85 -19.7 -21.9 -20.35 -21.2 -21.1 -20.45 -21.1 -19.35 L-21.1 -15.15 -21.35 -15.15 -21.85 -15.15 -21.85 -19.35 Q-21.9 -20.9 -21.0 -21.75 -20.0 -22.75 -18.7 -22.75 -17.4 -22.75 -16.4 -21.75 -15.5 -20.9 -15.45 -19.35 L-15.45 -15.15 -16.3 -15.15 M-21.55 -10.4 L-16.3 -2.5 -16.4 -2.25 -16.55 -1.9 -21.85 -9.9 -21.6 -10.45 -21.55 -10.4 M-12.6 -0.75 L-11.8 -0.75 -11.8 10.45 -12.6 10.45 -12.6 9.05 -12.6 -0.75 M-17.2 12.7 L-16.8 12.9 -21.45 21.25 -21.65 21.1 -21.85 20.95 -17.25 12.7 -17.2 12.7 M-21.65 23.2 L-11.0 23.2 -11.0 23.65 -22.15 23.65 -22.15 23.2 -21.65 23.2 M-8.1 21.1 L-8.55 20.6 1.05 12.65 1.35 13.0 1.5 13.2 -8.05 21.2 -8.1 21.1 M2.85 13.0 L3.2 12.65 12.7 20.6 12.25 21.2 2.65 13.2 2.85 13.0 M13.35 21.45 L16.7 21.45 16.7 21.95 13.35 21.95 13.35 21.45 M17.65 21.95 L17.65 21.1 20.0 21.1 20.0 14.1 20.05 14.1 20.9 14.1 20.9 21.95 17.65 21.95 M16.35 9.1 L16.6 9.5 15.85 9.95 12.95 4.9 15.85 -0.15 16.0 -0.1 16.6 0.2 13.9 4.9 16.35 9.1 M17.5 -2.7 L17.1 -2.95 21.6 -11.0 21.75 -11.25 22.15 -11.0 17.55 -2.7 17.5 -2.7 M7.15 -11.45 L7.05 -11.9 7.0 -11.9 6.5 -12.1 Q6.2 -12.1 6.05 -11.9 L5.85 -11.45 6.05 -10.95 6.5 -10.8 7.0 -10.95 7.15 -11.45 M7.55 -11.45 L7.2 -10.75 Q6.9 -10.4 6.5 -10.4 6.15 -10.4 5.8 -10.75 L5.5 -11.45 5.65 -11.9 5.8 -12.15 Q6.15 -12.5 6.5 -12.45 L7.2 -12.15 7.4 -11.9 7.55 -11.45 M3.65 -10.35 L-0.35 -3.0 -4.4 -10.35 -3.55 -10.85 -2.55 -9.0 1.85 -9.0 2.8 -10.85 3.65 -10.35 M12.6 -11.8 L12.8 -11.6 Q13.75 -10.65 14.2 -9.7 14.75 -8.55 14.8 -7.0 14.75 -5.65 14.2 -4.45 L13.25 -2.95 12.6 -2.15 12.1 -2.65 12.9 -3.6 13.65 -4.8 Q14.1 -5.85 14.1 -7.0 14.1 -8.4 13.65 -9.4 L12.1 -11.35 12.6 -11.8 M-6.65 -11.45 L-6.75 -11.9 -7.3 -12.1 -7.75 -11.9 -7.95 -11.45 -7.75 -10.95 -7.3 -10.8 -6.75 -10.95 -6.65 -11.45 M-6.6 -10.75 L-6.65 -10.65 -7.3 -10.4 -7.6 -10.45 -8.0 -10.75 -8.25 -11.45 -8.0 -12.15 -7.3 -12.45 Q-6.9 -12.5 -6.6 -12.15 -6.25 -11.8 -6.25 -11.45 -6.25 -11.1 -6.6 -10.75 M-0.35 -5.0 L1.4 -8.1 -2.1 -8.1 -0.35 -5.0" fill="#000000" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="text0" transform="matrix(1.0, 0.0, 0.0, 1.0, -0.6, -0.7)">
+      <g transform="matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)">
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 0.0, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__0"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 9.7, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__1"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 17.9, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__2"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 26.0, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__0"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 35.7, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__3"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 47.55, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__4"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 59.95, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__5"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 71.95, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__6"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 84.35, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__7"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 95.8, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__8"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 107.8, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__9"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 119.25, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__10"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 128.95, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__11"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 140.4, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__12"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 151.4, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__13"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 161.95, 12.0)" width="179.7" xlink:href="#font_MS_UI_Gothic__14"/>
+      </g>
+    </g>
+    <g id="font_MS_UI_Gothic__0">
+      <path d="M32.2 -33.6 L13.0 -33.6 13.2 -39.4 8.8 -39.4 Q9.0 -31.8 7.8 -27.2 6.4 -21.8 2.2 -17.8 L5.4 -14.6 Q11.0 -20.2 12.6 -29.8 L28.2 -29.8 28.2 -27.0 Q28.2 -17.0 23.2 -10.4 18.2 -4.0 8.0 -0.4 L11.2 3.4 Q21.0 -0.2 26.2 -7.6 32.2 -15.6 32.2 -27.0 L32.2 -33.6" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__1">
+      <path d="M8.0 -37.6 L4.0 -37.6 4.0 -14.6 8.0 -14.6 8.0 -37.6 M26.6 -39.2 L22.6 -39.2 22.6 -17.0 Q22.6 -11.6 19.0 -6.6 15.8 -2.4 8.0 -0.2 L11.0 3.6 Q19.6 0.8 22.8 -4.4 26.6 -9.2 26.6 -17.0 L26.6 -39.2" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__2">
+      <path d="M5.6 -25.8 L2.0 -24.2 Q4.2 -20.2 6.6 -14.0 L10.4 -15.8 Q7.4 -23.2 5.6 -25.8 M21.2 -10.4 L21.2 -10.4 Q17.6 -3.6 7.8 -0.2 L10.4 3.2 Q20.2 -1.2 24.2 -8.4 28.2 -15.4 28.4 -27.6 L24.6 -28.0 Q24.8 -16.4 21.2 -10.4 M14.4 -30.0 L11.0 -28.4 Q13.2 -24.6 15.6 -18.4 L19.4 -20.2 Q17.2 -25.6 14.4 -30.0" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__3">
+      <path d="M15.0 -13.6 L15.0 -13.6 Q13.8 -14.6 14.0 -17.6 14.4 -22.2 18.4 -22.2 19.8 -22.2 21.0 -20.8 22.4 -19.4 22.2 -16.8 21.8 -13.0 18.8 -12.8 16.2 -12.6 15.0 -13.6 M40.2 -33.4 L26.6 -33.4 26.6 -41.6 22.6 -41.6 22.6 -33.4 3.0 -33.4 3.0 -29.0 22.6 -29.0 22.6 -24.4 Q20.8 -25.4 18.4 -25.6 14.8 -25.6 12.6 -23.0 10.8 -20.8 10.4 -17.4 10.0 -13.0 13.2 -10.6 15.6 -8.8 17.6 -9.0 20.8 -9.2 22.8 -11.4 22.8 -7.0 20.0 -4.0 17.8 -1.0 12.6 1.0 L14.6 4.4 Q21.2 1.8 24.2 -3.0 27.0 -7.4 27.2 -14.2 27.2 -17.6 26.6 -19.8 L26.6 -29.0 40.2 -29.0 40.2 -33.4" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__4">
+      <path d="M35.0 -2.4 L35.0 -2.4 Q33.6 -2.6 33.8 -4.8 L33.8 -25.4 Q33.6 -33.4 28.2 -33.8 24.0 -34.2 20.2 -31.4 17.8 -29.6 14.8 -25.4 L14.8 -40.6 10.8 -40.6 10.8 -29.0 1.8 -29.0 1.8 -24.6 10.8 -24.6 10.8 -19.8 Q5.4 -11.6 1.8 -7.4 L4.6 -4.2 Q7.6 -8.2 10.8 -13.4 L10.8 3.4 14.8 3.4 14.8 -19.2 Q18.4 -25.0 20.8 -27.4 23.6 -30.2 26.6 -30.2 28.2 -30.2 29.0 -29.0 29.8 -28.0 29.8 -25.4 L29.8 -4.8 Q29.8 -1.4 31.6 0.4 33.4 2.0 35.2 2.0 38.6 2.2 40.2 -0.4 42.2 -3.0 42.2 -9.8 L38.6 -11.0 Q38.6 -1.6 35.0 -2.4" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__5">
+      <path d="M18.6 -3.0 L18.6 -3.0 Q17.2 -4.0 17.2 -5.8 17.2 -7.6 18.6 -8.8 19.8 -9.8 21.4 -10.0 24.0 -10.2 27.4 -8.8 27.2 -2.0 22.4 -2.0 20.2 -1.8 18.6 -3.0 M10.0 -38.0 L10.0 -38.0 6.0 -39.6 Q3.4 -27.2 3.6 -18.4 3.8 -7.2 6.0 1.8 L10.2 0.2 Q8.0 -10.4 7.8 -20.0 7.8 -29.2 10.0 -38.0 M31.4 -11.2 L31.4 -26.6 39.6 -26.6 39.6 -30.4 31.4 -30.4 31.4 -40.2 27.4 -40.2 27.4 -30.4 14.6 -30.4 14.6 -26.6 27.4 -26.6 27.4 -12.6 Q24.6 -13.4 21.8 -13.4 17.6 -13.4 15.4 -10.6 13.6 -8.4 13.6 -5.6 13.6 -2.8 15.4 -0.8 18.0 2.0 23.2 1.6 30.0 1.2 31.2 -6.8 34.8 -4.4 37.6 -1.2 L40.0 -4.8 Q35.8 -9.0 31.4 -11.2 M36.2 -41.6 L32.8 -41.6 32.8 -33.8 36.2 -33.8 36.2 -41.6 M41.8 -41.6 L38.4 -41.6 38.4 -33.8 41.8 -33.8 41.8 -41.6" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__6">
+      <path d="M6.4 -7.2 L6.4 -7.2 Q6.2 -10.8 8.2 -14.0 11.0 -18.0 16.0 -18.0 L16.6 -18.0 Q12.8 -5.0 8.8 -5.0 6.6 -5.0 6.4 -7.2 M35.0 -17.4 L35.0 -28.4 31.0 -28.4 31.0 -19.0 Q26.6 -20.4 21.8 -21.2 23.2 -26.2 24.4 -32.6 L24.4 -36.8 7.6 -36.8 7.6 -32.4 20.0 -32.4 Q19.2 -26.4 17.8 -21.6 L15.8 -21.8 Q10.2 -21.8 6.2 -17.8 2.4 -13.8 2.4 -8.0 2.6 -0.2 9.2 -0.4 15.6 -0.6 20.6 -17.6 25.6 -16.8 31.0 -14.2 L31.0 -13.8 30.8 -14.2 Q31.0 -4.8 22.2 0.2 L25.0 3.6 Q33.8 -2.2 34.8 -12.2 L39.4 -9.0 41.8 -13.2 Q38.6 -15.6 35.0 -17.4" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__7">
+      <path d="M27.4 -0.8 L27.4 -0.8 Q26.2 -0.6 25.8 -1.6 25.0 -2.4 25.0 -4.0 L25.0 -14.2 Q25.0 -16.8 23.4 -19.0 21.2 -21.6 17.8 -21.6 14.2 -21.6 11.0 -18.4 L16.4 -39.0 12.0 -40.2 Q8.2 -22.8 1.8 0.6 L6.0 2.2 Q8.6 -9.4 10.0 -12.6 11.0 -15.0 13.4 -16.4 15.4 -17.6 17.4 -17.6 19.0 -17.6 20.0 -16.6 21.0 -15.6 21.0 -14.2 L21.0 -4.0 Q21.0 -0.2 22.6 1.6 24.2 3.4 27.0 3.4 32.2 3.6 35.2 -2.0 38.2 -6.8 40.0 -17.8 L36.2 -19.8 Q33.4 -0.8 27.4 -0.8" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__8">
+      <path d="M29.2 -7.0 L29.2 -7.0 Q29.2 -4.0 27.6 -2.4 25.8 -0.6 23.2 -0.6 17.6 -0.6 17.6 -4.6 17.6 -8.8 23.0 -8.8 26.4 -8.8 29.2 -7.0 M29.2 -22.4 L29.2 -11.4 Q25.8 -12.6 22.6 -12.6 18.6 -12.6 16.4 -10.8 13.6 -8.4 13.6 -4.6 13.6 -0.6 16.2 1.4 18.8 3.4 23.0 3.4 27.2 3.4 29.6 1.6 32.6 -0.6 33.0 -4.8 L37.2 -1.8 39.6 -5.6 Q36.4 -7.8 33.2 -9.6 L33.2 -22.4 29.2 -22.4 M26.8 -32.0 L25.6 -28.0 Q31.8 -26.8 38.0 -23.8 L39.4 -28.0 Q33.2 -30.8 26.8 -32.0 M3.2 -29.2 L11.0 -29.2 Q8.2 -14.8 2.8 -4.4 L6.6 -2.0 Q12.6 -14.6 15.2 -29.2 L24.2 -29.2 24.2 -33.6 16.0 -33.6 17.2 -40.8 13.0 -41.6 11.8 -33.6 3.2 -33.6 3.2 -29.2" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__9">
+      <path d="M37.2 -36.4 L2.2 -36.4 2.2 -32.6 23.2 -32.6 Q18.0 -29.6 15.0 -24.2 12.4 -19.4 12.4 -15.0 12.6 -7.4 17.2 -3.0 22.4 2.0 31.8 2.0 L33.0 -2.4 Q24.8 -2.4 20.8 -5.6 16.6 -9.0 16.6 -15.6 16.6 -22.4 22.0 -27.2 27.8 -32.2 37.2 -32.4 L37.2 -36.4 M34.8 -28.0 L31.4 -28.0 31.4 -20.2 34.8 -20.2 34.8 -28.0 M40.2 -28.0 L36.8 -28.0 36.8 -20.2 40.2 -20.2 40.2 -28.0" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__10">
+      <path d="M21.0 -32.6 L21.0 -32.6 Q19.6 -36.4 18.2 -41.4 L14.2 -40.2 17.0 -32.0 3.6 -30.6 4.0 -26.4 18.6 -28.0 Q21.6 -22.2 24.4 -18.0 21.2 -19.2 15.6 -19.4 11.2 -19.4 8.0 -16.2 4.4 -13.0 4.6 -8.4 4.8 -3.4 8.2 -1.0 13.4 3.0 26.6 3.0 L27.4 -1.4 Q16.0 -1.4 11.8 -3.8 8.8 -5.4 8.8 -9.2 8.8 -11.6 10.6 -13.4 12.6 -15.6 17.2 -15.6 24.8 -15.2 29.4 -11.4 L32.4 -15.2 Q26.6 -20.8 22.8 -28.6 L32.8 -30.2 32.2 -34.0 21.0 -32.6" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__11">
+      <path d="M12.0 -3.2 L12.0 -3.2 Q9.2 -3.8 9.0 -16.0 9.0 -26.0 10.4 -35.4 L5.8 -36.0 Q4.8 -26.0 4.8 -16.2 5.0 1.2 11.6 2.0 14.6 2.4 16.6 0.0 19.2 -2.6 20.8 -8.2 L17.2 -11.0 Q14.8 -2.6 12.0 -3.2 M31.2 -33.4 L31.2 -33.4 27.4 -31.0 Q30.4 -27.0 32.8 -20.0 35.0 -13.4 35.6 -7.4 L40.2 -8.8 Q39.6 -15.6 37.2 -22.0 34.8 -28.6 31.2 -33.4" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__12">
+      <path d="M37.6 -2.0 L25.0 -2.0 Q19.6 -2.0 19.2 -4.8 19.0 -7.2 21.0 -10.0 L18.0 -12.2 Q15.6 -9.0 15.2 -5.8 14.8 -2.0 17.8 0.4 20.4 2.4 24.6 2.4 L37.6 2.4 37.6 -2.0 M27.8 -33.2 L15.4 -33.2 16.4 -40.8 12.0 -41.6 Q11.8 -37.4 11.0 -33.2 L2.4 -33.2 2.4 -29.4 10.4 -29.4 Q7.8 -15.4 2.0 -4.6 L5.6 -2.0 Q11.6 -14.0 14.6 -29.4 L27.8 -29.4 27.8 -33.2 M36.4 -23.4 L19.0 -23.4 19.0 -19.6 36.4 -19.6 36.4 -23.4" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__13">
+      <path d="M13.4 -1.0 L13.4 -1.0 Q10.8 -1.0 9.0 -2.2 7.4 -3.0 7.4 -4.6 7.6 -6.4 9.0 -7.8 10.4 -9.0 13.0 -9.0 L19.2 -8.2 19.2 -7.8 Q19.2 -3.6 17.2 -2.0 16.0 -1.0 13.4 -1.0 M23.2 -10.8 L23.2 -19.6 36.0 -19.6 36.0 -23.4 23.2 -23.4 23.2 -29.8 34.4 -29.8 34.4 -33.6 23.2 -33.6 23.2 -40.8 19.2 -40.8 19.2 -33.6 4.4 -33.6 4.4 -29.8 19.2 -29.8 19.2 -23.4 2.8 -23.4 2.8 -19.6 19.2 -19.6 19.2 -11.8 13.0 -12.4 Q8.6 -12.4 6.0 -10.0 4.0 -8.0 3.8 -5.2 3.8 -1.8 6.2 0.4 8.8 2.8 13.2 2.8 17.6 2.8 19.8 1.2 23.0 -1.0 23.2 -7.0 29.0 -4.8 33.6 -1.2 L36.2 -5.0 Q30.4 -8.6 23.2 -10.8" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__14">
+      <path d="M38.0 -21.4 L3.2 -21.4 3.2 -17.0 38.0 -17.0 38.0 -21.4" fill-rule="evenodd" stroke="none"/>
+    </g>
+  </defs>
 </svg>
