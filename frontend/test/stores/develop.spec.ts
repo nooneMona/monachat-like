@@ -1,13 +1,13 @@
 import { createPinia, setActivePinia } from "pinia";
-import { socketIOInstance } from "../socketIOInstance";
-import { useDevStore } from "./develop";
-import { useUserStore } from "./user";
+import { socketIOInstance } from "@/socketIOInstance";
+import { useDevStore } from "@/stores/develop";
+import { useUserStore } from "@/stores/user";
 
-const emitMock = vi.fn();
-const disconnectMock = vi.fn();
-const connectMock = vi.fn();
+const emitMock = vi.fn<typeof socketIOInstance.emit>();
 socketIOInstance.emit = emitMock;
+const disconnectMock = vi.fn<typeof socketIOInstance.disconnect>();
 socketIOInstance.disconnect = disconnectMock;
+const connectMock = vi.fn<typeof socketIOInstance.connect>();
 socketIOInstance.connect = connectMock;
 
 describe("Dev Store", () => {
