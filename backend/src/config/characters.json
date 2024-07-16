@@ -255,6 +255,58 @@
       "characters": ["tenki-1", "tenki-2", "tenki-3", "tenki-4", "kasa", "snow"]
     },
     {
+      "genre": "動物",
+      "characters": [
+        "wani",
+        "inu",
+        "neko",
+        "buta",
+        "tonosaru",
+        "tonosaruufo",
+        "kani"
+      ]
+    },
+    {
+      "genre": "女の子",
+      "characters": [
+        "girl1",
+        "girl2",
+        "girl3",
+        "girlb1",
+        "girlb2",
+        "girlb4",
+        "girlb3"
+      ]
+    },
+    {
+      "genre": "男の子",
+      "characters": ["boy1", "boy5", "kanpu1a", "boy2", "boy3"]
+    },
+    {
+      "genre": "乗り物",
+      "characters": ["pleo", "hopping"]
+    },
+    { "genre": "ロボ", "characters": ["robo1", "robo3", "robo2"] },
+    {
+      "genre": "ミステリー",
+      "characters": [
+        "yurei",
+        "kappa",
+        "hangyojin",
+        " uchujin",
+        "uchujin2",
+        "uchujin3",
+        "uchujin4",
+        "uchujin5",
+        "uchujin6",
+        "kaseijin",
+        "chupa",
+        "tutinoko",
+        "jinmenken"
+      ]
+    },
+    { "genre": "電波系", "characters": ["boy4", "uchujin7"] },
+    {
       "genre": "☆ω",
       "characters": ["poihorizon"]
     }

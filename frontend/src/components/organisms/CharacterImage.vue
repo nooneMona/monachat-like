@@ -42,6 +42,7 @@ const imageFilePath = computed(() => {
 const characterSVG = computed(() => {
   let text = fetchedSVGText.value;
   text = text.replaceAll(`style="fill:white;"`, `fill="${props.user.hexValue}"`);
+  text = text.replaceAll(`stroke-width="0.05"`, `stroke-width="0.5"`);
   return text.replaceAll(`fill="#ffffff"`, `fill="${props.user.hexValue}"`);
 });
 const scale = computed(() => {
