@@ -1,19 +1,19 @@
 import { BlackTrip, WhiteTrip } from "./trip";
 import { WhiteTripper, BlackTripper, TripperInput } from "./tripper";
 
-const WhiteTripperMock = jest.fn<WhiteTripper, []>().mockImplementation(() => {
+const WhiteTripperMock = vi.fn().mockImplementation(() => {
   return {
-    execute: jest.fn().mockReturnValue("tripResult"),
+    execute: vi.fn().mockReturnValue("tripResult"),
   };
 });
-const BlackTripperMock = jest.fn<BlackTripper, []>().mockImplementation(() => {
+const BlackTripperMock = vi.fn().mockImplementation(() => {
   return {
-    execute: jest.fn().mockReturnValue("tripResult"),
+    execute: vi.fn().mockReturnValue("tripResult"),
   };
 });
-const TripperInputMock = jest.fn<TripperInput, []>().mockImplementation(() => {
+const TripperInputMock = vi.fn().mockImplementation(() => {
   return {
-    getValue: jest.fn().mockReturnValue("tiv"),
+    getValue: vi.fn().mockReturnValue("tiv"),
   };
 });
 

@@ -42,106 +42,102 @@ const clientInfo: ClientInfo = {
   isMobile: true,
 };
 
-const ServerMock = jest.fn<IServerCommunicator, []>().mockImplementation(() => {
+const ServerMock = vi.fn().mockImplementation(() => {
   return {
-    sendCOM: jest.fn(),
-    sendENTER: jest.fn(),
-    sendSET: jest.fn(),
-    sendIG: jest.fn(),
-    sendEXIT: jest.fn(),
-    sendSLEEP: jest.fn(),
-    sendAWAKE: jest.fn(),
-    sendCOUNT: jest.fn(),
-    sendUsers: jest.fn(),
+    sendCOM: vi.fn(),
+    sendENTER: vi.fn(),
+    sendSET: vi.fn(),
+    sendIG: vi.fn(),
+    sendEXIT: vi.fn(),
+    sendSLEEP: vi.fn(),
+    sendAWAKE: vi.fn(),
+    sendCOUNT: vi.fn(),
+    sendUsers: vi.fn(),
   };
 });
 
-const ClientMock = jest.fn<IClientCommunicator, []>().mockImplementation(() => {
+const ClientMock = vi.fn().mockImplementation(() => {
   return {
-    update: jest.fn(),
-    sendUsers: jest.fn(),
-    sendAuth: jest.fn(),
-    moveRoom: jest.fn(),
-    disconnect: jest.fn(),
+    update: vi.fn(),
+    sendUsers: vi.fn(),
+    sendAuth: vi.fn(),
+    moveRoom: vi.fn(),
+    disconnect: vi.fn(),
   };
 });
 
-const IDGeneratorMock = jest.fn<IDGeneratable, []>().mockImplementation(() => {
+const IDGeneratorMock = vi.fn().mockImplementation(() => {
   return {
-    generate: jest.fn().mockReturnValueOnce("id").mockReturnValueOnce("token"),
+    generate: vi.fn().mockReturnValueOnce("id").mockReturnValueOnce("token"),
   };
 });
 
-const AccountRepositoryMock = jest
-  .fn<IAccountRepository, []>()
-  .mockImplementation(() => {
-    const account = Account.instantiate({
-      idGenerator: new IDGeneratorMock(),
-      socketId: "00",
-    });
-    account.character = new Character()
-      .updateAvatar(avatarData.copy())
-      .moveRoom("/1");
-    account.lastCommentTime = new Date(2000, 0, 0);
-    return {
-      getAccountBySocketId: jest.fn().mockReturnValue(account),
-      getAccountByToken: jest.fn().mockReturnValue(account),
-      fetchUsers: jest.fn().mockReturnValue([{ id: "1" }, { id: "2" }]),
-      fetchUser: jest.fn().mockReturnValue({
-        id: "id",
-        room: "/MONA8094",
-        x: 100,
-        y: 100,
-        scl: 100,
-        stat: "通常",
-        name: "名無しさん",
-        ihash: "ABCDE12346",
-        trip: "hoge2Trip",
-        r: 70,
-        g: 55,
-        b: 60,
-        type: "mona",
-        isMobile: true,
-      }),
-      getRooms: jest.fn().mockReturnValue([{ c: 1, n: "/1" }]),
-      countSameIhash: jest.fn().mockReturnValue(1),
-      isPermittedToEnter: jest.fn().mockReturnValue(true),
-      create: jest.fn().mockReturnValue(account),
-      updateSocketIdWithValidToken: jest.fn(),
-      updateAlive: jest.fn(),
-      updateIsMobile: jest.fn(),
-      updateLastCommentTime: jest.fn(),
-      updateCharacter: jest.fn(),
-      speak: jest.fn().mockReturnValue(true),
-    };
+const AccountRepositoryMock = vi.fn().mockImplementation(() => {
+  const account = Account.instantiate({
+    idGenerator: new IDGeneratorMock(),
+    socketId: "00",
   });
-
-const SystemLoggerMock = jest
-  .fn<ISystemReceivedLogger, []>()
-  .mockImplementation(() => {
-    return {
-      logReceivedConnection: jest.fn(),
-      logReceivedCOM: jest.fn(),
-      logReceivedENTER: jest.fn(),
-      logReceivedEXIT: jest.fn(),
-      logReceivedSET: jest.fn(),
-      logReceivedIG: jest.fn(),
-      logReceivedAUTH: jest.fn(),
-      logReceivedERROR: jest.fn(),
-      logReceivedSUICIDE: jest.fn(),
-      logReceivedDisconnect: jest.fn(),
-      logReceivedParseError: jest.fn(),
-    };
-  });
-
-const WhiteTripperMock = jest.fn<Tripper, []>().mockImplementation(() => {
+  account.character = new Character()
+    .updateAvatar(avatarData.copy())
+    .moveRoom("/1");
+  account.lastCommentTime = new Date(2000, 0, 0);
   return {
-    execute: jest.fn().mockReturnValue("hogeWhiteTrip"),
+    getAccountBySocketId: vi.fn().mockReturnValue(account),
+    getAccountByToken: vi.fn().mockReturnValue(account),
+    fetchUsers: vi.fn().mockReturnValue([{ id: "1" }, { id: "2" }]),
+    fetchUser: vi.fn().mockReturnValue({
+      id: "id",
+      room: "/MONA8094",
+      x: 100,
+      y: 100,
+      scl: 100,
+      stat: "通常",
+      name: "名無しさん",
+      ihash: "ABCDE12346",
+      trip: "hoge2Trip",
+      r: 70,
+      g: 55,
+      b: 60,
+      type: "mona",
+      isMobile: true,
+    }),
+    getRooms: vi.fn().mockReturnValue([{ c: 1, n: "/1" }]),
+    countSameIhash: vi.fn().mockReturnValue(1),
+    isPermittedToEnter: vi.fn().mockReturnValue(true),
+    create: vi.fn().mockReturnValue(account),
+    updateSocketIdWithValidToken: vi.fn(),
+    updateAlive: vi.fn(),
+    updateIsMobile: vi.fn(),
+    updateLastCommentTime: vi.fn(),
+    updateCharacter: vi.fn(),
+    speak: vi.fn().mockReturnValue(true),
   };
 });
-const BlackTripperMock = jest.fn<Tripper, []>().mockImplementation(() => {
+
+const SystemLoggerMock = vi.fn().mockImplementation(() => {
   return {
-    execute: jest.fn().mockReturnValue("hogeBlackTrip"),
+    logReceivedConnection: vi.fn(),
+    logReceivedCOM: vi.fn(),
+    logReceivedENTER: vi.fn(),
+    logReceivedEXIT: vi.fn(),
+    logReceivedSET: vi.fn(),
+    logReceivedIG: vi.fn(),
+    logReceivedAUTH: vi.fn(),
+    logReceivedERROR: vi.fn(),
+    logReceivedSUICIDE: vi.fn(),
+    logReceivedDisconnect: vi.fn(),
+    logReceivedParseError: vi.fn(),
+  };
+});
+
+const WhiteTripperMock = vi.fn().mockImplementation(() => {
+  return {
+    execute: vi.fn().mockReturnValue("hogeWhiteTrip"),
+  };
+});
+const BlackTripperMock = vi.fn().mockImplementation(() => {
+  return {
+    execute: vi.fn().mockReturnValue("hogeBlackTrip"),
   };
 });
 
@@ -237,8 +233,8 @@ describe("#receivedCOM", () => {
     });
     account.character = account.character.moveRoom("/1");
     account.lastCommentTime = new Date(2000, 0, 0);
-    accountRep.getAccountBySocketId = jest.fn().mockReturnValue(undefined);
-    accountRep.getAccountByToken = jest
+    accountRep.getAccountBySocketId = vi.fn().mockReturnValue(undefined);
+    accountRep.getAccountByToken = vi
       .fn()
       .mockReturnValueOnce(undefined)
       .mockReturnValue(account);
@@ -268,7 +264,7 @@ describe("#receivedCOM", () => {
       idGenerator: new IDGeneratorMock(),
       socketId: "socketId",
     });
-    accountRep.getAccountByToken = jest.fn().mockReturnValue(account);
+    accountRep.getAccountByToken = vi.fn().mockReturnValue(account);
     presenter.receivedCOM(
       {
         token: "token",
@@ -286,8 +282,8 @@ describe("#receivedCOM", () => {
       idGenerator: new IDGeneratorMock(),
       socketId: "socketId",
     });
-    accountRep.create = jest.fn().mockReturnValue(account);
-    accountRep.getAccountByToken = jest.fn().mockReturnValue(undefined);
+    accountRep.create = vi.fn().mockReturnValue(account);
+    accountRep.getAccountByToken = vi.fn().mockReturnValue(undefined);
     presenter.receivedCOM(
       {
         token: "token",
@@ -301,7 +297,7 @@ describe("#receivedCOM", () => {
   });
 
   it("should disconnect if interval of comment is too short", () => {
-    accountRep.speak = jest.fn().mockReturnValue(false);
+    accountRep.speak = vi.fn().mockReturnValue(false);
     const account = Account.instantiate({
       idGenerator: new IDGeneratorMock(),
       socketId: "socketId",
@@ -310,7 +306,7 @@ describe("#receivedCOM", () => {
     const milliSecNow = new Date().getTime();
     const tooShortPreviousTime = new Date(milliSecNow - 500);
     account.lastCommentTime = tooShortPreviousTime;
-    accountRep.getAccountByToken = jest.fn().mockReturnValue(account);
+    accountRep.getAccountByToken = vi.fn().mockReturnValue(account);
     presenter.receivedCOM(
       {
         token: "token",
@@ -456,8 +452,8 @@ describe("#receivedENTER", () => {
       socketId: "socketId",
     });
     account.character = account.character.moveRoom("/1");
-    accountRep.getAccountBySocketId = jest.fn().mockReturnValue(undefined);
-    accountRep.getAccountByToken = jest
+    accountRep.getAccountBySocketId = vi.fn().mockReturnValue(undefined);
+    accountRep.getAccountByToken = vi
       .fn()
       .mockReturnValueOnce(undefined)
       .mockReturnValue(account);
@@ -491,7 +487,7 @@ describe("#receivedENTER", () => {
   });
 
   it("should accept if currentRoom is null the first time", () => {
-    accountRep.getAccountByToken = jest.fn().mockReturnValue(undefined);
+    accountRep.getAccountByToken = vi.fn().mockReturnValue(undefined);
     presenter.receivedENTER(
       {
         token: "token",
@@ -527,7 +523,7 @@ describe("#receviedEXIT", () => {
   it("正常系 部屋選択画面での退室", () => {});
 
   it("should remake authentication if id is not found", () => {
-    accountRep.getAccountByToken = jest.fn().mockReturnValue(undefined);
+    accountRep.getAccountByToken = vi.fn().mockReturnValue(undefined);
     presenter.receivedEXIT(
       {
         token: "token",
@@ -554,7 +550,7 @@ describe("#receivedSET", () => {
       .updateStatus(new Status("通常"))
       .moveRoom("/1");
     const mockAccountValue = account;
-    accountRep.getAccountByToken = jest.fn().mockReturnValue(mockAccountValue);
+    accountRep.getAccountByToken = vi.fn().mockReturnValue(mockAccountValue);
     presenter.receivedSET(
       {
         token: "token",
@@ -591,7 +587,7 @@ describe("#receivedSET", () => {
       .updateStatus(new Status("通常"))
       .moveRoom("/1");
     const mockAccountValue = account;
-    accountRep.getAccountByToken = jest.fn().mockReturnValue(mockAccountValue);
+    accountRep.getAccountByToken = vi.fn().mockReturnValue(mockAccountValue);
     presenter.receivedSET(
       {
         token: "token",
@@ -624,8 +620,8 @@ describe("#receivedSET", () => {
       socketId: "socketId",
     });
     account.character = account.character.moveRoom("/1");
-    accountRep.getAccountBySocketId = jest.fn().mockReturnValue(undefined);
-    accountRep.getAccountByToken = jest
+    accountRep.getAccountBySocketId = vi.fn().mockReturnValue(undefined);
+    accountRep.getAccountByToken = vi
       .fn()
       .mockReturnValueOnce(undefined)
       .mockReturnValue(account);
@@ -667,7 +663,7 @@ describe("#receivedAUTH", () => {
   });
 
   it("should return authentication error if token is invalid", () => {
-    accountRep.getAccountByToken = jest.fn().mockReturnValue(undefined);
+    accountRep.getAccountByToken = vi.fn().mockReturnValue(undefined);
     presenter.receivedAUTH({ token: "noToken" }, clientInfo);
     expect(client.sendAuth).toBeCalledTimes(1);
     expect(client.sendAuth).toBeCalledWith({ id: "error", token: "noToken" });
@@ -705,8 +701,8 @@ describe("#receivedDisconnect", () => {
       idGenerator: new IDGeneratorMock(),
       socketId: "socketId",
     });
-    accountRep.getAccountBySocketId = jest.fn().mockReturnValue(account);
-    accountRep.getAccountByToken = jest.fn().mockReturnValue(undefined);
+    accountRep.getAccountBySocketId = vi.fn().mockReturnValue(account);
+    accountRep.getAccountByToken = vi.fn().mockReturnValue(undefined);
     presenter.receivedDisconnect("server shutting down", clientInfo);
     expect(accountRep.updateAlive).toBeCalledTimes(1);
     expect(server.sendSLEEP).toBeCalledTimes(0);
@@ -715,7 +711,7 @@ describe("#receivedDisconnect", () => {
   });
 
   it("should do nothing if id is not found", () => {
-    accountRep.getAccountBySocketId = jest.fn().mockReturnValue(undefined);
+    accountRep.getAccountBySocketId = vi.fn().mockReturnValue(undefined);
     presenter.receivedDisconnect("server shutting down", clientInfo);
     expect(systemLogger.logReceivedDisconnect).toBeCalledTimes(1);
     expect(accountRep.updateCharacter).toBeCalledTimes(0);
@@ -730,7 +726,7 @@ describe("#receivedJoiningRoom", () => {
   });
 
   it("should do nothing if id is not found", () => {
-    accountRep.getAccountBySocketId = jest.fn().mockReturnValue(undefined);
+    accountRep.getAccountBySocketId = vi.fn().mockReturnValue(undefined);
     presenter.completedJoiningRoom("/1", clientInfo);
     expect(accountRep.updateCharacter).toBeCalledTimes(0);
   });

@@ -14,4 +14,4 @@ describe("validateAUTHRequest (use case)", () => {
   });
 });
 
-describe("validateAUTHRequest (attacker)", () => {});
+describe.todo("validateAUTHRequest (attacker)", () => {});
