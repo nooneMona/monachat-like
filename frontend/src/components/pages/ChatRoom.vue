@@ -2,7 +2,7 @@
   <div ref="root" class="room" @drop.prevent="drop" @dragover.prevent @dragenter.prevent>
     <div class="top-right-text"><SpanText :size="15" :text="topRightText" /></div>
     <img
-      v-if="currentRoom != undefined && !isDarkMode"
+      v-if="currentRoom != undefined"
       class="room-img"
       :src="`img/roomimg/${currentRoom?.img_url ?? ''}`"
       alt="背景画像"

@@ -1,241 +1,100 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="721px" height="281px" viewBox="0 0 721 281" enable-background="new 0 0 721 281" xml:space="preserve">  <image id="image0" width="721" height="281" x="0" y="0"
-    href="data:image/png;base64,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" />
+<svg xmlns:ffdec="https://www.free-decompiler.com/flash" xmlns:xlink="http://www.w3.org/1999/xlink" ffdec:objectType="frame" height="280.0px" width="720.0px" xmlns="http://www.w3.org/2000/svg">
+  <g transform="matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)">
+    <use ffdec:characterId="3" height="12.55" transform="matrix(1.0, 0.0, 0.0, 1.0, 273.8, 7.95)" width="181.5" xlink:href="#text0"/>
+    <use ffdec:characterId="7" height="90.0" id="yama1" transform="matrix(1.0, 0.0, 0.0, 1.0, 44.95, 38.0)" width="213.0" xlink:href="#sprite0"/>
+    <use ffdec:characterId="11" height="57.5" id="yama2" transform="matrix(1.0, 0.0, 0.0, 1.0, 14.8, 127.0)" width="102.15" xlink:href="#sprite1"/>
+    <use ffdec:characterId="15" height="59.5" id="yama3" transform="matrix(1.0, 0.0, 0.0, 1.0, 200.95, 125.0)" width="109.1" xlink:href="#sprite2"/>
+    <use ffdec:characterId="7" height="90.0" id="yama7" transform="matrix(1.0, 0.0, 0.0, 1.0, 445.2, 34.2)" width="213.0" xlink:href="#sprite0"/>
+    <use ffdec:characterId="11" height="57.5" id="yama8" transform="matrix(1.0, 0.0, 0.0, 1.0, 415.05, 123.2)" width="102.15" xlink:href="#sprite1"/>
+    <use ffdec:characterId="15" height="59.5" id="yama9" transform="matrix(1.0, 0.0, 0.0, 1.0, 601.2, 121.2)" width="109.1" xlink:href="#sprite2"/>
+    <use ffdec:characterId="7" height="90.0" id="yama4" transform="matrix(1.0, 0.0, 0.0, 1.0, 265.2, 89.2)" width="213.0" xlink:href="#sprite0"/>
+    <use ffdec:characterId="11" height="57.5" id="yama5" transform="matrix(1.0, 0.0, 0.0, 1.0, 235.05, 178.2)" width="102.15" xlink:href="#sprite1"/>
+    <use ffdec:characterId="15" height="59.5" id="yama6" transform="matrix(1.0, 0.0, 0.0, 1.0, 421.2, 176.2)" width="109.1" xlink:href="#sprite2"/>
+  </g>
+  <defs>
+    <g id="text0" transform="matrix(1.0, 0.0, 0.0, 1.0, -0.6, -0.7)">
+      <g transform="matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)">
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 0.0, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__0"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 9.7, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__1"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 17.9, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__2"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 26.0, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__0"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 35.7, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__3"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 47.55, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__4"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 59.95, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__5"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 71.95, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__6"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 84.35, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__7"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 95.8, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__8"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 107.8, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__9"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 119.25, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__10"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 131.1, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__11"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 141.65, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__8"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 153.65, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__12"/>
+        <use fill="#000000" height="12.55" transform="matrix(0.2734, 0.0, 0.0, 0.2734, 163.75, 12.0)" width="181.5" xlink:href="#font_MS_UI_Gothic__13"/>
+      </g>
+    </g>
+    <g id="font_MS_UI_Gothic__0">
+      <path d="M32.2 -33.6 L13.0 -33.6 13.2 -39.4 8.8 -39.4 Q9.0 -31.8 7.8 -27.2 6.4 -21.8 2.2 -17.8 L5.4 -14.6 Q11.0 -20.2 12.6 -29.8 L28.2 -29.8 28.2 -27.0 Q28.2 -17.0 23.2 -10.4 18.2 -4.0 8.0 -0.4 L11.2 3.4 Q21.0 -0.2 26.2 -7.6 32.2 -15.6 32.2 -27.0 L32.2 -33.6" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__1">
+      <path d="M8.0 -37.6 L4.0 -37.6 4.0 -14.6 8.0 -14.6 8.0 -37.6 M26.6 -39.2 L22.6 -39.2 22.6 -17.0 Q22.6 -11.6 19.0 -6.6 15.8 -2.4 8.0 -0.2 L11.0 3.6 Q19.6 0.8 22.8 -4.4 26.6 -9.2 26.6 -17.0 L26.6 -39.2" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__2">
+      <path d="M5.6 -25.8 L2.0 -24.2 Q4.2 -20.2 6.6 -14.0 L10.4 -15.8 Q7.4 -23.2 5.6 -25.8 M21.2 -10.4 L21.2 -10.4 Q17.6 -3.6 7.8 -0.2 L10.4 3.2 Q20.2 -1.2 24.2 -8.4 28.2 -15.4 28.4 -27.6 L24.6 -28.0 Q24.8 -16.4 21.2 -10.4 M14.4 -30.0 L11.0 -28.4 Q13.2 -24.6 15.6 -18.4 L19.4 -20.2 Q17.2 -25.6 14.4 -30.0" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__3">
+      <path d="M15.0 -13.6 L15.0 -13.6 Q13.8 -14.6 14.0 -17.6 14.4 -22.2 18.4 -22.2 19.8 -22.2 21.0 -20.8 22.4 -19.4 22.2 -16.8 21.8 -13.0 18.8 -12.8 16.2 -12.6 15.0 -13.6 M40.2 -33.4 L26.6 -33.4 26.6 -41.6 22.6 -41.6 22.6 -33.4 3.0 -33.4 3.0 -29.0 22.6 -29.0 22.6 -24.4 Q20.8 -25.4 18.4 -25.6 14.8 -25.6 12.6 -23.0 10.8 -20.8 10.4 -17.4 10.0 -13.0 13.2 -10.6 15.6 -8.8 17.6 -9.0 20.8 -9.2 22.8 -11.4 22.8 -7.0 20.0 -4.0 17.8 -1.0 12.6 1.0 L14.6 4.4 Q21.2 1.8 24.2 -3.0 27.0 -7.4 27.2 -14.2 27.2 -17.6 26.6 -19.8 L26.6 -29.0 40.2 -29.0 40.2 -33.4" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__4">
+      <path d="M35.0 -2.4 L35.0 -2.4 Q33.6 -2.6 33.8 -4.8 L33.8 -25.4 Q33.6 -33.4 28.2 -33.8 24.0 -34.2 20.2 -31.4 17.8 -29.6 14.8 -25.4 L14.8 -40.6 10.8 -40.6 10.8 -29.0 1.8 -29.0 1.8 -24.6 10.8 -24.6 10.8 -19.8 Q5.4 -11.6 1.8 -7.4 L4.6 -4.2 Q7.6 -8.2 10.8 -13.4 L10.8 3.4 14.8 3.4 14.8 -19.2 Q18.4 -25.0 20.8 -27.4 23.6 -30.2 26.6 -30.2 28.2 -30.2 29.0 -29.0 29.8 -28.0 29.8 -25.4 L29.8 -4.8 Q29.8 -1.4 31.6 0.4 33.4 2.0 35.2 2.0 38.6 2.2 40.2 -0.4 42.2 -3.0 42.2 -9.8 L38.6 -11.0 Q38.6 -1.6 35.0 -2.4" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__5">
+      <path d="M18.6 -3.0 L18.6 -3.0 Q17.2 -4.0 17.2 -5.8 17.2 -7.6 18.6 -8.8 19.8 -9.8 21.4 -10.0 24.0 -10.2 27.4 -8.8 27.2 -2.0 22.4 -2.0 20.2 -1.8 18.6 -3.0 M10.0 -38.0 L10.0 -38.0 6.0 -39.6 Q3.4 -27.2 3.6 -18.4 3.8 -7.2 6.0 1.8 L10.2 0.2 Q8.0 -10.4 7.8 -20.0 7.8 -29.2 10.0 -38.0 M31.4 -11.2 L31.4 -26.6 39.6 -26.6 39.6 -30.4 31.4 -30.4 31.4 -40.2 27.4 -40.2 27.4 -30.4 14.6 -30.4 14.6 -26.6 27.4 -26.6 27.4 -12.6 Q24.6 -13.4 21.8 -13.4 17.6 -13.4 15.4 -10.6 13.6 -8.4 13.6 -5.6 13.6 -2.8 15.4 -0.8 18.0 2.0 23.2 1.6 30.0 1.2 31.2 -6.8 34.8 -4.4 37.6 -1.2 L40.0 -4.8 Q35.8 -9.0 31.4 -11.2 M36.2 -41.6 L32.8 -41.6 32.8 -33.8 36.2 -33.8 36.2 -41.6 M41.8 -41.6 L38.4 -41.6 38.4 -33.8 41.8 -33.8 41.8 -41.6" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__6">
+      <path d="M6.4 -7.2 L6.4 -7.2 Q6.2 -10.8 8.2 -14.0 11.0 -18.0 16.0 -18.0 L16.6 -18.0 Q12.8 -5.0 8.8 -5.0 6.6 -5.0 6.4 -7.2 M35.0 -17.4 L35.0 -28.4 31.0 -28.4 31.0 -19.0 Q26.6 -20.4 21.8 -21.2 23.2 -26.2 24.4 -32.6 L24.4 -36.8 7.6 -36.8 7.6 -32.4 20.0 -32.4 Q19.2 -26.4 17.8 -21.6 L15.8 -21.8 Q10.2 -21.8 6.2 -17.8 2.4 -13.8 2.4 -8.0 2.6 -0.2 9.2 -0.4 15.6 -0.6 20.6 -17.6 25.6 -16.8 31.0 -14.2 L31.0 -13.8 30.8 -14.2 Q31.0 -4.8 22.2 0.2 L25.0 3.6 Q33.8 -2.2 34.8 -12.2 L39.4 -9.0 41.8 -13.2 Q38.6 -15.6 35.0 -17.4" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__7">
+      <path d="M27.4 -0.8 L27.4 -0.8 Q26.2 -0.6 25.8 -1.6 25.0 -2.4 25.0 -4.0 L25.0 -14.2 Q25.0 -16.8 23.4 -19.0 21.2 -21.6 17.8 -21.6 14.2 -21.6 11.0 -18.4 L16.4 -39.0 12.0 -40.2 Q8.2 -22.8 1.8 0.6 L6.0 2.2 Q8.6 -9.4 10.0 -12.6 11.0 -15.0 13.4 -16.4 15.4 -17.6 17.4 -17.6 19.0 -17.6 20.0 -16.6 21.0 -15.6 21.0 -14.2 L21.0 -4.0 Q21.0 -0.2 22.6 1.6 24.2 3.4 27.0 3.4 32.2 3.6 35.2 -2.0 38.2 -6.8 40.0 -17.8 L36.2 -19.8 Q33.4 -0.8 27.4 -0.8" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__8">
+      <path d="M29.2 -7.0 L29.2 -7.0 Q29.2 -4.0 27.6 -2.4 25.8 -0.6 23.2 -0.6 17.6 -0.6 17.6 -4.6 17.6 -8.8 23.0 -8.8 26.4 -8.8 29.2 -7.0 M29.2 -22.4 L29.2 -11.4 Q25.8 -12.6 22.6 -12.6 18.6 -12.6 16.4 -10.8 13.6 -8.4 13.6 -4.6 13.6 -0.6 16.2 1.4 18.8 3.4 23.0 3.4 27.2 3.4 29.6 1.6 32.6 -0.6 33.0 -4.8 L37.2 -1.8 39.6 -5.6 Q36.4 -7.8 33.2 -9.6 L33.2 -22.4 29.2 -22.4 M26.8 -32.0 L25.6 -28.0 Q31.8 -26.8 38.0 -23.8 L39.4 -28.0 Q33.2 -30.8 26.8 -32.0 M3.2 -29.2 L11.0 -29.2 Q8.2 -14.8 2.8 -4.4 L6.6 -2.0 Q12.6 -14.6 15.2 -29.2 L24.2 -29.2 24.2 -33.6 16.0 -33.6 17.2 -40.8 13.0 -41.6 11.8 -33.6 3.2 -33.6 3.2 -29.2" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__9">
+      <path d="M37.2 -36.4 L2.2 -36.4 2.2 -32.6 23.2 -32.6 Q18.0 -29.6 15.0 -24.2 12.4 -19.4 12.4 -15.0 12.6 -7.4 17.2 -3.0 22.4 2.0 31.8 2.0 L33.0 -2.4 Q24.8 -2.4 20.8 -5.6 16.6 -9.0 16.6 -15.6 16.6 -22.4 22.0 -27.2 27.8 -32.2 37.2 -32.4 L37.2 -36.4 M34.8 -28.0 L31.4 -28.0 31.4 -20.2 34.8 -20.2 34.8 -28.0 M40.2 -28.0 L36.8 -28.0 36.8 -20.2 40.2 -20.2 40.2 -28.0" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__10">
+      <path d="M30.6 -32.0 L30.6 -32.0 27.2 -31.6 Q25.0 -36.2 22.4 -39.4 L19.2 -37.4 Q21.4 -34.6 23.2 -30.8 L14.6 -27.8 11.8 -39.4 8.0 -38.2 11.2 -26.4 2.6 -22.8 4.6 -18.8 12.2 -22.4 Q15.0 -10.8 17.8 3.2 L21.8 1.4 15.6 -24.0 Q21.2 -26.4 24.8 -27.4 26.2 -24.0 27.2 -20.6 L31.0 -22.0 Q30.6 -24.8 29.0 -28.2 L30.2 -28.2 Q37.0 -28.2 37.0 -21.0 37.0 -14.0 31.4 -14.0 28.0 -14.0 24.2 -17.0 L22.4 -13.4 Q27.4 -10.0 31.4 -10.0 35.0 -10.0 37.4 -12.0 41.0 -15.0 40.8 -21.6 40.6 -27.0 37.0 -29.8 34.4 -31.8 30.6 -32.0" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__11">
+      <path d="M13.4 -1.0 L13.4 -1.0 Q10.8 -1.0 9.0 -2.2 7.4 -3.0 7.4 -4.6 7.6 -6.4 9.0 -7.8 10.4 -9.0 13.0 -9.0 L19.2 -8.2 19.2 -7.8 Q19.2 -3.6 17.2 -2.0 16.0 -1.0 13.4 -1.0 M23.2 -10.8 L23.2 -19.6 36.0 -19.6 36.0 -23.4 23.2 -23.4 23.2 -29.8 34.4 -29.8 34.4 -33.6 23.2 -33.6 23.2 -40.8 19.2 -40.8 19.2 -33.6 4.4 -33.6 4.4 -29.8 19.2 -29.8 19.2 -23.4 2.8 -23.4 2.8 -19.6 19.2 -19.6 19.2 -11.8 13.0 -12.4 Q8.6 -12.4 6.0 -10.0 4.0 -8.0 3.8 -5.2 3.8 -1.8 6.2 0.4 8.8 2.8 13.2 2.8 17.6 2.8 19.8 1.2 23.0 -1.0 23.2 -7.0 29.0 -4.8 33.6 -1.2 L36.2 -5.0 Q30.4 -8.6 23.2 -10.8" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__12">
+      <path d="M27.4 -6.8 L27.4 -6.8 Q25.0 -3.0 20.6 -2.8 15.0 -2.6 13.2 -4.4 11.4 -6.4 11.4 -11.4 L11.4 -39.0 7.4 -39.0 7.4 -11.4 Q7.6 -4.2 10.0 -1.2 12.6 2.0 19.0 1.8 32.2 1.8 34.8 -14.6 L30.4 -16.6 Q29.6 -10.0 27.4 -6.8" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="font_MS_UI_Gothic__13">
+      <path d="M38.0 -21.4 L3.2 -21.4 3.2 -17.0 38.0 -17.0 38.0 -21.4" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="sprite0" transform="matrix(1.0, 0.0, 0.0, 1.0, 113.2, 44.75)">
+      <use ffdec:characterId="4" height="90.0" transform="matrix(1.0, 0.0, 0.0, 1.0, -113.2, -44.75)" width="148.0" xlink:href="#shape0"/>
+    </g>
+    <g id="shape0" transform="matrix(1.0, 0.0, 0.0, 1.0, 113.2, 44.75)">
+      <path d="M17.9 -39.4 L7.0 -30.3 6.4 -30.9 17.35 -40.05 17.9 -39.4 M9.5 -15.9 L-1.4 -25.0 -0.85 -25.65 10.05 -16.5 9.5 -15.9 M3.3 -5.4 L3.3 -7.5 5.4 -7.5 5.4 -5.4 3.3 -5.4 M17.9 -6.7 L30.65 -6.7 30.65 -6.2 17.9 -6.2 17.9 -6.7 M14.9 -9.45 Q15.55 -8.1 15.55 -6.3 15.55 -4.8 14.9 -3.45 L13.05 -0.8 12.5 -1.3 Q13.75 -2.7 14.25 -3.8 14.8 -5.0 14.8 -6.3 14.8 -7.95 14.25 -9.1 13.75 -10.15 12.5 -11.3 L13.05 -11.8 Q14.35 -10.6 14.9 -9.45 M21.6 12.9 L10.65 3.8 11.2 3.15 22.15 12.3 21.6 12.9 M9.35 3.8 L-1.6 12.9 -2.15 12.3 8.8 3.15 9.35 3.8 M17.65 41.7 L6.75 32.6 7.3 31.95 18.2 41.1 17.65 41.7 M5.2 27.3 L-5.7 18.2 -5.15 17.55 5.8 26.7 5.2 27.3 M-60.55 -1.5 L-61.1 -2.1 -50.15 -11.25 -49.6 -10.6 -60.55 -1.5 M-48.95 -12.85 L-36.15 -12.85 -36.15 -12.3 -48.95 -12.3 -48.95 -12.85 M-8.9 -41.65 L-8.9 -28.9 -9.4 -28.9 -9.4 -41.65 -8.9 -41.65 M-15.55 -25.0 L-26.45 -15.9 -27.0 -16.5 -16.1 -25.65 -15.55 -25.0 M-14.85 -27.25 L-2.1 -27.25 -2.1 -26.7 -14.85 -26.7 -14.85 -27.25 M-28.65 -30.9 L-29.2 -30.3 -40.15 -39.4 -39.55 -40.05 -28.65 -30.9 M-31.55 -10.9 Q-31.95 -10.3 -32.5 -10.3 -32.9 -10.3 -33.6 -11.05 -34.2 -11.6 -34.55 -11.6 L-35.2 -11.1 -35.55 -10.45 -36.0 -11.0 -35.5 -12.1 Q-35.15 -12.65 -34.6 -12.65 -34.15 -12.65 -33.55 -12.05 -32.8 -11.4 -32.35 -11.4 L-31.75 -11.9 -31.4 -12.6 -30.95 -11.9 -31.55 -10.9 M-29.6 -11.25 L-18.7 -2.1 -19.25 -1.5 -30.15 -10.6 -29.6 -11.25 M-13.75 -7.5 L-13.75 -5.4 -15.9 -5.4 -15.9 -7.5 -13.75 -7.5 M-0.6 -10.1 L-5.2 -1.8 -9.8 -10.1 -8.85 -10.7 -7.7 -8.65 -2.7 -8.65 -1.6 -10.7 -0.6 -10.1 M-7.2 -7.6 L-5.2 -4.05 -3.2 -7.6 -7.2 -7.6 M-19.6 2.5 L-20.2 3.5 Q-20.6 4.1 -21.15 4.1 -21.6 4.1 -22.3 3.35 L-23.25 2.8 Q-23.7 2.8 -23.9 3.3 L-24.2 3.95 -24.7 3.4 -24.15 2.3 Q-23.8 1.75 -23.3 1.75 -22.8 1.75 -22.2 2.35 L-21.05 3.0 -20.4 2.5 -20.1 1.8 -19.6 2.5 M-18.3 3.15 L-7.35 12.3 -7.95 12.9 -18.85 3.8 -18.3 3.15 M-2.85 13.2 L-2.85 13.8 -6.7 13.8 -6.7 13.2 -2.85 13.2 M-25.4 1.8 L-24.95 2.5 -25.55 3.5 Q-25.95 4.1 -26.5 4.1 -26.9 4.1 -27.6 3.35 -28.2 2.8 -28.55 2.8 -29.0 2.8 -29.2 3.3 L-29.55 3.95 -30.0 3.4 -29.5 2.3 Q-29.15 1.75 -28.6 1.75 -28.15 1.75 -27.55 2.35 L-26.35 3.0 -25.75 2.5 -25.4 1.8 M-30.75 1.8 L-30.25 2.5 -30.85 3.5 Q-31.25 4.1 -31.8 4.1 -32.25 4.1 -32.95 3.35 -33.55 2.8 -33.9 2.8 -34.35 2.8 -34.55 3.3 L-34.85 3.95 -35.35 3.4 -34.8 2.3 Q-34.45 1.75 -33.95 1.75 L-32.85 2.35 -31.7 3.0 Q-31.45 3.0 -31.05 2.5 L-30.75 1.8 M-35.55 2.5 L-36.15 3.5 Q-36.6 4.1 -37.15 4.1 -37.55 4.1 -38.25 3.35 -38.85 2.8 -39.2 2.8 -39.65 2.8 -39.85 3.3 L-40.15 3.95 -40.65 3.4 -40.15 2.3 Q-39.8 1.75 -39.25 1.75 -38.8 1.75 -38.15 2.35 -37.45 3.0 -37.0 3.0 -36.75 3.0 -36.35 2.5 L-36.05 1.8 -35.55 2.5 M-40.9 2.5 L-41.5 3.5 Q-41.9 4.1 -42.45 4.1 L-43.55 3.35 -44.55 2.8 Q-45.0 2.8 -45.15 3.3 L-45.5 3.95 -45.95 3.4 -45.45 2.3 Q-45.1 1.75 -44.55 1.75 -44.1 1.75 -43.5 2.35 -42.8 3.0 -42.35 3.0 L-41.7 2.5 -41.35 1.8 -40.9 2.5 M-46.7 1.8 L-46.2 2.5 -46.8 3.5 Q-47.2 4.1 -47.75 4.1 -48.2 4.1 -48.9 3.35 L-49.85 2.8 Q-50.3 2.8 -50.5 3.3 L-50.8 3.95 -51.3 3.4 -50.75 2.3 Q-50.4 1.75 -49.9 1.75 -49.4 1.75 -48.8 2.35 L-47.65 3.0 -47.0 2.5 -46.7 1.8 M-52.35 2.5 L-52.0 1.8 -51.55 2.5 -52.15 3.5 Q-52.55 4.1 -53.1 4.1 -53.5 4.1 -54.2 3.35 -54.8 2.8 -55.15 2.8 -55.6 2.8 -55.8 3.3 L-56.15 3.95 -56.6 3.4 -56.1 2.3 Q-55.75 1.75 -55.2 1.75 -54.75 1.75 -54.15 2.35 L-52.95 3.0 -52.35 2.5 M-57.35 1.8 L-56.85 2.5 -57.45 3.5 Q-57.85 4.1 -58.4 4.1 L-59.55 3.35 Q-60.15 2.8 -60.5 2.8 -60.95 2.8 -61.15 3.3 L-61.45 3.95 -61.95 3.4 -61.4 2.3 Q-61.05 1.75 -60.55 1.75 -60.05 1.75 -59.45 2.35 -58.75 3.0 -58.3 3.0 L-57.65 2.5 -57.35 1.8 M-75.15 18.2 L-86.1 27.3 -86.65 26.7 -75.75 17.55 -75.15 18.2 M-74.2 12.3 L-63.3 3.15 -62.75 3.8 -73.65 12.9 -74.2 12.3 M-99.2 41.7 L-99.75 41.1 -88.85 31.95 -88.3 32.6 -99.2 41.7" fill="#000000" fill-rule="evenodd" stroke="none"/>
+      <path d="M34.8 45.25 L-113.2 45.25 -113.2 -44.75 34.8 -44.75 34.8 45.25" fill="#ffffff" fill-opacity="0.0" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="sprite1" transform="matrix(1.0, 0.0, 0.0, 1.0, 48.05, 28.25)">
+      <use ffdec:characterId="8" height="57.5" transform="matrix(1.0, 0.0, 0.0, 1.0, -3.4, -28.25)" width="57.5" xlink:href="#shape1"/>
+    </g>
+    <g id="shape1" transform="matrix(1.0, 0.0, 0.0, 1.0, 3.4, 28.25)">
+      <path d="M54.1 29.25 L-3.4 29.25 -3.4 -28.25 54.1 -28.25 54.1 29.25" fill="#ffffff" fill-opacity="0.0" fill-rule="evenodd" stroke="none"/>
+      <path d="M14.75 -16.0 L13.75 -16.5 18.35 -26.55 22.95 -16.5 22.05 -16.0 18.35 -24.0 14.75 -16.0 M5.5 -3.5 Q3.55 -6.25 -0.25 -8.75 L0.85 -9.7 Q4.9 -7.15 6.75 -4.55 L5.5 -3.5 M14.15 -8.0 L16.25 -8.0 16.25 -5.9 14.15 -5.9 14.15 -8.0 M11.05 -1.35 Q8.5 -3.7 8.55 -6.8 8.5 -9.9 11.05 -12.2 L11.6 -11.7 Q9.3 -9.55 9.3 -6.8 9.3 -4.05 11.6 -1.9 L11.05 -1.35 M30.5 -16.5 L35.1 -26.55 39.7 -16.5 38.75 -16.0 35.1 -24.0 31.45 -16.0 30.5 -16.5 M22.8 -8.1 L24.8 -4.55 26.8 -8.1 22.8 -8.1 M22.35 -9.15 L27.35 -9.15 28.45 -11.2 29.4 -10.6 24.8 -2.3 20.2 -10.6 21.15 -11.2 22.35 -9.15 M33.35 -8.0 L35.45 -8.0 35.45 -5.9 33.35 -5.9 33.35 -8.0 M41.9 -1.9 Q44.15 -4.05 44.15 -6.8 44.15 -9.55 41.9 -11.7 L42.45 -12.2 Q44.9 -9.9 44.95 -6.8 44.9 -3.7 42.45 -1.35 L41.9 -1.9 M49.9 -11.5 L50.95 -11.0 Q51.25 -10.8 50.95 -10.7 49.95 -5.05 46.8 -2.2 L46.0 -3.3 Q48.9 -5.7 49.9 -11.5 M42.15 22.1 L35.55 22.1 35.55 15.45 36.05 15.45 36.05 21.6 42.15 21.6 42.15 22.1 M37.75 2.2 Q40.2 4.5 40.2 7.6 40.2 10.7 37.75 13.05 L37.15 12.5 Q39.45 10.35 39.45 7.6 39.45 4.85 37.15 2.7 L37.75 2.2 M25.05 17.9 L20.6 22.0 25.05 26.1 24.55 26.6 19.6 22.0 24.55 17.4 25.05 17.9 M18.8 13.05 Q16.3 10.7 16.3 7.6 16.3 4.5 18.8 2.2 L19.35 2.7 Q17.05 4.85 17.05 7.6 17.05 10.35 19.35 12.5 L18.8 13.05" fill="#000000" fill-rule="evenodd" stroke="none"/>
+    </g>
+    <g id="sprite2" transform="matrix(1.0, 0.0, 0.0, 1.0, 62.05, 30.25)">
+      <use ffdec:characterId="12" height="59.5" transform="matrix(1.0, 0.0, 0.0, 1.0, -62.05, -30.25)" width="59.5" xlink:href="#shape2"/>
+    </g>
+    <g id="shape2" transform="matrix(1.0, 0.0, 0.0, 1.0, 62.05, 30.25)">
+      <path d="M-45.15 -16.0 L-46.1 -16.5 -41.5 -26.55 -36.9 -16.5 -37.85 -16.0 -41.5 -24.0 -45.15 -16.0 M-58.05 -8.75 L-56.95 -9.7 Q-52.9 -7.15 -51.05 -4.55 L-52.3 -3.5 Q-54.25 -6.25 -58.05 -8.75 M-46.75 -12.2 L-46.2 -11.7 Q-48.5 -9.55 -48.5 -6.8 -48.5 -4.05 -46.2 -1.9 L-46.75 -1.35 Q-49.25 -3.7 -49.25 -6.8 -49.25 -9.9 -46.75 -12.2 M-29.4 -16.5 L-24.8 -26.55 -20.2 -16.5 -21.1 -16.0 -24.8 -24.0 -28.45 -16.0 -29.4 -16.5 M-37.65 -8.0 L-37.65 -5.9 -39.75 -5.9 -39.75 -8.0 -37.65 -8.0 M-32.7 -11.2 L-31.55 -9.15 -26.55 -9.15 -25.45 -11.2 -24.45 -10.6 -29.05 -2.3 -33.65 -10.6 -32.7 -11.2 M-27.05 -8.1 L-31.05 -8.1 -29.05 -4.55 -27.05 -8.1 M-20.55 -8.0 L-18.45 -8.0 -18.45 -5.9 -20.55 -5.9 -20.55 -8.0 M-11.8 -3.3 Q-8.9 -5.7 -7.9 -11.5 L-6.85 -11.0 Q-6.55 -10.8 -6.85 -10.7 -7.85 -5.05 -11.0 -2.2 L-11.8 -3.3 M-12.85 -6.8 Q-12.85 -3.7 -15.35 -1.35 L-15.9 -1.9 Q-13.65 -4.05 -13.65 -6.8 -13.65 -9.55 -15.9 -11.7 L-15.35 -12.2 Q-12.85 -9.9 -12.85 -6.8 M-26.8 2.2 Q-24.3 4.5 -24.3 7.6 -24.3 10.7 -26.8 13.05 L-27.35 12.5 Q-25.05 10.35 -25.05 7.6 -25.05 4.85 -27.35 2.7 L-26.8 2.2 M-24.65 22.0 L-29.55 26.6 -30.05 26.1 -25.65 22.0 -30.05 17.9 -29.55 17.4 -24.65 22.0 M-47.45 7.6 Q-47.45 10.35 -45.15 12.5 L-45.7 13.05 Q-48.25 10.7 -48.25 7.6 -48.25 4.5 -45.7 2.2 L-45.15 2.7 Q-47.45 4.85 -47.45 7.6 M-47.2 22.1 L-47.2 21.6 -41.05 21.6 -41.05 15.45 -40.55 15.45 -40.55 22.1 -47.2 22.1" fill="#000000" fill-rule="evenodd" stroke="none"/>
+      <path d="M-32.7 -11.2 L-33.65 -10.6 -29.05 -2.3 -24.45 -10.6 -25.45 -11.2 -26.55 -9.15 -31.55 -9.15 -32.7 -11.2 M-37.65 -8.0 L-39.75 -8.0 -39.75 -5.9 -37.65 -5.9 -37.65 -8.0 M-29.4 -16.5 L-28.45 -16.0 -24.8 -24.0 -21.1 -16.0 -20.2 -16.5 -24.8 -26.55 -29.4 -16.5 M-46.75 -12.2 Q-49.25 -9.9 -49.25 -6.8 -49.25 -3.7 -46.75 -1.35 L-46.2 -1.9 Q-48.5 -4.05 -48.5 -6.8 -48.5 -9.55 -46.2 -11.7 L-46.75 -12.2 M-58.05 -8.75 Q-54.25 -6.25 -52.3 -3.5 L-51.05 -4.55 Q-52.9 -7.15 -56.95 -9.7 L-58.05 -8.75 M-45.15 -16.0 L-41.5 -24.0 -37.85 -16.0 -36.9 -16.5 -41.5 -26.55 -46.1 -16.5 -45.15 -16.0 M-12.85 -6.8 Q-12.85 -9.9 -15.35 -12.2 L-15.9 -11.7 Q-13.65 -9.55 -13.65 -6.8 -13.65 -4.05 -15.9 -1.9 L-15.35 -1.35 Q-12.85 -3.7 -12.85 -6.8 M-11.8 -3.3 L-11.0 -2.2 Q-7.85 -5.05 -6.85 -10.7 -6.55 -10.8 -6.85 -11.0 L-7.9 -11.5 Q-8.9 -5.7 -11.8 -3.3 M-20.55 -8.0 L-20.55 -5.9 -18.45 -5.9 -18.45 -8.0 -20.55 -8.0 M-2.55 -30.25 L-2.55 29.25 -62.05 29.25 -62.05 -30.25 -2.55 -30.25 M-47.2 22.1 L-40.55 22.1 -40.55 15.45 -41.05 15.45 -41.05 21.6 -47.2 21.6 -47.2 22.1 M-47.45 7.6 Q-47.45 4.85 -45.15 2.7 L-45.7 2.2 Q-48.25 4.5 -48.25 7.6 -48.25 10.7 -45.7 13.05 L-45.15 12.5 Q-47.45 10.35 -47.45 7.6 M-24.65 22.0 L-29.55 17.4 -30.05 17.9 -25.65 22.0 -30.05 26.1 -29.55 26.6 -24.65 22.0 M-26.8 2.2 L-27.35 2.7 Q-25.05 4.85 -25.05 7.6 -25.05 10.35 -27.35 12.5 L-26.8 13.05 Q-24.3 10.7 -24.3 7.6 -24.3 4.5 -26.8 2.2" fill="#ffffff" fill-opacity="0.0" fill-rule="evenodd" stroke="none"/>
+    </g>
+  </defs>
 </svg>
