@@ -35,9 +35,11 @@ export default defineConfig({
     },
   },
   test: {
-    globals: true,
     coverage: {
       provider: "istanbul",
     },
+    environment: "happy-dom",
+    globals: true,
+    include: ["test/**/*.spec.ts"],
   },
 });

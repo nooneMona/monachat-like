@@ -14,6 +14,7 @@ export const useUIStore = defineStore("ui", () => {
   const width = ref(1_000);
   const height = ref(500);
   const bottomBarHeight = ref(50);
+  const isLogVisible = ref(false); // ログ窓表示
 
   const backgroundColor = computed(() => (settingStore.isDarkMode ? "black" : "#d9d5da"));
   const panelBackgroundColor = computed(() => (settingStore.isDarkMode ? "#121212" : "white"));
@@ -23,6 +24,7 @@ export const useUIStore = defineStore("ui", () => {
     width,
     height,
     bottomBarHeight,
+    isLogVisible,
     backgroundColor,
     panelBackgroundColor,
     greyBackgroundColor,
