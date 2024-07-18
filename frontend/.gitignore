@@ -24,3 +24,7 @@ pnpm-debug.log*
 
 storybook-static/
 coverage/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
