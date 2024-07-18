@@ -70,7 +70,7 @@ const registerSocketEvents = () => {
     if (usersStore.silentUsers[id] !== undefined) return;
     const message: ChatMessage = { id, cmt, style, typing };
     // フォーカスから外れているときに吹き出しをためない
-    if (document.visibilityState === "visible") {
+    if (document.visibilityState === "visible" && !uiStore.isLogVisible) {
       usersStore.appendChatMessage(id, message);
     }
     logStore.appendCommentLog(message);
@@ -107,7 +107,7 @@ const registerSocketEvents = () => {
       usersStore.updateUserIgnore(param.ihash, ignores);
       // TODO: 無視から戻ったときに吹き出しが表示される問題の暫定対応
       //       -> COM受信時、visibleUsersに入ってない限りは吹き出しを保存しないようにしているので、もう外して大丈夫そう？
-      usersStore.idsByIhash[param.ihash].forEach((targetId: string) => {
+      usersStore.idsByIhash[param.ihash]?.forEach((targetId: string) => {
         usersStore.removeChatMessages(targetId);
       });
     }

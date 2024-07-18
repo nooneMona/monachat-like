@@ -1,6 +1,21 @@
 <template>
   <div ref="root" class="room" @drop.prevent="drop" @dragover.prevent @dragenter.prevent>
     <div class="top-right-text"><SpanText :size="15" :text="topRightText" /></div>
+    <div class="top-log-buttons">
+      <SimpleButton title="ログモード" class="log-button" :textSize="16" @click="clickLogMode" />
+      <SimpleButton
+        title="ログ行数🚫"
+        class="log-button"
+        :disabled="true"
+        :textSize="16"
+        @click="clickLogLines"
+      />
+    </div>
+    <div v-if="isLogVisible" class="log-window">
+      <div v-for="log in visibleLogMessages" :key="log.head + log.foot">
+        <div><SpanText :text="`${log.head}${log.content}${log.foot}`" /></div>
+      </div>
+    </div>
     <img
       v-if="currentRoom != undefined"
       class="room-img"
@@ -95,16 +110,18 @@ import SimpleButton from "@/components/atoms/SimpleButton.vue";
 import InvertButton from "@/components/molecules/InvertButton.vue";
 import SubmittableField from "@/components/molecules/SubmittableField.vue";
 import ChatCharacter from "@/components/organisms/ChatCharacter.vue";
-import { useUIStore } from "../../stores/ui";
-import { useUserStore } from "../../stores/user";
+import { useUIStore } from "@/stores/ui";
+import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores/setting";
-import { useRoomStore } from "../../stores/room";
-import { useUsersStore } from "../../stores/users";
+import { useRoomStore } from "@/stores/room";
+import { useUsersStore } from "@/stores/users";
+import { useLogStore } from "@/stores/log";
 
 const userStore = useUserStore();
 const usersStore = useUsersStore();
 const roomStore = useRoomStore();
+const logStore = useLogStore();
 const uiStore = useUIStore();
 const settingStore = useSettingStore();
 const router = useRouter();
@@ -131,7 +148,8 @@ const typingStartTime = ref(0); // タイピング開始時刻
 // ストア
 const { disconnected, myID } = storeToRefs(userStore);
 const { chatMessages, visibleUsers } = storeToRefs(usersStore);
-const { isDarkMode } = storeToRefs(settingStore);
+const { visibleLogMessages } = storeToRefs(logStore);
+const { isLogVisible, panelBackgroundColor } = storeToRefs(uiStore);
 const selectedVolume = computed({
   get: () => settingStore.selectedVolume,
   set: (value) => settingStore.updateSelectedVolume(value),
@@ -221,6 +239,11 @@ const clickExit = async () => {
     path: "/select",
   });
 };
+const clickLogMode = () => {
+  isLogVisible.value = !isLogVisible.value;
+};
+const clickLogLines = () => {};
+
 const submitCOM = (param: { text: string; shift: boolean }) => {
   if (param.text.match(/^(状態|stat)(:|：)/)) {
     userStore.setStat(param.text.replace(/(状態|stat)(:|：)/, ""));
@@ -291,6 +314,7 @@ const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messag
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    z-index: 1;
   }
 
   .top-right-text {
@@ -298,6 +322,37 @@ const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messag
     position: absolute;
     top: 0px;
     right: 7%;
+  }
+
+  .top-log-buttons {
+    @include supplementary-object;
+    position: absolute;
+    top: 4px;
+
+    display: flex;
+    flex-direction: row;
+    column-gap: 16px;
+
+    padding-left: 16px;
+
+    .log-button {
+      pointer-events: auto;
+      width: 100px;
+      height: 30px;
+    }
+  }
+
+  .log-window {
+    position: absolute;
+    top: 40px;
+    left: 10%;
+    right: 10%;
+    height: 40%;
+
+    border: 1px solid black;
+    overflow-y: scroll;
+    z-index: 10;
+    background-color: v-bind(panelBackgroundColor);
   }
 
   .character-frame {
