@@ -3,14 +3,19 @@ import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 
 describe("SpanText", () => {
+  const getCommonMountOption = (props?: object) => ({
+    global: {
+      plugins: [createTestingPinia()],
+    },
+    props: {
+      text: "Hello World",
+      ...props,
+    },
+  });
+
   it("should render correctly", () => {
     const wrapper = mount(SpanText, {
-      global: {
-        plugins: [createTestingPinia()],
-      },
-      props: {
-        text: "Hello World",
-      },
+      ...getCommonMountOption(),
     });
 
     expect(wrapper.text()).toBe("Hello World");
@@ -19,13 +24,9 @@ describe("SpanText", () => {
 
   it("should render the component with dark style", () => {
     const wrapper = mount(SpanText, {
-      global: {
-        plugins: [createTestingPinia()],
-      },
-      props: {
-        text: "Hello World",
+      ...getCommonMountOption({
         isDark: true,
-      },
+      }),
     });
 
     expect(wrapper.attributes()).toEqual(expect.objectContaining({ style: "color: white;" }));
@@ -33,6 +34,7 @@ describe("SpanText", () => {
 
   it("should render the component with dark style from store", () => {
     const wrapper = mount(SpanText, {
+      ...getCommonMountOption(),
       global: {
         plugins: [
           createTestingPinia({
@@ -42,9 +44,6 @@ describe("SpanText", () => {
           }),
         ],
       },
-      props: {
-        text: "Hello World",
-      },
     });
 
     expect(wrapper.attributes()).toEqual(expect.objectContaining({ style: "color: white;" }));
@@ -52,13 +51,9 @@ describe("SpanText", () => {
 
   it("should render the component with color type", () => {
     const wrapper = mount(SpanText, {
-      global: {
-        plugins: [createTestingPinia()],
-      },
-      props: {
-        text: "Hello World",
+      ...getCommonMountOption({
         type: "notice",
-      },
+      }),
     });
 
     expect(wrapper.attributes()).toEqual(expect.objectContaining({ style: "color: red;" }));
@@ -66,13 +61,9 @@ describe("SpanText", () => {
 
   it("should render the component with text size", () => {
     const wrapper = mount(SpanText, {
-      global: {
-        plugins: [createTestingPinia()],
-      },
-      props: {
-        text: "Hello World",
+      ...getCommonMountOption({
         size: 20,
-      },
+      }),
     });
 
     expect(wrapper.attributes()).toEqual(
