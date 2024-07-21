@@ -21,4 +21,5 @@ export default [
     },
   },
   eslintConfigPrettier,
+  { files: ["test/**/*.spec.ts"], rules: { "@typescript-eslint/no-explicit-any": "no" } },
 ];

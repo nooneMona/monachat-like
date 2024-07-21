@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/nooneMona/monachat-like/graph/badge.svg?token=nroaATT2RA)](https://codecov.io/gh/nooneMona/monachat-like)
+
 # OSS化によせて for Japanese
 
 使用する前に必ず下記のライセンスの内容をお読みいただき、同意の上でお使いください。
