@@ -36,5 +36,9 @@ jobs:
         run: yarn playwright install
         working-directory: ./frontend
       - name: test frontend
-        run: yarn test
+        run: yarn test:coverage
         working-directory: ./frontend
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
