@@ -20,7 +20,7 @@ import SpanText from "@/components/atoms/SpanText.vue";
 import Color from "@/stores/color";
 import { useSettingStore } from "@/stores/setting";
 
-type Message = {
+export type Message = {
   cmt: string;
   style: number;
 };
