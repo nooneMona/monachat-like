@@ -32,3 +32,6 @@ Disabled.args = { title: "OK", disabled: true };
 
 export const TextSize = Template.bind({});
 TextSize.args = { title: "OK", textSize: 10 };
+
+export const TooLong = Template.bind({});
+TooLong.args = { title: "溢れるテキスト" };
