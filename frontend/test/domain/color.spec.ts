@@ -1,4 +1,4 @@
-import { MonaColor } from "./color";
+import { MonaColor } from "@/domain/color";
 
 describe("MonaColor", () => {
   describe("constructedByHex", () => {

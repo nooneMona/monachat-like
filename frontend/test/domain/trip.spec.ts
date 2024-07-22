@@ -1,4 +1,4 @@
-import { TripFactory } from "./trip";
+import { TripFactory } from "@/domain/trip";
 
 describe("Trip", () => {
   it("should create a black trip", () => {
