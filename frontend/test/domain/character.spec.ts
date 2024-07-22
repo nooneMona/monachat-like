@@ -1,4 +1,4 @@
-import { Character } from "./character";
+import { Character } from "@/domain/character";
 
 describe("Character", () => {
   it("should create a character with trip", () => {

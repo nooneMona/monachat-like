@@ -1,4 +1,4 @@
-import { CharType } from "./charType";
+import { CharType } from "@/domain/charType";
 
 describe("CharType", () => {
   it("constructor", () => {

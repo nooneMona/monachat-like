@@ -18,7 +18,7 @@ import { computed } from "vue";
 import { MonaHexColor } from "@/stores/color";
 import { useSettingStore } from "@/stores/setting";
 
-type Color = { hexColor: MonaHexColor };
+export type Color = { id: number; hexColor: MonaHexColor };
 const gridWidth = 4;
 const gridHeight = 16;
 

@@ -43,6 +43,8 @@ button {
   height: 100%;
   width: 100%;
   border: 1px solid;
+  white-space: nowrap;
+  overflow: hidden;
 
   &.light {
     color: black;
