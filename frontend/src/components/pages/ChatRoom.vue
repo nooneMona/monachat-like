@@ -4,15 +4,18 @@
     <div class="top-log-buttons">
       <SimpleButton title="ログモード" class="log-button" :textSize="16" @click="clickLogMode" />
       <SimpleButton
-        title="ログ行数🚫"
+        v-if="isLogVisible"
+        title="ログ行数"
         class="log-button"
-        :disabled="true"
         :textSize="16"
         @click="clickLogLines"
       />
+      <div class="log-line-text">
+        <SpanText v-if="isLogVisible" :text="logLinesText" />
+      </div>
     </div>
     <div v-if="isLogVisible" class="log-window">
-      <div v-for="log in visibleLogMessages" :key="log.head + log.foot">
+      <div v-for="log in visibleLogMessages.slice(0, logLines)" :key="log.head + log.foot">
         <div><SpanText :text="`${log.head}${log.content}${log.foot}`" /></div>
       </div>
     </div>
@@ -144,6 +147,7 @@ const gripY = ref(0);
 const permittedSubmitting = ref(true); // チャットの送信が許可されているかどうか
 const keyCount = ref(0); // キータイプ数
 const typingStartTime = ref(0); // タイピング開始時刻
+const logLines = ref<Number.POSITIVE_INFINITY | 200 | 100 | 50>(Number.POSITIVE_INFINITY);
 
 // ストア
 const { disconnected, myID } = storeToRefs(userStore);
@@ -173,6 +177,12 @@ const disabledSubmitButton = computed(() => disconnected.value || !permittedSubm
 const topRightText = computed(() =>
   !disconnected.value ? `${totalUser.value}人 (ID:${displayingMyID.value})` : "切断しました",
 );
+const logLinesText = computed(() => {
+  if (logLines.value === Number.POSITIVE_INFINITY) {
+    return "制限なし";
+  }
+  return `${logLines.value}行`;
+});
 
 const isMine = (id: string) => {
   return id === myID.value;
@@ -242,7 +252,22 @@ const clickExit = async () => {
 const clickLogMode = () => {
   isLogVisible.value = !isLogVisible.value;
 };
-const clickLogLines = () => {};
+const clickLogLines = () => {
+  switch (logLines.value) {
+    case Number.POSITIVE_INFINITY:
+      logLines.value = 200;
+      break;
+    case 200:
+      logLines.value = 100;
+      break;
+    case 100:
+      logLines.value = 50;
+      break;
+    case 50:
+      logLines.value = Number.POSITIVE_INFINITY;
+      break;
+  }
+};
 
 const submitCOM = (param: { text: string; shift: boolean }) => {
   if (param.text.match(/^(状態|stat)(:|：)/)) {
@@ -335,6 +360,13 @@ const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messag
 
     padding-left: 16px;
 
+    .log-line-text {
+      @include supplementary-object;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
     .log-button {
       pointer-events: auto;
       width: 100px;
@@ -351,6 +383,7 @@ const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messag
 
     border: 1px solid black;
     overflow-y: scroll;
+    overflow-wrap: break-word;
     z-index: 10;
     background-color: v-bind(panelBackgroundColor);
   }
