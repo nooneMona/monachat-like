@@ -29,7 +29,7 @@ import { computed, ref } from "vue";
 import SpanText from "@/components/atoms/SpanText.vue";
 import { useSettingStore } from "@/stores/setting";
 
-type Option = {
+export type Option = {
   value: string;
   text: string;
 };
