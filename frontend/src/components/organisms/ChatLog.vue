@@ -169,11 +169,15 @@ watch(
   flex-direction: column;
   row-gap: 2px;
 
-  .link {
-    text-decoration: none;
-  }
-  .log-info-container {
-    padding-top: 16px;
+  .log-row {
+    overflow-wrap: break-word;
+
+    .link {
+      text-decoration: none;
+    }
+    .log-info-container {
+      padding-top: 16px;
+    }
   }
 }
 </style>
