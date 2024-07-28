@@ -1,83 +1,88 @@
 <template>
-  <TabView>
-    <TabPanel>
-      <template #header>
+  <Tabs>
+    <TabList>
+      <Tab value="0">
         <span v-if="!isKBMode">ログ</span>
         <i v-else class="pi pi-list"></i>
-      </template>
-      <ChatLog />
-    </TabPanel>
-    <TabPanel>
-      <template #header>
+      </Tab>
+      <Tab value="1">
         <span v-if="!isKBMode">ユーザー({{ manageableUsers.length }})</span>
         <i v-else class="pi pi-users">({{ manageableUsers.length }})</i>
-      </template>
-      <div>
-        <DataTable
-          :value="manageableUsers"
-          :resizableColumns="true"
-          columnResizeMode="fit"
-          responsiveLayout="scroll"
-          stripedRows
-          class="p-datatable-sm"
-        >
-          <Column header="名前">
-            <template #body="nameSlotProps">
-              <SpanText
-                :text="nameSlotProps.data.disp"
-                :size="16"
-                :type="selectedUsersIhashes[nameSlotProps.data.ihash]"
-              />
-            </template>
-          </Column>
-          <Column header="無視">
-            <template #body="slotProps">
-              <Checkbox
-                v-model="slotProps.data.isIgnored"
-                :binary="true"
-                @click="onClickIgnore(slotProps.data.ihash)"
-              />
-            </template>
-          </Column>
-          <Column header="サイレント無視">
-            <template #body="silentIgnoreSlotProps">
-              <Checkbox
-                v-model="silentIgnoreSlotProps.data.isSilentUser"
-                :binary="true"
-                @change="
-                  onChangeSilentIgnore(
-                    silentIgnoreSlotProps.data.ihash,
-                    silentIgnoreSlotProps.data.isSilentUser,
-                  )
-                "
-              />
-            </template>
-          </Column>
-        </DataTable>
-      </div>
-    </TabPanel>
-    <TabPanel>
-      <template #header>
+      </Tab>
+      <Tab value="2">
         <span v-if="!isKBMode">設定</span>
         <i v-else class="pi pi-cog"></i>
-      </template>
-      <SettingsFields />
-    </TabPanel>
-    <TabPanel>
-      <template #header>
+      </Tab>
+      <Tab value="3">
         <span v-if="!isKBMode">開発</span>
         <i v-else class="pi pi-github"></i>
-      </template>
-      <DevArea />
-    </TabPanel>
-  </TabView>
+      </Tab>
+    </TabList>
+    <TabPanels>
+      <TabPanel value="0"><ChatLog /></TabPanel>
+      <TabPanel value="1">
+        <div>
+          <DataTable
+            :value="manageableUsers"
+            :resizableColumns="true"
+            columnResizeMode="fit"
+            responsiveLayout="scroll"
+            stripedRows
+            class="p-datatable-sm"
+          >
+            <Column header="名前">
+              <template #body="nameSlotProps">
+                <SpanText
+                  :text="nameSlotProps.data.disp"
+                  :size="16"
+                  :type="selectedUsersIhashes[nameSlotProps.data.ihash]"
+                />
+              </template>
+            </Column>
+            <Column header="無視">
+              <template #body="slotProps">
+                <Checkbox
+                  v-model="slotProps.data.isIgnored"
+                  :binary="true"
+                  @click="onClickIgnore(slotProps.data.ihash)"
+                />
+              </template>
+            </Column>
+            <Column header="サイレント無視">
+              <template #body="silentIgnoreSlotProps">
+                <Checkbox
+                  v-model="silentIgnoreSlotProps.data.isSilentUser"
+                  :binary="true"
+                  @change="
+                    onChangeSilentIgnore(
+                      silentIgnoreSlotProps.data.ihash,
+                      silentIgnoreSlotProps.data.isSilentUser,
+                    )
+                  "
+                />
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+      </TabPanel>
+      <TabPanel value="2">
+        <SettingsFields />
+      </TabPanel>
+      <TabPanel value="3">
+        <DevArea />
+      </TabPanel>
+    </TabPanels>
+  </Tabs>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import Checkbox from "primevue/checkbox";
-import TabView from "primevue/tabview";
+import Tabs from "primevue/tabs";
+import TabList from "primevue/tablist";
+import Tab from "primevue/tab";
+import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
+import Checkbox from "primevue/checkbox";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import ChatLog from "@/components/organisms/ChatLog.vue";
@@ -127,46 +132,13 @@ const onChangeSilentIgnore = (ihash: string, isActive: boolean) => {
 </script>
 
 <style lang="scss" scoped>
-.link-containers {
-  display: flex;
-  flex-direction: column;
-  row-gap: 40px;
-  h1 {
-    font-size: 24px;
-    margin: 0;
-  }
-
-  p {
-    margin: 0;
-  }
-
-  .discord-container {
-    .dicsord-widget {
-      margin-top: 20px;
-    }
-  }
-}
-
-:deep(.p-tabview-nav) {
+:deep(.p-tab) {
   background-color: v-bind(panelBackgroundColor);
-  height: 40px;
+  width: 100%;
 }
 
-:deep(.p-tabview-nav .p-tabview-header .p-tabview-nav-link) {
+:deep(.p-tabpanels) {
   background-color: v-bind(panelBackgroundColor);
-  height: 30px;
-  min-width: 160px;
-  padding: 1.18em;
-  align-items: center;
-  justify-content: center;
-}
-
-:deep(.p-tabview-panels) {
-  background-color: v-bind(panelBackgroundColor);
-}
-
-:deep(.pi) {
-  font-size: 1.4rem;
 }
 
 :deep(.p-datatable .p-resizable-column) {
