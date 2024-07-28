@@ -1,6 +1,5 @@
 import { createPinia, setActivePinia } from "pinia";
 import { useUIStore } from "@/stores/ui";
-import { mount } from "@vue/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 
 describe("useUIStore", () => {
