@@ -1,13 +1,7 @@
 import { createPinia, setActivePinia } from "pinia";
 import { useUIStore } from "@/stores/ui";
-
-const useSettingStore = vi.hoisted(() =>
-  vi.fn(() => {
-    return { isDarkMode: false };
-  }),
-);
-
-vi.mock("@/stores/setting", () => ({ useSettingStore }));
+import { mount } from "@vue/test-utils";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("useUIStore", () => {
   beforeEach(() => {
@@ -38,45 +32,69 @@ describe("useUIStore", () => {
     expect(isLogVisible).toBe(false);
   });
 
-  it("backgroundColor should be return #d9d5da when isDarkMode is false", () => {
-    useSettingStore.mockReturnValue({ isDarkMode: false });
+  it.each([
+    [false, "#d9d5da"],
+    [true, "black"],
+  ])("with isDarkMode=%s, backgroundColor should be %s", (isDarkMode, expectedBackgroundColor) => {
+    const testingPinia = createTestingPinia({
+      initialState: {
+        setting: { isDarkMode },
+      },
+    });
+    setActivePinia(testingPinia);
+
     const uiStore = useUIStore();
-    const backgroundColor = uiStore.backgroundColor;
-    expect(backgroundColor).toBe("#d9d5da");
+    expect(uiStore.backgroundColor).toBe(expectedBackgroundColor);
   });
 
-  it("backgroundColor should be return black when isDarkMode is true", () => {
-    useSettingStore.mockReturnValue({ isDarkMode: true });
+  it.each([
+    [false, "#d9d5da"],
+    [true, "black"],
+  ])("with isDarkMode=%s, backgroundColor should be %s", (isDarkMode, expectedBackgroundColor) => {
+    const testingPinia = createTestingPinia({
+      initialState: {
+        setting: { isDarkMode },
+      },
+    });
+    setActivePinia(testingPinia);
+
     const uiStore = useUIStore();
-    const backgroundColor = uiStore.backgroundColor;
-    expect(backgroundColor).toBe("black");
+    expect(uiStore.backgroundColor).toBe(expectedBackgroundColor);
   });
 
-  it("panelBackgroundColor should be return white when isDarkMode is false", () => {
-    useSettingStore.mockReturnValue({ isDarkMode: false });
-    const uiStore = useUIStore();
-    const backgroundColor = uiStore.panelBackgroundColor;
-    expect(backgroundColor).toBe("white");
-  });
+  it.each([
+    [false, "white"],
+    [true, "#121212"],
+  ])(
+    "with isDarkMode=%s, panelBackgroundColor should be %s",
+    (isDarkMode, expectedPanelBackgroundColor) => {
+      const testingPinia = createTestingPinia({
+        initialState: {
+          setting: { isDarkMode },
+        },
+      });
+      setActivePinia(testingPinia);
 
-  it("panelBackgroundColor  should be return #121212 when isDarkMode is true", () => {
-    useSettingStore.mockReturnValue({ isDarkMode: true });
-    const uiStore = useUIStore();
-    const backgroundColor = uiStore.panelBackgroundColor;
-    expect(backgroundColor).toBe("#121212");
-  });
+      const uiStore = useUIStore();
+      expect(uiStore.panelBackgroundColor).toBe(expectedPanelBackgroundColor);
+    },
+  );
 
-  it("greyBackgroundColor should be return white when isDarkMode is false", () => {
-    useSettingStore.mockReturnValue({ isDarkMode: false });
-    const uiStore = useUIStore();
-    const backgroundColor = uiStore.greyBackgroundColor;
-    expect(backgroundColor).toBe("#dcdcdc");
-  });
+  it.each([
+    [false, "#dcdcdc"],
+    [true, "#3A3A3A"],
+  ])(
+    "with isDarkMode=%s, grayBackgroundColor should be %s",
+    (isDarkMode, expectedGreylBackgroundColor) => {
+      const testingPinia = createTestingPinia({
+        initialState: {
+          setting: { isDarkMode },
+        },
+      });
+      setActivePinia(testingPinia);
 
-  it("greyBackgroundColor  should be return #121212 when isDarkMode is true", () => {
-    useSettingStore.mockReturnValue({ isDarkMode: true });
-    const uiStore = useUIStore();
-    const backgroundColor = uiStore.greyBackgroundColor;
-    expect(backgroundColor).toBe("#3A3A3A");
-  });
+      const uiStore = useUIStore();
+      expect(uiStore.greyBackgroundColor).toBe(expectedGreylBackgroundColor);
+    },
+  );
 });
