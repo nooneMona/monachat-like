@@ -42,6 +42,7 @@ const settingStore = useSettingStore();
 const { greyBackgroundColor } = storeToRefs(uiStore);
 const { isDrawnUnderlineLog, selectedUsersIhashes } = storeToRefs(settingStore);
 
+// TODO: イベントにして上位コンポーネントに渡すようにする。
 const toggleUserSelecting = (ihash: string) => {
   settingStore.toggleUserSelecting(ihash);
 };
