@@ -38,7 +38,7 @@ beforeEach(() => {
 
 describe("ServerCommunicator#sendCOM", () => {
   it("should emit event and log it.", () => {
-    serverCommunicator.sendCOM({ id: "id", cmt: "comment" }, "/1");
+    serverCommunicator.sendCOM({ id: "id", cmt: "comment" }, "/1", []);
     expect(systemSendLogger.logSendCOM).toBeCalledTimes(1);
     expect(socketServer.in).toBeCalledTimes(1);
     expect(socketServer.emit).toBeCalledTimes(1);

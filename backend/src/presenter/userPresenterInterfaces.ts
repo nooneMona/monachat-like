@@ -18,7 +18,7 @@ import { Character } from "../domain/character";
 
 // サーバーのマルチキャスト処理
 export interface IServerCommunicator {
-  sendCOM(param: COMResponse, to: string): void;
+  sendCOM(param: COMResponse, to: string, exceptIDs: string[]): void;
   sendENTER(param: ENTERResponse, to: string | undefined): void;
   sendSET(param: SETResponse, to: string): void;
   sendIG(param: IGResponse, to: string): void;

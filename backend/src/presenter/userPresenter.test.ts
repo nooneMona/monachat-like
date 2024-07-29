@@ -8,7 +8,6 @@ import {
   ISystemReceivedLogger,
 } from "./userPresenterInterfaces";
 import { HashTripper, Tripper } from "../domain/tripper";
-import { IDGeneratable } from "../domain/idGenerator";
 import { Avatar } from "../domain/avatar";
 import { CharType } from "../domain/charType";
 import { Name } from "../domain/name";
@@ -181,7 +180,8 @@ describe("#receivedCOM", () => {
         id: "id",
         cmt: "こんにちは",
       },
-      "/1"
+      "/1",
+      []
     );
   });
 
@@ -202,7 +202,8 @@ describe("#receivedCOM", () => {
         cmt: "こんにちは",
         style: 2,
       },
-      "/1"
+      "/1",
+      []
     );
   });
 
@@ -222,7 +223,8 @@ describe("#receivedCOM", () => {
         id: "id",
         cmt: "こんにちは",
       },
-      "/1"
+      "/1",
+      []
     );
   });
 
@@ -255,7 +257,8 @@ describe("#receivedCOM", () => {
         id: "id",
         cmt: "こんにちは",
       },
-      "/1"
+      "/1",
+      []
     );
   });
 
