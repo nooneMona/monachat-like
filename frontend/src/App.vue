@@ -86,6 +86,11 @@ const registerSocketEvents = () => {
       settingStore.updateTripResult(param.trip);
       userStore.updateIhash(param.ihash);
     }
+    const enterdUser = usersStore.users[param.id]!;
+    if (usersStore.ihashsIgnoredByMe[enterdUser.ihash] === true) {
+      // 自分が無視しているユーザーが入室した場合は、再度無視コマンドを送る
+      userStore.sendIgnorance(enterdUser.ihash, true);
+    }
     if (usersStore.visibleUsers[param.id] === undefined) return;
     logStore.appendRoomLog(param.id, true);
     usersStore.updateUserDispLocation(param.id);

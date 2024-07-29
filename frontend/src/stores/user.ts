@@ -237,6 +237,14 @@ export const useUserStore = defineStore("user", () => {
     });
   };
 
+  const sendIgnorance = (targetIhash: string, isActive: boolean) => {
+    socketIOInstance.emit("IG", {
+      token: myToken.value,
+      stat: isActive ? "on" : "off",
+      ihash: targetIhash,
+    });
+  };
+
   const toggleSilentIgnorance = (targetIhash: string, isActive: boolean) => {
     const usersStore = useUsersStore();
 
@@ -245,7 +253,7 @@ export const useUserStore = defineStore("user", () => {
     }
     usersStore.updateUserSilentIgnore(targetIhash, isActive);
     if (isActive) {
-      usersStore.idsByIhash[targetIhash].forEach((targetId: string) => {
+      usersStore.idsByIhash[targetIhash]?.forEach((targetId: string) => {
         usersStore.removeChatMessages(targetId);
       });
     }
@@ -286,6 +294,7 @@ export const useUserStore = defineStore("user", () => {
     setStat,
     setScl,
     toggleIgnorance,
+    sendIgnorance,
     toggleSilentIgnorance,
     sendAuth,
     sendError,
