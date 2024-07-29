@@ -1,5 +1,5 @@
 <template>
-  <Tabs>
+  <Tabs value="0">
     <TabList>
       <Tab value="0">
         <span v-if="!isKBMode">ログ</span>
