@@ -3,12 +3,15 @@
     <DataTable
       :value="manageableUsers"
       :resizableColumns="true"
+      size="small"
       columnResizeMode="fit"
       responsiveLayout="scroll"
       stripedRows
-      class="p-datatable-sm"
     >
-      <Column header="名前">
+      <Column>
+        <template #header>
+          <SpanText text="名前" :size="16" type="text" />
+        </template>
         <template #body="nameSlotProps">
           <SpanText
             :text="nameSlotProps.data.disp"
@@ -17,7 +20,10 @@
           />
         </template>
       </Column>
-      <Column header="無視">
+      <Column>
+        <template #header>
+          <SpanText text="無視" :size="16" type="text" />
+        </template>
         <template #body="slotProps">
           <Checkbox
             v-model="slotProps.data.isIgnored"
@@ -26,7 +32,10 @@
           />
         </template>
       </Column>
-      <Column header="サイレント無視">
+      <Column>
+        <template #header>
+          <SpanText text="サイレント無視" :size="16" type="text" />
+        </template>
         <template #body="silentIgnoreSlotProps">
           <Checkbox
             v-model="silentIgnoreSlotProps.data.isSilentUser"
@@ -60,11 +69,9 @@ import { Character } from "@/domain/character";
 const userStore = useUserStore();
 const usersStore = useUsersStore();
 const uiStore = useUIStore();
-
-const { panelBackgroundColor } = storeToRefs(uiStore);
-
 const settingStore = useSettingStore();
 
+const { panelBackgroundColor } = storeToRefs(uiStore);
 const { selectedUsersIhashes } = storeToRefs(settingStore);
 
 const onClickIgnore = (ihash: string) => {
@@ -95,11 +102,15 @@ const manageableUsers = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-:deep(.p-datatable .p-resizable-column) {
+:deep(.p-resizable-column) {
   background-color: v-bind(panelBackgroundColor);
 }
 
-:deep(.p-datatable .p-datatable-tbody td) {
+:deep(.p-datatable-header-cell) {
+  background-color: v-bind(panelBackgroundColor);
+}
+
+:deep(.p-datatable-tbody td) {
   background-color: v-bind(panelBackgroundColor);
 }
 </style>
