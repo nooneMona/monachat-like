@@ -23,10 +23,10 @@
     "@types/socket.io-client": "^3.0.0",
     "@types/ua-parser-js": "^0.7.36",
     "@types/uuid": "^10.0.0",
-    "@vitest/coverage-v8": "^2.0.3",
+    "@vitest/coverage-v8": "^2.0.4",
     "nodemon": "3.1.4",
-    "typescript": "5.5.3",
-    "vitest": "^2.0.3"
+    "typescript": "5.5.4",
+    "vitest": "^2.0.4"
   },
   "scripts": {
     "start": "ts-node --transpile-only src/index.ts",
