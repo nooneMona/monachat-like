@@ -24,17 +24,10 @@
       <SpanText
         @click.right.prevent="changeSelectedUsersColor(msg.ihash)"
         @click="toggleUserSelecting(msg.ihash)"
-        @keydown.enter="toggleUserSelecting(msg.ihash)"
         :text="msg.head"
         :type="selectedUsersIhashes[msg.ihash]"
       />
-      <!-- 本文をリンクと通常のテキストで分離 -->
-      <template v-for="(content, index) in splitToContentsArray(msg.content)" :key="content">
-        <SpanText v-if="index % 2 === 0" :text="content" :type="selectedUsersIhashes[msg.ihash]" />
-        <a v-if="index % 2 === 1" class="link" :href="content" target="_blank">
-          <SpanText :text="content" type="link" />
-        </a>
-      </template>
+      <LinkableText :text="msg.content" :type="selectedUsersIhashes[msg.ihash]" />
       <SpanText :text="msg.foot" :type="selectedUsersIhashes[msg.ihash]" />
     </div>
     <div class="log-info-container" v-if="!isDescendingLog && visibleLogMessages.length !== 0">
@@ -46,6 +39,7 @@
 <script setup lang="ts">
 import { onMounted, watch, ref, nextTick, onUnmounted } from "vue";
 import SpanText from "@/components/atoms/SpanText.vue";
+import LinkableText from "@/components/molecules/LinkableText.vue";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores/setting";
 import { useUIStore } from "@/stores/ui";
@@ -67,19 +61,6 @@ const { greyBackgroundColor } = storeToRefs(uiStore);
 // スクロール位置が下端にあるか
 const isLatestScrollPosition = ref(true);
 const unseenLogCounter = ref(0);
-
-const splitToContentsArray = (msg: string): string[] => {
-  const urlPattern = /https?:\/\/[^\s$.?#].[^\s]*/gm;
-  const plainContents = msg.split(urlPattern) ?? [];
-  const urlContents = msg.match(urlPattern) ?? [];
-  const resultArray = [];
-  for (let i = 0; i < urlContents.length; i += 1) {
-    resultArray.push(plainContents[i] as string);
-    resultArray.push(urlContents[i] as string);
-  }
-  resultArray.push(plainContents[plainContents.length - 1] as string);
-  return resultArray;
-};
 
 const scrollToLatest = () => {
   const elm = wrapperEl.value;
@@ -172,9 +153,6 @@ watch(
   .log-row {
     overflow-wrap: break-word;
 
-    .link {
-      text-decoration: none;
-    }
     .log-info-container {
       padding-top: 16px;
     }
