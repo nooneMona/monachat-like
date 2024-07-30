@@ -18,14 +18,14 @@
             />
           </div>
           <div class="color-palette-container">
-            <ColorPalette :hexColors="hexColors" @click="updateColor" />
+            <ColorPalette :hex-colors="hexColors" @click="updateColor" />
           </div>
           <div class="character-selection-box-image">
             <CharacterImage
               :user="{ type: userType, hexValue: userHexColor, stat: '通常', scl: 100 }"
-              :depthRate="1.0"
-              :isKBMode
-              :isSilent="false"
+              :depth-rate="1.0"
+              :is-k-b-mode
+              :is-silent="false"
             />
             <div class="character-preview-text"><SpanText :text="savedName" /></div>
             <div class="character-preview-text"><SpanText :text="dispTrip" /></div>
@@ -33,19 +33,19 @@
         </div>
         <div class="selection-box-under-area">
           <div class="seek-bar-container">
-            <SeekBar :sequence="characterSequence" v-model:index="currentCharIndex" />
+            <SeekBar v-model:index="currentCharIndex" :sequence="characterSequence" />
           </div>
           <div>
             <label for="type">
               <input id="type" v-model="userType" :style="{ width: '100px' }" />タイプ
             </label>
-            <label for="color"> <input id="color" type="color" v-model="userHexColor" />色 </label>
+            <label for="color"> <input id="color" v-model="userHexColor" type="color" />色 </label>
           </div>
           <div class="selection-box-under-buttons">
-            <SimpleButton title="名前変更" @onClick="backToHome" />
+            <SimpleButton title="名前変更" @on-click="backToHome" />
           </div>
           <div class="selection-box-under-buttons">
-            <SimpleButton title="キャラランダム変更" @onClick="pickRandomCharacter" />
+            <SimpleButton title="キャラランダム変更" @on-click="pickRandomCharacter" />
           </div>
         </div>
       </div>
@@ -55,7 +55,7 @@
           <SpanText text="ステージ選択" :size="18" />
           <SpanText text="最大人数 ∞人" :size="18" />
         </div>
-        <RoomButtons :rooms="roomMetadata" :roomCount="rooms" @clickRoom="submitEnter" />
+        <RoomButtons :rooms="roomMetadata" :room-count="rooms" @click-room="submitEnter" />
       </div>
     </div>
   </div>

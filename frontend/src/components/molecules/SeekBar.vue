@@ -5,7 +5,7 @@
     </button>
     <!-- v-modelと:maxの値が更新されてもUIにそれが反映されない。v-ifで再描画のタイミングを制御することで解決 -->
     <!-- 例: キャラコを直接入れた場合のシークバーへの反映 -->
-    <input type="range" v-if="isReady" v-model="index" :max="maxIndex" />
+    <input v-if="isReady" v-model="index" type="range" :max="maxIndex" />
     <button class="aside-button-frame" @click="increase">
       <span class="aside-button">▶</span>
     </button>

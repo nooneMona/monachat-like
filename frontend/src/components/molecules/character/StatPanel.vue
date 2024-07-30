@@ -1,6 +1,6 @@
 <template>
   <div :class="{ dark: shouldBeDark, light: !shouldBeDark }">
-    <SpanText :text="text" :isDark="shouldBeDark" />
+    <SpanText :text="text" :is-dark="shouldBeDark" />
   </div>
 </template>
 

@@ -1,8 +1,8 @@
 <template>
   <button
     :class="{ dark: shouldBeDark, light: !shouldBeDark }"
-    @click.prevent="onClick"
     :disabled="disabled"
+    @click.prevent="onClick"
   >
     <SpanText :text="title" :size="textSize" :is-dark="shouldBeDark" />
   </button>

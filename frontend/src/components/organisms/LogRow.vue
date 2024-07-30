@@ -8,10 +8,10 @@
     }"
   >
     <SpanText
-      @click.right.prevent="changeSelectedUsersColor(msg.ihash)"
-      @click="toggleUserSelecting(msg.ihash)"
       :text="msg.head"
       :type="selectedUsersIhashes[msg.ihash]"
+      @click.right.prevent="changeSelectedUsersColor(msg.ihash)"
+      @click="toggleUserSelecting(msg.ihash)"
     />
     <LinkableText :text="msg.content" :type="selectedUsersIhashes[msg.ihash]" />
     <SpanText :text="msg.foot" :type="selectedUsersIhashes[msg.ihash]" />

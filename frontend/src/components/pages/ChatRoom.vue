@@ -2,12 +2,12 @@
   <div ref="root" class="room" @drop.prevent="drop" @dragover.prevent @dragenter.prevent>
     <div class="top-right-text"><SpanText :size="15" :text="topRightText" /></div>
     <div class="top-log-buttons">
-      <SimpleButton title="ログモード" class="log-button" :textSize="16" @click="clickLogMode" />
+      <SimpleButton title="ログモード" class="log-button" :text-size="16" @click="clickLogMode" />
       <SimpleButton
         v-if="isLogVisible"
         title="ログ行数"
         class="log-button"
-        :textSize="16"
+        :text-size="16"
         @click="clickLogLines"
       />
       <div class="log-line-text">
@@ -28,13 +28,6 @@
     <!-- TODO: v-forのインデックスが勝手にnumber型になる問題を解消する -->
     <div
       v-for="(user, id) in visibleUsers"
-      class="character-frame"
-      :style="{
-        left: user.dispX + 'px',
-        top: user.dispY - bubbleAreaHeight + 'px',
-        // TODO: 可動域の高さが400pxを超えたときに破綻するので修正する
-        zIndex: `${user.dispY + (isMine(id as unknown as string) ? 500 : 100)}`,
-      }"
       :key="id"
       :ref="
         // https://vuejs.org/guide/essentials/template-refs.html#function-refs
@@ -44,6 +37,13 @@
           }
         }
       "
+      class="character-frame"
+      :style="{
+        left: user.dispX + 'px',
+        top: user.dispY - bubbleAreaHeight + 'px',
+        // TODO: 可動域の高さが400pxを超えたときに破綻するので修正する
+        zIndex: `${user.dispY + (isMine(id as unknown as string) ? 500 : 100)}`,
+      }"
     >
       <ChatCharacter
         :key="id"
@@ -52,8 +52,8 @@
         :bubble-area-height="bubbleAreaHeight"
         :draggable="isMine(id as unknown as string)"
         @dragstart="dragStart"
-        @sizeUpdated="sizeUpdated"
-        @bubbleDeleted="bubbleDeleted"
+        @size-updated="sizeUpdated"
+        @bubble-deleted="bubbleDeleted"
       />
     </div>
 
@@ -89,7 +89,7 @@
         <SubmittableField
           ref="chatField"
           v-model="text"
-          :allowedEmpty="false"
+          :allowed-empty="false"
           :disabled="disabledSubmitButton"
           @submit="submitCOM"
           @delete-all="fieldAllTextDeleted"

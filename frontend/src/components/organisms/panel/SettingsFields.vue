@@ -8,14 +8,14 @@
             <SwitchField
               v-model="isDrawnUnderlineLog"
               label="ログに色の下線を引く"
-              labelId="drawUnderLineLog"
+              label-id="drawUnderLineLog"
             />
           </div>
           <div class="field-wrapper">
-            <SwitchField v-model="isKBMode" label="KBテーマ" labelId="KBMode" />
+            <SwitchField v-model="isKBMode" label="KBテーマ" label-id="KBMode" />
           </div>
           <div class="field-wrapper">
-            <SwitchField v-model="isDarkMode" label="ダークモード" labelId="darkMode" />
+            <SwitchField v-model="isDarkMode" label="ダークモード" label-id="darkMode" />
           </div>
         </AccordionContent>
       </AccordionPanel>
@@ -26,18 +26,18 @@
             <SwitchField
               v-model="isScrollableLog"
               label="ログの高さを固定する（スクロール）"
-              labelId="scrollableLog"
+              label-id="scrollableLog"
             />
           </div>
           <div class="field-wrapper">
             <SwitchField
               v-model="isDescendingLog"
               label="ログの最新を一番下にする"
-              labelId="descendingLog"
+              label-id="descendingLog"
             />
           </div>
           <div class="field-wrapper">
-            <SwitchField v-model="isTypingMode" label="タイピングモード" labelId="typingMode" />
+            <SwitchField v-model="isTypingMode" label="タイピングモード" label-id="typingMode" />
           </div>
           <div class="field-wrapper">
             <div><SpanText text="ログ行数" /></div>
