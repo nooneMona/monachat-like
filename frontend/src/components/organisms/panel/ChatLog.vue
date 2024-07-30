@@ -7,36 +7,9 @@
       overflowY: isScrollableLog ? 'scroll' : 'auto',
     }"
   >
-    <!-- ログの1行分 -->
-    <!-- TODO: コンポーネント化する -->
-    <div
-      class="log-row"
-      v-for="msg in visibleLogMessages"
-      :key="msg.head + msg.foot"
-      :style="{
-        backgroundColor: msg.visibleOnReceived ? 'none' : greyBackgroundColor,
-        /*rgbaが渡されているが、alphaの値が1.0でありrgbに変換されるため、rgbに0.4を新たに加える。そうすると勝手にrgbaに変換され、線が薄くなる*/
-        borderBottom: isDrawnUnderlineLog
-          ? `2px solid ${msg.color.replace(')', ', 0.4)')}`
-          : 'none',
-      }"
-    >
-      <SpanText
-        @click.right.prevent="changeSelectedUsersColor(msg.ihash)"
-        @click="toggleUserSelecting(msg.ihash)"
-        @keydown.enter="toggleUserSelecting(msg.ihash)"
-        :text="msg.head"
-        :type="selectedUsersIhashes[msg.ihash]"
-      />
-      <!-- 本文をリンクと通常のテキストで分離 -->
-      <template v-for="(content, index) in splitToContentsArray(msg.content)" :key="content">
-        <SpanText v-if="index % 2 === 0" :text="content" :type="selectedUsersIhashes[msg.ihash]" />
-        <a v-if="index % 2 === 1" class="link" :href="content" target="_blank">
-          <SpanText :text="content" type="link" />
-        </a>
-      </template>
-      <SpanText :text="msg.foot" :type="selectedUsersIhashes[msg.ihash]" />
-    </div>
+    <template v-for="msg in visibleLogMessages" :key="msg.head + msg.foot">
+      <LogRow :msg="msg" />
+    </template>
     <div class="log-info-container" v-if="!isDescendingLog && visibleLogMessages.length !== 0">
       <SpanText :text="`現在のログ: ${visibleLogMessages.length}件`" type="text" />
     </div>
@@ -46,9 +19,9 @@
 <script setup lang="ts">
 import { onMounted, watch, ref, nextTick, onUnmounted } from "vue";
 import SpanText from "@/components/atoms/SpanText.vue";
+import LogRow from "@/components/organisms/LogRow.vue";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores/setting";
-import { useUIStore } from "@/stores/ui";
 import { useLogStore } from "@/stores/log";
 
 const pageTitle = document.title;
@@ -57,29 +30,13 @@ const wrapperEl = ref<HTMLDivElement>();
 // ストア
 const logStore = useLogStore();
 const settingStore = useSettingStore();
-const uiStore = useUIStore();
 
 const { visibleLogMessages } = storeToRefs(logStore);
-const { isScrollableLog, isDescendingLog, isDrawnUnderlineLog, selectedUsersIhashes } =
-  storeToRefs(settingStore);
-const { greyBackgroundColor } = storeToRefs(uiStore);
+const { isScrollableLog, isDescendingLog } = storeToRefs(settingStore);
 
 // スクロール位置が下端にあるか
 const isLatestScrollPosition = ref(true);
 const unseenLogCounter = ref(0);
-
-const splitToContentsArray = (msg: string): string[] => {
-  const urlPattern = /https?:\/\/[^\s$.?#].[^\s]*/gm;
-  const plainContents = msg.split(urlPattern) ?? [];
-  const urlContents = msg.match(urlPattern) ?? [];
-  const resultArray = [];
-  for (let i = 0; i < urlContents.length; i += 1) {
-    resultArray.push(plainContents[i] as string);
-    resultArray.push(urlContents[i] as string);
-  }
-  resultArray.push(plainContents[plainContents.length - 1] as string);
-  return resultArray;
-};
 
 const scrollToLatest = () => {
   const elm = wrapperEl.value;
@@ -107,13 +64,6 @@ const handleVisibilityChange = () => {
     resetUnseenLogCounter();
     document.title = pageTitle;
   }
-};
-
-const toggleUserSelecting = (ihash: string) => {
-  settingStore.toggleUserSelecting(ihash);
-};
-const changeSelectedUsersColor = (ihash: string) => {
-  settingStore.changeSelectedUserColor(ihash);
 };
 
 const increaseUnseenLogCounter = () => {
@@ -169,15 +119,8 @@ watch(
   flex-direction: column;
   row-gap: 2px;
 
-  .log-row {
-    overflow-wrap: break-word;
-
-    .link {
-      text-decoration: none;
-    }
-    .log-info-container {
-      padding-top: 16px;
-    }
+  .log-info-container {
+    padding-top: 16px;
   }
 }
 </style>

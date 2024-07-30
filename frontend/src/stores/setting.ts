@@ -21,6 +21,7 @@ type StorageKey =
   | "descendingLog"
   | "drawBorderBottomLog"
   | "logInfinite"
+  | "logLineNumber"
   | "selectedUsersIhashes"
   | "log";
 const TRUE = "true";
@@ -113,9 +114,15 @@ export const useSettingStore = defineStore("setting", () => {
   const isDrawnUnderlineLog = ref(getBooleanValueWithDefault("drawBorderBottomLog", false));
   const updateIsDrawnUnderlineLog = (value: boolean) =>
     updateBooleanValueWithPerpetuation(isDrawnUnderlineLog, "drawBorderBottomLog", value);
+  // TODO: logLineNumberへの移行が完了したら削除
   const isInfiniteLog = ref(getBooleanValueWithDefault("logInfinite", false)); // ログを無限に保存するか
-  const updateIsInfiniteLog = (value: boolean) =>
-    updateBooleanValueWithPerpetuation(isInfiniteLog, "logInfinite", value);
+  const logLineNumber = ref(getValueWithDefault("logLineNumber", ""));
+  const logLineNumberInteger = computed(() => {
+    const parsed = parseInt(logLineNumber.value, 10);
+    return isNaN(parsed) ? 0 : parsed;
+  });
+  const updateLogLineNumber = (value: string) =>
+    updateValueWithPerpetuation(logLineNumber, "logLineNumber", value);
   const settingSetupResult = {
     selectedVolume,
     updateSelectedVolume,
@@ -134,7 +141,9 @@ export const useSettingStore = defineStore("setting", () => {
     isDrawnUnderlineLog,
     updateIsDrawnUnderlineLog,
     isInfiniteLog,
-    updateIsInfiniteLog,
+    logLineNumber,
+    logLineNumberInteger,
+    updateLogLineNumber,
   };
 
   // ユーザー設定情報

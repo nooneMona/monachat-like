@@ -15,7 +15,7 @@
       </div>
     </div>
     <div v-if="isLogVisible" class="log-window">
-      <div v-for="log in visibleLogMessages.slice(0, logLines)" :key="log.head + log.foot">
+      <div v-for="log in visibleLogMessages" :key="log.head + log.foot">
         <div><SpanText :text="`${log.head}${log.content}${log.foot}`" /></div>
       </div>
     </div>
@@ -147,7 +147,6 @@ const gripY = ref(0);
 const permittedSubmitting = ref(true); // チャットの送信が許可されているかどうか
 const keyCount = ref(0); // キータイプ数
 const typingStartTime = ref(0); // タイピング開始時刻
-const logLines = ref<Number.POSITIVE_INFINITY | 200 | 100 | 50>(Number.POSITIVE_INFINITY);
 
 // ストア
 const { disconnected, myID } = storeToRefs(userStore);
@@ -178,10 +177,10 @@ const topRightText = computed(() =>
   !disconnected.value ? `${totalUser.value}人 (ID:${displayingMyID.value})` : "切断しました",
 );
 const logLinesText = computed(() => {
-  if (logLines.value === Number.POSITIVE_INFINITY) {
+  if (settingStore.logLineNumberInteger === 0) {
     return "制限なし";
   }
-  return `${logLines.value}行`;
+  return `${settingStore.logLineNumberInteger}行`;
 });
 
 const isMine = (id: string) => {
@@ -253,18 +252,21 @@ const clickLogMode = () => {
   isLogVisible.value = !isLogVisible.value;
 };
 const clickLogLines = () => {
-  switch (logLines.value) {
-    case Number.POSITIVE_INFINITY:
-      logLines.value = 200;
+  switch (settingStore.logLineNumberInteger) {
+    case 0:
+      settingStore.updateLogLineNumber("1000");
+      break;
+    case 1000:
+      settingStore.updateLogLineNumber("200");
       break;
     case 200:
-      logLines.value = 100;
+      settingStore.updateLogLineNumber("100");
       break;
     case 100:
-      logLines.value = 50;
+      settingStore.updateLogLineNumber("50");
       break;
     case 50:
-      logLines.value = Number.POSITIVE_INFINITY;
+      settingStore.updateLogLineNumber("0");
       break;
   }
 };
