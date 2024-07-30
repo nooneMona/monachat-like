@@ -35,6 +35,9 @@ jobs:
       - name: install playwright
         run: yarn playwright install
         working-directory: ./frontend
+      - name: lint frontend
+        run: yarn lint
+        working-directory: ./frontend
       - name: test frontend
         run: yarn test:coverage
         working-directory: ./frontend
