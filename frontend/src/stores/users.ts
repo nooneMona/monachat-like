@@ -22,8 +22,8 @@ export const useUsersStore = defineStore("users", () => {
   const visibleUsers = computed(() => {
     return Object.keys(users.value)
       .filter((id) => users.value[id]!.alive)
-      .filter((id) => !idsIgnoresMe.value[id])
-      .filter((id) => !ihashsIgnoredByMe.value[users.value[id]!.ihash])
+      .filter((id) => !(idsIgnoresMe.value[id] ?? false))
+      .filter((id) => !(ihashsIgnoredByMe.value[users.value[id]!.ihash] ?? false))
       .reduce((result, id) => {
         const currentResult: ChatCharacterUserDict = { ...result };
         currentResult[id] = users.value[id]!;
@@ -35,7 +35,7 @@ export const useUsersStore = defineStore("users", () => {
     return (
       Object.keys(users.value)
         .filter((id) => users.value[id]!.alive)
-        .filter((id) => !idsIgnoresMe.value[id])
+        .filter((id) => !(idsIgnoresMe.value[id] ?? false))
         // 自分が無視したユーザーは解除できるべきである (ihashIgnoraedByMeを含めていない理由)
         .reduce((result, id) => {
           const currentResult: ChatCharacterUserDict = { ...result };

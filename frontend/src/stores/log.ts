@@ -52,8 +52,8 @@ export const useLogStore = defineStore("log", () => {
   const visibleLogMessages = computed(() => {
     const usersStore = useUsersStore();
     return logMessages.value
-      .filter((e) => !usersStore.ihashsSilentIgnoredByMe[e.ihash])
-      .filter((e) => !usersStore.ihashsIgnoredByMe[e.ihash]);
+      .filter((e) => !(usersStore.ihashsSilentIgnoredByMe[e.ihash] ?? false))
+      .filter((e) => !(usersStore.ihashsIgnoredByMe[e.ihash] ?? false));
   });
 
   const appendCommentLog = ({ id, cmt, typing }: ChatMessage) => {
@@ -65,7 +65,7 @@ export const useLogStore = defineStore("log", () => {
     const trip = usersStore.visibleUsers[id]?.trip;
     const ihash = usersStore.visibleUsers[id]?.ihash;
     let tripString = "";
-    if (trip) {
+    if (trip !== undefined) {
       tripString = `◆${trip.slice(0, 10)}`;
     } else {
       tripString = `◇${ihash?.slice(0, 6)}`;
@@ -95,7 +95,7 @@ export const useLogStore = defineStore("log", () => {
     const trip = usersStore.visibleUsers[id]?.trip;
     const ihash = usersStore.visibleUsers[id]?.ihash;
     let tripString = "";
-    if (trip) {
+    if (trip !== undefined) {
       tripString = `◆${trip.slice(0, 10)}`;
     } else {
       tripString = `◇${ihash?.slice(0, 6)}`;
