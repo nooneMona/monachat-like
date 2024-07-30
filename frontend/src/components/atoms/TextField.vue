@@ -1,9 +1,9 @@
 <template>
   <input
-    :class="{ dark: shouldBeDark, light: !shouldBeDark }"
     ref="inputEl"
-    type="text"
     v-model="model"
+    :class="{ dark: shouldBeDark, light: !shouldBeDark }"
+    type="text"
     @keydown="onKeydown"
   />
 </template>
@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<{ isDark?: boolean }>(), {
 const emits = defineEmits<{
   (e: "typed", value: string): void;
 }>();
-const model = defineModel();
+const model = defineModel<string>();
 
 const inputEl = ref(null);
 const typedInputEl: Ref<HTMLInputElement | undefined> = computed(

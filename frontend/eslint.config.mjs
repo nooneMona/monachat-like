@@ -10,16 +10,15 @@ import eslintConfigPrettier from "eslint-config-prettier";
 export default [
   { ignores: ["node_modules", "dist", ".storybook"] },
   { languageOptions: { globals: globals.browser } },
-  eslintConfigPrettier,
   ...tseslint.configs.recommended,
-  ...pluginVue.configs["flat/essential"],
+  ...pluginVue.configs["flat/recommended"],
   {
     name: "js",
     files: ["**/*.js"],
     rules: js.configs.recommended.rules,
   },
   {
-    files: ["**/*.ts"],
+    files: ["*.ts", "**/*.ts"],
     rules: { "@typescript-eslint/strict-boolean-expressions": "error" },
     languageOptions: {
       parser: tseslint.parser,
@@ -43,4 +42,5 @@ export default [
     },
     rules: { "@typescript-eslint/no-explicit-any": "off" },
   },
+  eslintConfigPrettier, // 一番後ろに置かないとよしなに調整してくれない。
 ];

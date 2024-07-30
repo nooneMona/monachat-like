@@ -1,7 +1,7 @@
 <template>
   <div class="dev-area">
     <div>
-      <SwitchField v-model="isVisibleFrame" label="フレーム表示" labelId="checkedFrame" />
+      <SwitchField v-model="isVisibleFrame" label="フレーム表示" label-id="checkedFrame" />
     </div>
     <div>
       <PrimeButton

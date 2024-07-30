@@ -6,7 +6,7 @@
       type="notice"
     />
     <div class="button">
-      <SimpleButton title="更新" @onClick="onClick" />
+      <SimpleButton title="更新" @on-click="onClick" />
     </div>
   </div>
 </template>

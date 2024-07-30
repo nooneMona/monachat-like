@@ -1,5 +1,7 @@
 <template>
   <div class="character-image">
+    <!-- 自サーバーに向けて取得したものを展開するため -->
+    <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-if="fetchedSVGText !== ''" class="character-svg" v-html="characterSVG" />
     <!-- TODO: ChatCharacterに移譲する -->
     <div v-show="isVisibleStat" class="stat-panel-frame">

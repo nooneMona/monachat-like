@@ -10,7 +10,7 @@
     <template v-for="msg in visibleLogMessages" :key="msg.head + msg.foot">
       <LogRow :msg="msg" />
     </template>
-    <div class="log-info-container" v-if="!isDescendingLog && visibleLogMessages.length !== 0">
+    <div v-if="!isDescendingLog && visibleLogMessages.length !== 0" class="log-info-container">
       <SpanText :text="`現在のログ: ${visibleLogMessages.length}件`" type="text" />
     </div>
   </div>

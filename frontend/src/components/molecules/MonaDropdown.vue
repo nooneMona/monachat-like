@@ -13,10 +13,10 @@
       <SpanText :text="`▼${title}`" :size="10" type="text" :is-dark="shouldBeDark" />
     </button>
     <button
-      :class="{ dark: shouldBeDark, light: !shouldBeDark }"
-      v-show="isVisibleSelectionBox"
       v-for="option in options"
+      v-show="isVisibleSelectionBox"
       :key="option.value"
+      :class="{ dark: shouldBeDark, light: !shouldBeDark }"
       @click="onSelect(option.value)"
     >
       <SpanText :text="option.text" :size="10" type="text" :is-dark="shouldBeDark" />

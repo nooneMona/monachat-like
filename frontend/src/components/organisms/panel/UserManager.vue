@@ -2,11 +2,11 @@
   <div>
     <DataTable
       :value="manageableUsers"
-      :resizableColumns="true"
+      :resizable-columns="true"
       size="small"
-      columnResizeMode="fit"
-      responsiveLayout="scroll"
-      stripedRows
+      column-resize-mode="fit"
+      responsive-layout="scroll"
+      striped-rows
     >
       <Column>
         <template #header>

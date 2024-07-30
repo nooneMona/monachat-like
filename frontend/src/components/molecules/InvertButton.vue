@@ -1,5 +1,5 @@
 <template>
-  <img src="/img/invert.svg" alt="反転" @click.prevent="click" @keydown="click" draggable="false" />
+  <img src="/img/invert.svg" alt="反転" draggable="false" @click.prevent="click" @keydown="click" />
 </template>
 
 <script setup lang="ts">
