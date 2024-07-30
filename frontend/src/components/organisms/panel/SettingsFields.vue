@@ -40,11 +40,8 @@
             <SwitchField v-model="isTypingMode" label="タイピングモード" labelId="typingMode" />
           </div>
           <div class="field-wrapper">
-            <SwitchField
-              v-model="isLogInfinite"
-              label="ログを無限に保存する（OFF: 1,000行）"
-              labelId="logInfinite"
-            />
+            <div><SpanText text="ログ行数" /></div>
+            <SelectButton v-model="logLineNumber" :options="options" aria-labelledby="basic" />
           </div>
           <div class="field-wrapper">
             <PrimeButton
@@ -67,12 +64,16 @@ import Accordion from "primevue/accordion";
 import AccordionPanel from "primevue/accordionpanel";
 import AccordionHeader from "primevue/accordionheader";
 import AccordionContent from "primevue/accordioncontent";
+import SelectButton from "primevue/selectbutton";
 import SwitchField from "@/components/molecules/SwitchField.vue";
+import SpanText from "@/components/atoms/SpanText.vue";
 import { useSettingStore } from "@/stores/setting";
 import { useLogStore } from "@/stores/log";
 
 const logStore = useLogStore();
 const settingStore = useSettingStore();
+
+const options = ["制限なし", "1000行", "200行", "100行", "50行"];
 
 const isKBMode = computed({
   get: () => settingStore.isKBMode,
@@ -94,9 +95,46 @@ const isDrawnUnderlineLog = computed({
   get: () => settingStore.isDrawnUnderlineLog,
   set: (value) => settingStore.updateIsDrawnUnderlineLog(value),
 });
-const isLogInfinite = computed({
-  get: () => settingStore.isInfiniteLog,
-  set: (value) => settingStore.updateIsInfiniteLog(value),
+const logLineNumber = computed({
+  get: () => {
+    const value = settingStore.logLineNumber;
+    switch (value) {
+      case "0":
+        return "制限なし";
+      case "1000":
+        return "1000行";
+      case "200":
+        return "200行";
+      case "100":
+        return "100行";
+      case "50":
+        return "50行";
+      default:
+        return "";
+    }
+  },
+  set: (value) => {
+    switch (value) {
+      case "制限なし":
+        settingStore.updateLogLineNumber("0");
+        break;
+      case "1000行":
+        settingStore.updateLogLineNumber("1000");
+        break;
+      case "200行":
+        settingStore.updateLogLineNumber("200");
+        break;
+      case "100行":
+        settingStore.updateLogLineNumber("100");
+        break;
+      case "50行":
+        settingStore.updateLogLineNumber("50");
+        break;
+      default:
+        settingStore.updateLogLineNumber("");
+        break;
+    }
+  },
 });
 const isDarkMode = computed({
   get: () => settingStore.isDarkMode,
@@ -115,11 +153,21 @@ watch(
   },
   { immediate: true },
 );
+
+// NOTE: logInfiniteの移行
+if (logLineNumber.value === "") {
+  logLineNumber.value = settingStore.isInfiniteLog ? "制限なし" : "1000行";
+}
 </script>
 
-<style>
+<style lang="scss" scoped>
 .field-wrapper {
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
+}
+
+:deep(.p-togglebutton) {
+  width: 100px;
+  padding: 6px 10px;
 }
 </style>

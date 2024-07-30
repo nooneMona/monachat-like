@@ -21,9 +21,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import PrimeButton from "primevue/button";
 import SwitchField from "@/components/molecules/SwitchField.vue";
-import { computed } from "vue";
 import { useDevStore } from "@/stores/develop";
 
 const devStore = useDevStore();

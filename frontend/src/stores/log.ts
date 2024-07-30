@@ -27,13 +27,14 @@ export const useLogStore = defineStore("log", () => {
     ihash: string;
   }) => {
     const settingStore = useSettingStore();
-    const MAX_LOG_LENGTH = 1_000;
-    if (settingStore.isInfiniteLog) {
+    const logLineNumber = settingStore.logLineNumberInteger;
+    if (logLineNumber === 0) {
       logs.value = [log, ...logs.value];
       return;
     }
-    logs.value = [log, ...logs.value.slice(0, MAX_LOG_LENGTH - 1)];
+    logs.value = [log, ...logs.value.slice(0, logLineNumber - 1)];
   };
+
   const resetLog = () => {
     const settingStore = useSettingStore();
     logs.value.splice(0);
