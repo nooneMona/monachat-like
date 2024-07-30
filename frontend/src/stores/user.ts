@@ -229,7 +229,7 @@ export const useUserStore = defineStore("user", () => {
     if (targetIhash === ihash.value) {
       return;
     }
-    const newIgnores = !usersStore.ihashsIgnoredByMe[targetIhash];
+    const newIgnores = !(usersStore.ihashsIgnoredByMe[targetIhash] ?? false);
     socketIOInstance.emit("IG", {
       token: myToken.value,
       stat: newIgnores ? "on" : "off",

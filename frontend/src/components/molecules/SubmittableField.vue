@@ -4,7 +4,7 @@
       <TextField ref="inputEl" v-model="model" @typed="onTyped" />
     </div>
     <div class="button">
-      <SimpleButton title="OK" @onClick="submit" :disabled />
+      <SimpleButton title="OK" :disabled @on-click="submit" />
     </div>
   </form>
 </template>

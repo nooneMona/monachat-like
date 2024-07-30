@@ -5,7 +5,7 @@
     <div class="field-space"></div>
     <div><SpanText text="なまえを入れてください" :size="26" /></div>
     <div class="field-area">
-      <SubmittableField ref="nameField" @submit="submitName" v-model="nameWithTrip" />
+      <SubmittableField ref="nameField" v-model="nameWithTrip" @submit="submitName" />
     </div>
     <div class="rule-area">
       <div class="rule-title">

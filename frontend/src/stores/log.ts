@@ -27,13 +27,14 @@ export const useLogStore = defineStore("log", () => {
     ihash: string;
   }) => {
     const settingStore = useSettingStore();
-    const MAX_LOG_LENGTH = 1_000;
-    if (settingStore.isInfiniteLog) {
+    const logLineNumber = settingStore.logLineNumberInteger;
+    if (logLineNumber === 0) {
       logs.value = [log, ...logs.value];
       return;
     }
-    logs.value = [log, ...logs.value.slice(0, MAX_LOG_LENGTH - 1)];
+    logs.value = [log, ...logs.value.slice(0, logLineNumber - 1)];
   };
+
   const resetLog = () => {
     const settingStore = useSettingStore();
     logs.value.splice(0);
@@ -51,8 +52,8 @@ export const useLogStore = defineStore("log", () => {
   const visibleLogMessages = computed(() => {
     const usersStore = useUsersStore();
     return logMessages.value
-      .filter((e) => !usersStore.ihashsSilentIgnoredByMe[e.ihash])
-      .filter((e) => !usersStore.ihashsIgnoredByMe[e.ihash]);
+      .filter((e) => !(usersStore.ihashsSilentIgnoredByMe[e.ihash] ?? false))
+      .filter((e) => !(usersStore.ihashsIgnoredByMe[e.ihash] ?? false));
   });
 
   const appendCommentLog = ({ id, cmt, typing }: ChatMessage) => {
@@ -64,7 +65,7 @@ export const useLogStore = defineStore("log", () => {
     const trip = usersStore.visibleUsers[id]?.trip;
     const ihash = usersStore.visibleUsers[id]?.ihash;
     let tripString = "";
-    if (trip) {
+    if (trip !== undefined) {
       tripString = `◆${trip.slice(0, 10)}`;
     } else {
       tripString = `◇${ihash?.slice(0, 6)}`;
@@ -94,7 +95,7 @@ export const useLogStore = defineStore("log", () => {
     const trip = usersStore.visibleUsers[id]?.trip;
     const ihash = usersStore.visibleUsers[id]?.ihash;
     let tripString = "";
-    if (trip) {
+    if (trip !== undefined) {
       tripString = `◆${trip.slice(0, 10)}`;
     } else {
       tripString = `◇${ihash?.slice(0, 6)}`;

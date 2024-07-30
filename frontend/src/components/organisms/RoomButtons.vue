@@ -1,11 +1,12 @@
 <template>
   <div class="rooms">
-    <template v-for="rooms in roomsColumns" :key="rooms">
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <template v-for="roomsColumn in roomsColumns" :key="roomsColumn">
       <div class="rooms-column">
-        <template v-for="room in rooms" :key="room.id">
+        <template v-for="room in roomsColumn" :key="room.id">
           <div class="room-cell">
             <div class="room-button-frame">
-              <SimpleButton :title="room.name" @onClick="onClick(room)" :textSize="16" />
+              <SimpleButton :title="room.name" :text-size="16" @on-click="onClick(room)" />
             </div>
             <SpanText :text="`${roomCount[room.id] ?? 0}人`" :size="18" />
           </div>

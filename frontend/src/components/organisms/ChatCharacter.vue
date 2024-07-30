@@ -1,14 +1,14 @@
 <template>
   <div :class="['character-container', { 'debug-frame': isVisibleFrame }]">
-    <div class="debug-text character-text" v-if="isVisibleFrame">
+    <div v-if="isVisibleFrame" class="debug-text character-text">
       <SpanText :text="`(${user.x}, ${user.y})`" :size="10" />
     </div>
     <BubbleArea
       class="bubble-area"
       :user="user"
       :messages="messages"
-      :bubbleAreaHeight
-      @bubbleDeleted="bubbleDeleted"
+      :bubble-area-height
+      @bubble-deleted="bubbleDeleted"
     />
     <div ref="characterEl" class="character">
       <CharacterImage
@@ -21,7 +21,7 @@
           borderColor: selectedBorderColor,
         }"
         :user="user"
-        :depthRate="depthRate"
+        :depth-rate="depthRate"
         :is-k-b-mode="isKBMode"
         :is-silent="isSilent"
         @click="toggleUserSelecting(user.ihash) /* TODO: 親コンポーネントに渡す */"
@@ -30,7 +30,7 @@
             ? changeSelectedUsersColor(user.ihash)
             : '' /* TODO: 親コンポーネントに渡す */
         "
-        @imageUpdated="imageUpdated"
+        @image-updated="imageUpdated"
       />
       <div :class="['character-text', { 'debug-frame': isVisibleFrame }]">
         <SpanText :text="user.name" />

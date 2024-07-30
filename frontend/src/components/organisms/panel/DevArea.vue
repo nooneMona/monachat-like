@@ -1,7 +1,7 @@
 <template>
   <div class="dev-area">
     <div>
-      <SwitchField v-model="isVisibleFrame" label="フレーム表示" labelId="checkedFrame" />
+      <SwitchField v-model="isVisibleFrame" label="フレーム表示" label-id="checkedFrame" />
     </div>
     <div>
       <PrimeButton
@@ -21,9 +21,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import PrimeButton from "primevue/button";
 import SwitchField from "@/components/molecules/SwitchField.vue";
-import { computed } from "vue";
 import { useDevStore } from "@/stores/develop";
 
 const devStore = useDevStore();
