@@ -1,6 +1,6 @@
 import MonaDropdown, { Option } from "@/components/molecules/MonaDropdown.vue";
 import { createTestingPinia } from "@pinia/testing";
-import { flushPromises, mount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 
 describe("MonaDropdown", () => {
   const getCommonMountOption = (props?: object) => ({
