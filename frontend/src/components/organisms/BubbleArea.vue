@@ -1,7 +1,7 @@
 <template>
   <div
     :class="['bubble-area-frame', { 'debug-frame': isVisibleFrame }]"
-    :style="{ bottom: `${bubbleAreaHeight - user.y}`, height: `${bubbleAreaHeight}px` }"
+    :style="{ bottom: `${bubbleAreaHeight - user.y}px`, height: `${bubbleAreaHeight}px` }"
   >
     <div :class="['bubble-area', { 'debug-frame': isVisibleFrame }]">
       <div v-for="msg in messages" :key="msg.messageID" class="bubble-container">
