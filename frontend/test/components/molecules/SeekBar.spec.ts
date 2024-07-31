@@ -1,7 +1,6 @@
 import SeekBar from "@/components/molecules/SeekBar.vue";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
-import { ref } from "vue";
 
 describe("SeekBar", () => {
   const getCommonMountOption = (props?: object) => ({
