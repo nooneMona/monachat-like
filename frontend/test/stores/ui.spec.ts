@@ -1,10 +1,12 @@
-import { createPinia, setActivePinia } from "pinia";
+import { setActivePinia } from "pinia";
 import { useUIStore } from "@/stores/ui";
 import { createTestingPinia } from "@pinia/testing";
 
+const testingPinia = createTestingPinia({});
+
 describe("useUIStore", () => {
   beforeEach(() => {
-    setActivePinia(createPinia());
+    setActivePinia(testingPinia);
   });
 
   it("width should be return  1000", () => {
@@ -41,7 +43,6 @@ describe("useUIStore", () => {
       },
     });
     setActivePinia(testingPinia);
-
     const uiStore = useUIStore();
     expect(uiStore.backgroundColor).toBe(expectedBackgroundColor);
   });
