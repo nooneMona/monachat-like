@@ -4,6 +4,7 @@ import tseslint from "typescript-eslint";
 import pluginVue from "eslint-plugin-vue";
 import vueParser from "vue-eslint-parser";
 import eslintConfigPrettier from "eslint-config-prettier";
+import vitest from "eslint-plugin-vitest";
 
 // @ts-check
 /** @type { import("eslint").Linter.FlatConfig[] } */
@@ -34,13 +35,16 @@ export default [
   },
   {
     files: ["test/**/*.spec.ts"],
+    plugins: {
+      vitest,
+    },
     languageOptions: {
       globals: {
         it: "readonly",
         describe: "readonly",
       },
     },
-    rules: { "@typescript-eslint/no-explicit-any": "off" },
+    rules: { ...vitest.configs.recommended.rules, "@typescript-eslint/no-explicit-any": "off" },
   },
   eslintConfigPrettier, // 一番後ろに置かないとよしなに調整してくれない。
 ];
