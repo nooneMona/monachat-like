@@ -16,7 +16,7 @@
     </div>
     <div v-if="isLogVisible" class="log-window">
       <div v-for="log in visibleLogMessages" :key="log.head + log.foot">
-        <div><SpanText :text="`${log.head}${log.content}${log.foot}`" /></div>
+        <div class="log-row"><SpanText :text="`${log.head}${log.content}${log.foot}`" /></div>
       </div>
     </div>
     <img
@@ -399,6 +399,10 @@ const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messag
     overflow-wrap: break-word;
     z-index: 10;
     background-color: v-bind(panelBackgroundColor);
+
+    .log-row {
+      overflow: hidden; // NOTE: 要素から想定外の方向にはみ出る文字を抑制する
+    }
   }
 
   .character-frame {
