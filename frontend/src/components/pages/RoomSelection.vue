@@ -22,7 +22,7 @@
           </div>
           <div class="character-selection-box-image">
             <CharacterImage
-              :user="{ type: userType, hexValue: userHexColor, stat: '通常', scl: 100 }"
+              :user="{ type: userType, hexValue: userHexColor, scl: 100 }"
               :depth-rate="1.0"
               :is-k-b-mode
               :is-silent="false"
@@ -69,7 +69,7 @@ import axios from "axios";
 import Color from "@/stores/color";
 import SpanText from "@/components/atoms/SpanText.vue";
 import SimpleButton from "@/components/atoms/SimpleButton.vue";
-import CharacterImage from "@/components/organisms/CharacterImage.vue";
+import CharacterImage from "@/components/molecules/character/CharacterImage.vue";
 import SeekBar from "@/components/molecules/SeekBar.vue";
 import ColorPalette from "@/components/molecules/ColorPalette.vue";
 import MonaDropdown from "@/components/molecules/MonaDropdown.vue";

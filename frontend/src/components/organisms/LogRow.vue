@@ -54,5 +54,6 @@ const changeSelectedUsersColor = (ihash: string) => {
 <style lang="scss" scoped>
 .log-row {
   overflow-wrap: break-word;
+  overflow: hidden; // NOTE: 要素から想定外の方向にはみ出る文字を抑制する
 }
 </style>

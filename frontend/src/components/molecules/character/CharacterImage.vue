@@ -1,25 +1,19 @@
 <template>
   <div class="character-image">
-    <!-- 自サーバーに向けて取得したものを展開するため -->
+    <!-- NOTE: 自サーバーに向けて取得したものをSVGとして展開するため -->
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-if="fetchedSVGText !== ''" class="character-svg" v-html="characterSVG" />
-    <!-- TODO: ChatCharacterに移譲する -->
-    <div v-show="isVisibleStat" class="stat-panel-frame">
-      <StatPanel :text="user.stat" />
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import axios from "axios";
-import { Stat } from "@/domain/stat";
 import defaultCharhanSVG from "@/stores/defaultCharhan";
-import StatPanel from "@/components/molecules/character/StatPanel.vue";
 import { ChatCharacterUser } from "@/domain/type";
 
 const props = defineProps<{
-  user: Pick<ChatCharacterUser, "type" | "scl" | "hexValue" | "stat">;
+  user: Pick<ChatCharacterUser, "type" | "scl" | "hexValue">;
   depthRate: number;
   isKBMode: boolean;
   isSilent: boolean;
@@ -43,9 +37,12 @@ const imageFilePath = computed(() => {
 });
 const characterSVG = computed(() => {
   let text = fetchedSVGText.value;
+  // キャラクターに色を塗る
   text = text.replaceAll(`style="fill:white;"`, `fill="${props.user.hexValue}"`);
+  text = text.replaceAll(`fill="#ffffff"`, `fill="${props.user.hexValue}"`);
+  // クールな美術館のキャラの線を太くする
   text = text.replaceAll(`stroke-width="0.05"`, `stroke-width="0.5"`);
-  return text.replaceAll(`fill="#ffffff"`, `fill="${props.user.hexValue}"`);
+  return text;
 });
 const scale = computed(() => {
   const oneValue = props.depthRate;
@@ -53,10 +50,6 @@ const scale = computed(() => {
     return `scale(${oneValue}, ${oneValue})`;
   }
   return `scale(${-oneValue}, ${oneValue})`;
-});
-const isVisibleStat = computed(() => {
-  const stat = Stat.create(props.user.stat);
-  return stat.isVisible();
 });
 
 const fetchSVGData = async () => {
@@ -96,19 +89,13 @@ watch([fetchedSVGText], () => {
 
 <style lang="scss" scoped>
 .character-image {
-  position: relative;
+  pointer-events: auto;
   opacity: v-bind(characterOpacity);
 
   .character-svg {
+    pointer-events: none; // SVGの要素にドラッグすると変な動きをするのを抑止
     transform-origin: center bottom;
     transform: v-bind(scale);
-  }
-
-  .stat-panel-frame {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
   }
 }
 </style>
