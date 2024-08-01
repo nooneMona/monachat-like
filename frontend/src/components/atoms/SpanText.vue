@@ -41,6 +41,5 @@ const fontSize = computed(() => (props.size !== undefined ? `${props.size}px` : 
 span {
   font-size: 14px;
   font-family: "Noto Sans JP", monospace;
-  overflow: "hidden";
 }
 </style>

@@ -62,6 +62,7 @@ const borderColor = computed(() => (shouldBeDark.value ? "white" : "black"));
 
   text-align: center;
   white-space: nowrap;
+  overflow: hidden; // NOTE: 要素から想定外の方向にはみ出る文字を抑制する
 
   &.light {
     border-color: black;
