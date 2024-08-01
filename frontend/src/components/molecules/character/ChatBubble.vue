@@ -10,7 +10,9 @@
       },
     ]"
   >
-    <SpanText :text="msg.cmt" :type="isDarkColor(color) ? 'white' : 'black'" class="text" />
+    <div class="text-container">
+      <SpanText :text="msg.cmt" :type="isDarkColor(color) ? 'white' : 'black'" class="text" />
+    </div>
   </div>
 </template>
 
@@ -62,7 +64,6 @@ const borderColor = computed(() => (shouldBeDark.value ? "white" : "black"));
 
   text-align: center;
   white-space: nowrap;
-  overflow: hidden; // NOTE: 要素から想定外の方向にはみ出る文字を抑制する
 
   &.light {
     border-color: black;
@@ -71,11 +72,15 @@ const borderColor = computed(() => (shouldBeDark.value ? "white" : "black"));
     border-color: white;
   }
 
-  .text {
-    /* これがないとline-heightが小さいときに上に偏ってしまう。謎すぎる。。 */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .text-container {
+    overflow: hidden; // NOTE: 要素から想定外の方向にはみ出る文字を抑制する
+
+    .text {
+      /* これがないとline-heightが小さいときに上に偏ってしまう。謎すぎる。。 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   &--normal {
