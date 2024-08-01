@@ -20,16 +20,17 @@ describe("BubbleArea", () => {
   });
 
   it("should render correctly", () => {
+    expect.assertions(6);
     const wrapper = mount(BubbleArea, { ...getCommonMountOption() });
-    expect(wrapper.classes()).toEqual(["bubble-area-frame"]);
+    expect(wrapper.classes()).toStrictEqual(["bubble-area-frame"]);
     expect(wrapper.attributes("style")).toBe("bottom: 200px; height: 300px;");
     const bubbleArea = wrapper.find(".bubble-area");
     expect(bubbleArea.exists()).toBe(true);
-    expect(bubbleArea.classes()).toEqual(["bubble-area"]);
+    expect(bubbleArea.classes()).toStrictEqual(["bubble-area"]);
 
     const bubbleContainers = wrapper.findAll(".bubble-container");
-    expect(bubbleContainers.length).toBe(2);
-    expect(wrapper.findAllComponents({ name: "ChatBubble" }).length).toBe(2);
+    expect(bubbleContainers).toHaveLength(2);
+    expect(wrapper.findAllComponents({ name: "ChatBubble" })).toHaveLength(2);
   });
 
   it.each`
@@ -41,6 +42,7 @@ describe("BubbleArea", () => {
   `(
     `should get period $selectedTime when selectedTime is $selectedTime`,
     ({ selectedTime, expectedPeriod }) => {
+      expect.assertions(1);
       const wrapper = mount(BubbleArea, {
         ...getCommonMountOption(),
         global: {
@@ -57,9 +59,12 @@ describe("BubbleArea", () => {
     },
   );
 
-  it.todo("@bubbleDeleted", () => {});
+  it.todo("@bubbleDeleted", () => {
+    expect.assertions(0);
+  });
 
   it("should render correctly when debug frame is visible", () => {
+    expect.assertions(2);
     const wrapper = mount(BubbleArea, {
       ...getCommonMountOption(),
       global: {
@@ -72,7 +77,7 @@ describe("BubbleArea", () => {
         ],
       },
     });
-    expect(wrapper.classes()).toEqual(["bubble-area-frame", "debug-frame"]);
-    expect(wrapper.find(".bubble-area").classes()).toEqual(["bubble-area", "debug-frame"]);
+    expect(wrapper.classes()).toStrictEqual(["bubble-area-frame", "debug-frame"]);
+    expect(wrapper.find(".bubble-area").classes()).toStrictEqual(["bubble-area", "debug-frame"]);
   });
 });

@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "lint": "eslint --fix src",
+    "lint": "eslint --fix .",
     "storybook": "sb dev -p 6006",
     "build-storybook": "sb build",
     "test": "vitest",

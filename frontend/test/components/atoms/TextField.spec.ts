@@ -13,6 +13,7 @@ describe("TextField", () => {
   });
 
   it("should render correctly", () => {
+    expect.assertions(2);
     const wrapper = mount(TextField, {
       ...getCommonMountOption(),
     });
@@ -21,6 +22,7 @@ describe("TextField", () => {
   });
 
   it("should render with dark style", () => {
+    expect.assertions(1);
     const wrapper = mount(TextField, {
       ...getCommonMountOption({
         isDark: true,
@@ -30,6 +32,7 @@ describe("TextField", () => {
   });
 
   it("should render with dark style by store", () => {
+    expect.assertions(1);
     const wrapper = mount(TextField, {
       ...getCommonMountOption(),
       global: {
@@ -46,29 +49,32 @@ describe("TextField", () => {
   });
 
   it("set value", () => {
+    expect.assertions(1);
     const wrapper = mount(TextField, {
       ...getCommonMountOption(),
     });
     wrapper.find("input").setValue("こんにちは");
-    expect(wrapper.emitted("update:modelValue")).toEqual([["こんにちは"]]);
+    expect(wrapper.emitted("update:modelValue")).toStrictEqual([["こんにちは"]]);
   });
 
   it("@typed", () => {
+    expect.assertions(1);
     const wrapper = mount(TextField, {
       ...getCommonMountOption(),
     });
     wrapper.find("input").trigger("keydown", {
       key: "a",
     });
-    expect(wrapper.emitted("typed")).toEqual([["a"]]);
+    expect(wrapper.emitted("typed")).toStrictEqual([["a"]]);
   });
 
   it("#focus", () => {
+    expect.assertions(1);
     const wrapper = mount(TextField, {
       ...getCommonMountOption(),
       attachTo: document.body, // NOTE: document.bodyにアタッチしないとfocusのテストができない。
     });
     wrapper.vm.focus();
-    expect(wrapper.get("input").element).toEqual(document.activeElement);
+    expect(wrapper.get("input").element).toStrictEqual(document.activeElement);
   });
 });

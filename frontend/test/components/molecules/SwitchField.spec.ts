@@ -16,6 +16,7 @@ describe("SwitchField", () => {
   });
 
   it("should render label", () => {
+    expect.assertions(1);
     const wrapper = mount(SwitchField, {
       ...getCommonMountOption(),
     });
@@ -24,20 +25,22 @@ describe("SwitchField", () => {
   });
 
   it("should emit @update:modelValue false->true", async () => {
+    expect.assertions(1);
     const wrapper = mount(SwitchField, {
       ...getCommonMountOption({ modelValue: false }),
     });
 
     await wrapper.find("input").setValue(true);
-    expect(wrapper.emitted("update:modelValue")).toEqual([[true]]);
+    expect(wrapper.emitted("update:modelValue")).toStrictEqual([[true]]);
   });
 
   it("should emit @update:modelValue true->false", async () => {
+    expect.assertions(1);
     const wrapper = mount(SwitchField, {
       ...getCommonMountOption({ modelValue: true }),
     });
 
     await wrapper.find("input").setValue(false);
-    expect(wrapper.emitted("update:modelValue")).toEqual([[false]]);
+    expect(wrapper.emitted("update:modelValue")).toStrictEqual([[false]]);
   });
 });

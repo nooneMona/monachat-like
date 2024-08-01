@@ -91,7 +91,27 @@ export default [
         describe: "readonly",
       },
     },
-    rules: { ...vitest.configs.recommended.rules, "@typescript-eslint/no-explicit-any": "off" },
+    rules: {
+      ...vitest.configs.all.rules,
+      "@typescript-eslint/no-explicit-any": "off", // テストコードではanyを使って見やすいようにしたいことが多い
+      "vitest/consistent-test-filename": [
+        "error",
+        {
+          pattern: ".*\\.spec\\.[tj]sx?$",
+        },
+      ],
+      "vitest/max-expects": ["error", { max: 20 }], // 認知負荷を下げるフェーズに入ったらデフォルトの5に下げる
+      "vitest/no-alias-methods": ["off"], // エイリアスは使っていきたい
+      "vitest/no-hooks": ["off"],
+      "vitest/prefer-lowercase-title": [
+        "error",
+        {
+          ignoreTopLevelDescribe: true,
+        },
+      ],
+      "vitest/prefer-to-be-truthy": "off", // toBe(true)でしっかりと判定したいため
+      "vitest/prefer-to-be-falsy": "off", // toBe(false)でしっかりと判定したいため
+    },
   },
   eslintConfigPrettier, // 一番後ろに置かないとよしなに調整してくれない。
 ];

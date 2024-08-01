@@ -18,6 +18,7 @@ describe("ChatBubble", () => {
   });
 
   it("should render correctly", () => {
+    expect.assertions(6);
     const wrapper = mount(ChatBubble, {
       ...getCommonMountOption(),
     });
@@ -32,6 +33,7 @@ describe("ChatBubble", () => {
   });
 
   it("should render correctly with dark mode", () => {
+    expect.assertions(6);
     const wrapper = mount(ChatBubble, {
       ...getCommonMountOption({ isDark: true }),
     });
@@ -46,6 +48,7 @@ describe("ChatBubble", () => {
   });
 
   it("should render correctly with dark by store", () => {
+    expect.assertions(6);
     const wrapper = mount(ChatBubble, {
       ...getCommonMountOption(),
       global: {
@@ -69,6 +72,7 @@ describe("ChatBubble", () => {
   });
 
   it("should render correctly with style 2", () => {
+    expect.assertions(5);
     const wrapper = mount(ChatBubble, {
       ...getCommonMountOption({
         msg: {

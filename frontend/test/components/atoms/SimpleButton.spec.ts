@@ -15,6 +15,7 @@ describe("SimpleButton", () => {
 
   describe("props", () => {
     it("should render the component", () => {
+      expect.assertions(3);
       const wrapper = mount(SimpleButton, {
         ...getCommonMountOption(),
       });
@@ -24,6 +25,7 @@ describe("SimpleButton", () => {
     });
 
     it("should render the component with dark style", () => {
+      expect.assertions(1);
       const wrapper = mount(SimpleButton, {
         ...getCommonMountOption({
           isDark: true,
@@ -33,15 +35,19 @@ describe("SimpleButton", () => {
     });
 
     it("should render the component with disabled style", () => {
+      expect.assertions(1);
       const wrapper = mount(SimpleButton, {
         ...getCommonMountOption({
           disabled: true,
         }),
       });
-      expect(wrapper.get("button").attributes()).toEqual(expect.objectContaining({ disabled: "" }));
+      expect(wrapper.get("button").attributes()).toStrictEqual(
+        expect.objectContaining({ disabled: "" }),
+      );
     });
 
     it("should render the component with dark style from store", () => {
+      expect.assertions(1);
       const wrapper = mount(SimpleButton, {
         ...getCommonMountOption(),
         global: {
@@ -60,6 +66,7 @@ describe("SimpleButton", () => {
 
   describe("@click", () => {
     it("should emit event when button is clicked", async () => {
+      expect.assertions(1);
       const wrapper = mount(SimpleButton, {
         ...getCommonMountOption(),
       });
