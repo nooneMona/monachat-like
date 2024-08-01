@@ -19,12 +19,8 @@
           :depth-rate
           :is-k-b-mode
           :is-silent
-          @click="toggleUserSelecting(user.ihash) /* TODO: 親コンポーネントに渡す */"
-          @click.right.prevent="
-            selectedUsersIhashes[user.ihash]
-              ? changeSelectedUsersColor(user.ihash)
-              : '' /* TODO: 親コンポーネントに渡す */
-          "
+          @click="emits('click', { id: user.id, ihash: user.ihash })"
+          @click.right.prevent="emits('click-right', { id: user.id, ihash: user.ihash })"
           @image-updated="imageUpdated"
         />
         <div v-show="isVisibleStat" class="stat-panel-frame">
@@ -69,6 +65,8 @@ const props = withDefaults(
 const emits = defineEmits<{
   (e: "sizeUpdated", obj: { id: string; width: number; height: number }): void;
   (e: "bubbleDeleted", obj: { characterID: string; messageID: string }): void;
+  (e: "click", obj: { id: string; ihash: string }): void;
+  (e: "click-right", obj: { id: string; ihash: string }): void;
 }>();
 
 // 要素
@@ -130,12 +128,6 @@ const imageUpdated = () => {
     width: rect.width,
     height: rect.height,
   });
-};
-const toggleUserSelecting = (ihash: string) => {
-  settingStore.toggleUserSelecting(ihash);
-};
-const changeSelectedUsersColor = (ihash: string) => {
-  settingStore.changeSelectedUserColor(ihash);
 };
 const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messageID: string }) => {
   emits("bubbleDeleted", { characterID, messageID });

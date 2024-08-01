@@ -54,6 +54,8 @@
         @dragstart="dragStart"
         @size-updated="sizeUpdated"
         @bubble-deleted="bubbleDeleted"
+        @click="click"
+        @click-right="clickRight"
       />
     </div>
 
@@ -268,6 +270,15 @@ const clickLogLines = () => {
     case 50:
       settingStore.updateLogLineNumber("0");
       break;
+  }
+};
+const click = ({ ihash }: { ihash: string }) => {
+  settingStore.toggleUserSelecting(ihash);
+};
+const clickRight = ({ ihash }: { ihash: string }) => {
+  if (settingStore.selectedUsersIhashes[ihash]) {
+    settingStore.changeSelectedUserColor(ihash);
+    return;
   }
 };
 
