@@ -18,13 +18,13 @@ const props = withDefaults(defineProps<{ allowedEmpty?: boolean; disabled?: bool
   allowedEmpty: true,
   disabled: false,
 });
-const emits = defineEmits<{
+const emit = defineEmits<{
   (e: "submit", data: { text: string; shift: boolean }): void;
   (e: "typed", value: string): void;
   (e: "delete-all"): void;
 }>();
 const model = defineModel({ type: String });
-const inputEl = ref(null);
+const inputEl = ref<HTMLInputElement | null>(null);
 const typedInputEl: Ref<HTMLInputElement | undefined> = computed(
   () => inputEl.value as unknown as HTMLInputElement | undefined,
 );
@@ -34,19 +34,19 @@ const submit = (event: Event & { shiftKey: boolean }) => {
   if (!isValidSubmitting.value) {
     return;
   }
-  emits("submit", {
+  emit("submit", {
     text: model.value ?? "",
     shift: event.shiftKey,
   });
   model.value = "";
 };
 const onTyped = (value: string) => {
-  emits("typed", value);
+  emit("typed", value);
 };
 
 watchEffect(() => {
   if (model.value?.length === 0) {
-    emits("delete-all");
+    emit("delete-all");
   }
 });
 

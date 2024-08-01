@@ -7,6 +7,7 @@
     }"
     >{{ text }}</span
   >
+  <span v-else></span>
 </template>
 
 <script setup lang="ts">

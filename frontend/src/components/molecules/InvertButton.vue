@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-const emits = defineEmits<{ (e: "click"): void }>();
-const click = () => emits("click");
+const emit = defineEmits<{ (e: "click"): void }>();
+const click = () => emit("click");
 </script>
 
 <style lang="scss" scoped>

@@ -18,7 +18,7 @@ const props = defineProps<{
   isKBMode: boolean;
   isSilent: boolean;
 }>();
-const emits = defineEmits<{ (e: "image-updated"): void }>();
+const emit = defineEmits<{ (e: "image-updated"): void }>();
 
 // リアクティブ
 const fetchedSVGText = ref("");
@@ -82,7 +82,7 @@ watch([fetchedSVGText], () => {
   // NOTE: svgにセットされた瞬間はまだ描画されていない
   //       => タスクキューに積んで遅延させる
   setTimeout(() => {
-    emits("image-updated");
+    emit("image-updated");
   }, 0);
 });
 </script>

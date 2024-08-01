@@ -51,6 +51,29 @@ export default [
       "vue/define-props-declaration": ["error", "type-based"],
       "vue/html-comment-content-spacing": ["error", "always"],
       "vue/no-empty-component-block": ["error"],
+      "vue/no-multiple-objects-in-class": ["error"],
+      "vue/no-ref-object-reactivity-loss": ["off"], // if文の中で評価するときもNGになるので、、
+      "vue/no-required-prop-with-default": ["error"],
+      "vue/no-root-v-if": ["error"],
+      "vue/no-static-inline-styles": ["error"],
+      "vue/no-template-target-blank": ["warn"],
+      "vue/no-undef-components": [
+        "error",
+        {
+          ignorePatterns: ["router-view"],
+        },
+      ], // これのせいで不具合に気付かないことがよくあるので、必須
+      "vue/no-undef-properties": ["error"],
+      "vue/no-unused-emit-declarations": ["warn"],
+      "vue/no-unused-properties": ["warn"],
+      "vue/no-unused-refs": ["warn"],
+      "vue/no-useless-v-bind": ["error"],
+      "vue/no-v-text": ["error"],
+      "vue/padding-line-between-blocks": ["error"],
+      "vue/prefer-true-attribute-shorthand": ["error"],
+      "vue/require-macro-variable-name": ["error"],
+      "vue/require-typed-ref": ["error"],
+      "vue/static-class-names-order": ["error"],
     },
     languageOptions: {
       parser: vueParser,

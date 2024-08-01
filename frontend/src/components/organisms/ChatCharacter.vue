@@ -1,6 +1,6 @@
 <template>
   <div :class="['character-container', { 'debug-frame': isVisibleFrame }]">
-    <div v-if="isVisibleFrame" class="debug-text character-text">
+    <div v-if="isVisibleFrame" class="character-text debug-text">
       <SpanText :text="`(${user.x}, ${user.y})`" :size="10" />
     </div>
     <BubbleArea :user :messages :bubble-area-height @bubble-deleted="bubbleDeleted" />
@@ -19,8 +19,8 @@
           :depth-rate
           :is-k-b-mode
           :is-silent
-          @click="emits('click', { id: user.id, ihash: user.ihash })"
-          @click.right.prevent="emits('click-right', { id: user.id, ihash: user.ihash })"
+          @click="emit('click', { id: user.id, ihash: user.ihash })"
+          @click.right.prevent="emit('click-right', { id: user.id, ihash: user.ihash })"
           @image-updated="imageUpdated"
         />
         <div v-show="isVisibleStat" class="stat-panel-frame">
@@ -62,7 +62,7 @@ const props = withDefaults(
   }>(),
   { bubbleAreaHeight: 300, isDark: undefined },
 );
-const emits = defineEmits<{
+const emit = defineEmits<{
   (e: "size-updated", obj: { id: string; width: number; height: number }): void;
   (e: "bubble-deleted", obj: { characterID: string; messageID: string }): void;
   (e: "click", obj: { id: string; ihash: string }): void;
@@ -70,7 +70,7 @@ const emits = defineEmits<{
 }>();
 
 // 要素
-const characterEl = ref(null);
+const characterEl = ref<HTMLDivElement | null>(null);
 const typedCharacterEl: Ref<HTMLDivElement | undefined> = computed(
   () => characterEl.value as unknown as HTMLDivElement | undefined,
 );
@@ -123,14 +123,14 @@ const imageUpdated = () => {
   if (rect === undefined) {
     return;
   }
-  emits("size-updated", {
+  emit("size-updated", {
     id: props.user.id,
     width: rect.width,
     height: rect.height,
   });
 };
 const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messageID: string }) => {
-  emits("bubble-deleted", { characterID, messageID });
+  emit("bubble-deleted", { characterID, messageID });
 };
 
 onUpdated(() => {

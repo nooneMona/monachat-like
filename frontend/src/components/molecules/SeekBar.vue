@@ -22,7 +22,7 @@ const props = withDefaults(
   }>(),
   { index: 0 },
 );
-const emits = defineEmits<{ (e: "update:index", index: number): void }>();
+const emit = defineEmits<{ (e: "update:index", index: number): void }>();
 
 const index = computed({
   get: () => {
@@ -33,7 +33,7 @@ const index = computed({
     if (!Number.isFinite(numberIndex)) {
       return;
     }
-    emits("update:index", numberIndex);
+    emit("update:index", numberIndex);
   },
 });
 const isReady = computed(() => props.sequence.length > 0);

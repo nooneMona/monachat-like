@@ -22,7 +22,7 @@ export type Color = { id: number; hexColor: MonaHexColor };
 const props = withDefaults(defineProps<{ hexColors: Color[]; isDark?: boolean }>(), {
   isDark: undefined,
 });
-const emits = defineEmits<{ (e: "click", hexColor: MonaHexColor): void }>();
+const emit = defineEmits<{ (e: "click", hexColor: MonaHexColor): void }>();
 const gridWidth = 4;
 const gridHeight = 16;
 
@@ -34,7 +34,7 @@ const shouldBeDark = computed(() => {
   return isDarkModeFromStore;
 });
 
-const onClick = (color: Color) => emits("click", color.hexColor);
+const onClick = (color: Color) => emit("click", color.hexColor);
 </script>
 
 <style lang="scss" scoped>

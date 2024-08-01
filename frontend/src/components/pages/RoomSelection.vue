@@ -36,9 +36,7 @@
             <SeekBar v-model:index="currentCharIndex" :sequence="characterSequence" />
           </div>
           <div>
-            <label for="type">
-              <input id="type" v-model="userType" :style="{ width: '100px' }" />タイプ
-            </label>
+            <label for="type"> <input id="type" v-model="userType" />タイプ </label>
             <label for="color"> <input id="color" v-model="userHexColor" type="color" />色 </label>
           </div>
           <div class="selection-box-under-buttons">
@@ -274,6 +272,10 @@ watch(currentCharIndex, () => {
         .seek-bar-container {
           margin: 10px auto 8px;
           width: 248px;
+        }
+
+        input#type {
+          width: 100px;
         }
 
         .selection-box-under-buttons {

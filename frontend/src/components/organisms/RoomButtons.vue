@@ -31,7 +31,7 @@ const props = withDefaults(
   {},
 );
 
-const emits = defineEmits<{ (e: "click-room", room: Room): void }>();
+const emit = defineEmits<{ (e: "click-room", room: Room): void }>();
 
 const chunk = <T,>(array: T[], size: number): T[][] => {
   return Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
@@ -42,7 +42,7 @@ const chunk = <T,>(array: T[], size: number): T[][] => {
 const roomsColumns = computed(() => chunk(props.rooms, 10) as Room[][]);
 
 const onClick = (room: Room) => {
-  emits("click-room", room);
+  emit("click-room", room);
 };
 </script>
 

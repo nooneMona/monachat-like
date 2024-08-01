@@ -137,7 +137,7 @@ const commentIntervalMilliSec = 1000;
 const statOptions = Stat.defaultOptions();
 
 // 要素
-const root = ref(null);
+const root = ref<HTMLDivElement | null>(null);
 const chatField = ref<InstanceType<typeof SubmittableField> | null>(null);
 const characterChildren = ref<{ [key: string]: InstanceType<typeof ChatCharacter> }>({});
 

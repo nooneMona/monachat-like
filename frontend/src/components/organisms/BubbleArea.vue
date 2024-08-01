@@ -26,7 +26,7 @@ const props = defineProps<{
   messages: ChatMessages;
   bubbleAreaHeight: number;
 }>();
-const emits = defineEmits<{
+const emit = defineEmits<{
   (e: "bubble-deleted", obj: { characterID: string; messageID: string }): void;
 }>();
 
@@ -55,7 +55,7 @@ const transitionPeriod = computed(() => {
 });
 
 const afterEnter = (_: Element, messageID: string) => {
-  emits("bubble-deleted", { characterID: props.user.id, messageID });
+  emit("bubble-deleted", { characterID: props.user.id, messageID });
 };
 </script>
 
