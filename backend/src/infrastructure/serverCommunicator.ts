@@ -30,11 +30,12 @@ export class ServerCommunicator implements IServerCommunicator {
     this.systemLogger = systemLogger;
   }
 
-  sendCOM(param: COMResponse, to: string, exceptIDs: string[]): void {
+  sendCOM(param: COMResponse, to: string, exceptSocketIDs: string[]): void {
     this.systemLogger.logSendCOM(param, to);
-    const broadCaster = this.server.in(to);
-    exceptIDs.forEach((id) => {
-      broadCaster.except(id);
+    let broadCaster = this.server.in(to);
+    exceptSocketIDs.forEach((socketID) => {
+      // 送信しないソケットを追加する
+      broadCaster = broadCaster.except(socketID);
     });
     broadCaster.emit(COM, param);
   }

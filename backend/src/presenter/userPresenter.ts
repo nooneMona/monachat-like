@@ -88,6 +88,7 @@ export class UserPresenter implements IEventHandler, IServerNotificator {
     };
     req.style != null && (res.style = req.style);
     req.typing != null && (res.typing = { ...req.typing });
+    // TODO: 第三引数にセキュア無視中のソケットIDを渡す
     this.serverCommunicator.sendCOM(res, currentRoom, []);
   }
 
