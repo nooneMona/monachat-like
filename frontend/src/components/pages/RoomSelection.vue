@@ -22,7 +22,7 @@
           </div>
           <div class="character-selection-box-image">
             <CharacterImage
-              :user="{ type: userType, hexValue: userHexColor, stat: '通常', scl: 100 }"
+              :user="{ type: userType, hexValue: userHexColor, scl: 100 }"
               :depth-rate="1.0"
               :is-k-b-mode
               :is-silent="false"

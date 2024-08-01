@@ -11,27 +11,32 @@
       @bubble-deleted="bubbleDeleted"
     />
     <div ref="characterEl" class="character">
-      <CharacterImage
-        :class="{
-          'debug-frame': isVisibleFrame,
-          'selected-frame': selectedUsersIhashes[user.ihash],
-        }"
-        :style="{
-          borderStyle: selectedUsersIhashes[user.ihash] ? 'solid' : 'unset',
-          borderColor: selectedBorderColor,
-        }"
-        :user="user"
-        :depth-rate="depthRate"
-        :is-k-b-mode="isKBMode"
-        :is-silent="isSilent"
-        @click="toggleUserSelecting(user.ihash) /* TODO: 親コンポーネントに渡す */"
-        @click.right.prevent="
-          selectedUsersIhashes[user.ihash]
-            ? changeSelectedUsersColor(user.ihash)
-            : '' /* TODO: 親コンポーネントに渡す */
-        "
-        @image-updated="imageUpdated"
-      />
+      <div class="character-image-container">
+        <CharacterImage
+          :class="{
+            'debug-frame': isVisibleFrame,
+            'selected-frame': selectedUsersIhashes[user.ihash],
+          }"
+          :style="{
+            borderStyle: selectedUsersIhashes[user.ihash] ? 'solid' : 'unset',
+            borderColor: selectedBorderColor,
+          }"
+          :user="user"
+          :depth-rate="depthRate"
+          :is-k-b-mode="isKBMode"
+          :is-silent="isSilent"
+          @click="toggleUserSelecting(user.ihash) /* TODO: 親コンポーネントに渡す */"
+          @click.right.prevent="
+            selectedUsersIhashes[user.ihash]
+              ? changeSelectedUsersColor(user.ihash)
+              : '' /* TODO: 親コンポーネントに渡す */
+          "
+          @image-updated="imageUpdated"
+        />
+        <div v-show="isVisibleStat" class="stat-panel-frame">
+          <StatPanel :text="user.stat" />
+        </div>
+      </div>
       <div :class="['character-text', { 'debug-frame': isVisibleFrame }]">
         <SpanText :text="user.name" />
       </div>
@@ -44,17 +49,19 @@
 
 <script setup lang="ts">
 import { computed, ref, onUpdated, Ref } from "vue";
+import { storeToRefs } from "pinia";
 import BubbleArea from "@/components/organisms/BubbleArea.vue";
 import CharacterImage from "@/components/organisms/CharacterImage.vue";
 import SpanText from "@/components/atoms/SpanText.vue";
-import { UIColor } from "../../ui/uiColor";
-import { useUIStore } from "../../stores/ui";
+import StatPanel from "@/components/molecules/character/StatPanel.vue";
+import { UIColor } from "@/ui/uiColor";
+import { useUIStore } from "@/stores/ui";
 import { SelectedUserColorType, useSettingStore } from "@/stores/setting";
-import { storeToRefs } from "pinia";
 import { useDevStore } from "@/stores/develop";
-import { Character } from "@/domain/character";
-import { ChatCharacterUser, ChatMessages } from "@/domain/type";
 import { useUsersStore } from "@/stores/users";
+import { Character } from "@/domain/character";
+import { Stat } from "@/domain/stat";
+import { ChatCharacterUser, ChatMessages } from "@/domain/type";
 
 const props = withDefaults(
   defineProps<{
@@ -114,6 +121,10 @@ const selectedBorderColor = computed(() => {
   }
   return new UIColor(color).getCSSColorName(shouldBeDark.value);
 });
+const isVisibleStat = computed(() => {
+  const stat = Stat.create(props.user.stat);
+  return stat.isVisible();
+});
 
 const imageUpdated = () => {
   const rect = typedCharacterEl.value?.getBoundingClientRect();
@@ -167,13 +178,28 @@ onUpdated(() => {
   .character {
     pointer-events: auto;
 
-    .selected-frame {
-      box-sizing: border-box;
-      border-radius: 5px;
-      border-width: 2px;
+    .character-image-container {
+      position: relative;
+
+      .selected-frame {
+        box-sizing: border-box;
+        border-radius: 5px;
+        border-width: 2px;
+      }
+
+      .stat-panel-frame {
+        pointer-events: none;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
     }
   }
-
   .character-text {
     pointer-events: none;
     line-height: 1;
