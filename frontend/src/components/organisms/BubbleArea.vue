@@ -63,6 +63,7 @@ const afterEnter = (_: Element, messageID: string) => {
 .bubble-area-frame {
   pointer-events: none;
   user-select: none;
+  width: 100%;
 
   .bubble-area {
     width: 100%;

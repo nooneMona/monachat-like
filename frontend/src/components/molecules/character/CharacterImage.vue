@@ -89,9 +89,11 @@ watch([fetchedSVGText], () => {
 
 <style lang="scss" scoped>
 .character-image {
+  pointer-events: auto;
   opacity: v-bind(characterOpacity);
 
   .character-svg {
+    pointer-events: none; // SVGの要素にドラッグすると変な動きをするのを抑止
     transform-origin: center bottom;
     transform: v-bind(scale);
   }

@@ -3,13 +3,7 @@
     <div v-if="isVisibleFrame" class="debug-text character-text">
       <SpanText :text="`(${user.x}, ${user.y})`" :size="10" />
     </div>
-    <BubbleArea
-      class="bubble-area"
-      :user="user"
-      :messages="messages"
-      :bubble-area-height
-      @bubble-deleted="bubbleDeleted"
-    />
+    <BubbleArea :user :messages :bubble-area-height @bubble-deleted="bubbleDeleted" />
     <div ref="characterEl" class="character">
       <div class="character-image-container">
         <CharacterImage
@@ -21,10 +15,10 @@
             borderStyle: selectedUsersIhashes[user.ihash] ? 'solid' : 'unset',
             borderColor: selectedBorderColor,
           }"
-          :user="user"
-          :depth-rate="depthRate"
-          :is-k-b-mode="isKBMode"
-          :is-silent="isSilent"
+          :user
+          :depth-rate
+          :is-k-b-mode
+          :is-silent
           @click="toggleUserSelecting(user.ihash) /* TODO: 親コンポーネントに渡す */"
           @click.right.prevent="
             selectedUsersIhashes[user.ihash]
@@ -156,23 +150,18 @@ onUpdated(() => {
 
 <style lang="scss" scoped>
 .character-container {
+  pointer-events: none;
+  position: relative;
+
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  position: relative;
-
   text-align: center;
-  pointer-events: none;
 
   .debug-text {
     position: absolute;
     top: 0;
-  }
-
-  .bubble-area {
-    pointer-events: none;
-    width: 100%;
   }
 
   .character {
@@ -199,10 +188,11 @@ onUpdated(() => {
         align-items: center;
       }
     }
-  }
-  .character-text {
-    pointer-events: none;
-    line-height: 1;
+
+    .character-text {
+      pointer-events: none;
+      line-height: 1;
+    }
   }
 }
 </style>
