@@ -13,27 +13,30 @@ describe("SubmittableField", () => {
   });
 
   it("@submit", () => {
+    expect.assertions(2);
     const wrapper = mount(SubmittableField, {
       ...getCommonMountOption(),
     });
 
     wrapper.find("input").setValue("こんにちは");
     wrapper.find("button").trigger("click");
-    expect(wrapper.emitted("submit")).toEqual([[{ shift: false, text: "こんにちは" }]]);
-    expect(wrapper.emitted("update:modelValue")).toEqual([["こんにちは"], [""]]);
+    expect(wrapper.emitted("submit")).toStrictEqual([[{ shift: false, text: "こんにちは" }]]);
+    expect(wrapper.emitted("update:modelValue")).toStrictEqual([["こんにちは"], [""]]);
   });
 
   it("@submit with shift key", () => {
+    expect.assertions(1);
     const wrapper = mount(SubmittableField, {
       ...getCommonMountOption(),
     });
 
     wrapper.find("input").setValue("こんにちは");
     wrapper.find("button").trigger("click", { shiftKey: true });
-    expect(wrapper.emitted("submit")).toEqual([[{ shift: true, text: "こんにちは" }]]);
+    expect(wrapper.emitted("submit")).toStrictEqual([[{ shift: true, text: "こんにちは" }]]);
   });
 
   it("@submit with empty text (not allowedEmpty)", () => {
+    expect.assertions(1);
     const wrapper = mount(SubmittableField, {
       ...getCommonMountOption({ allowedEmpty: false }),
     });
@@ -44,16 +47,18 @@ describe("SubmittableField", () => {
   });
 
   it("@typed", () => {
+    expect.assertions(1);
     const wrapper = mount(SubmittableField, {
       ...getCommonMountOption(),
     });
     wrapper.find("input").trigger("keydown", {
       key: "a",
     });
-    expect(wrapper.emitted("typed")).toEqual([["a"]]);
+    expect(wrapper.emitted("typed")).toStrictEqual([["a"]]);
   });
 
   it("@delete-all", async () => {
+    expect.assertions(2);
     const wrapper = mount(SubmittableField, {
       ...getCommonMountOption(),
     });
@@ -63,10 +68,11 @@ describe("SubmittableField", () => {
     expect(wrapper.emitted("delete-all")).toBeUndefined();
     wrapper.find("input").setValue("");
     await flushPromises();
-    expect(wrapper.emitted("delete-all")).toEqual([[]]);
+    expect(wrapper.emitted("delete-all")).toStrictEqual([[]]);
   });
 
   it("#focus", () => {
+    expect.assertions(1);
     const wrapper = mount(SubmittableField, {
       ...getCommonMountOption(),
       attachTo: document.body, // NOTE: document.bodyにアタッチしないとfocusのテストができない。

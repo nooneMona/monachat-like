@@ -15,6 +15,7 @@ describe("SeekBar", () => {
   });
 
   it("should render correctly", () => {
+    expect.assertions(4);
     const wrapper = mount(SeekBar, {
       ...getCommonMountOption(),
     });
@@ -26,18 +27,20 @@ describe("SeekBar", () => {
   });
 
   it("should change index when buttons clicked", async () => {
+    expect.assertions(2);
     const wrapper = mount(SeekBar, {
       ...getCommonMountOption(),
     });
 
     await wrapper.findAll("button")[1]?.trigger("click");
-    expect(wrapper.emitted("update:index")).toEqual([[3]]);
+    expect(wrapper.emitted("update:index")).toStrictEqual([[3]]);
 
     await wrapper.findAll("button")[0]?.trigger("click");
-    expect(wrapper.emitted("update:index")).toEqual([[3], [1]]);
+    expect(wrapper.emitted("update:index")).toStrictEqual([[3], [1]]);
   });
 
   it("shouldn't change index when starts with index 0", async () => {
+    expect.assertions(1);
     const wrapper = mount(SeekBar, {
       ...getCommonMountOption({ index: 0 }),
     });
@@ -47,6 +50,7 @@ describe("SeekBar", () => {
   });
 
   it("shouldn't change index when starts with index max value", async () => {
+    expect.assertions(1);
     const wrapper = mount(SeekBar, {
       ...getCommonMountOption({ index: 4 }),
     });
@@ -56,6 +60,7 @@ describe("SeekBar", () => {
   });
 
   it("shouldn't change index when starts with index infinity", async () => {
+    expect.assertions(1);
     const wrapper = mount(SeekBar, {
       ...getCommonMountOption({ index: Number.POSITIVE_INFINITY }),
     });
