@@ -40,10 +40,10 @@
             <label for="color"> <input id="color" v-model="userHexColor" type="color" />色 </label>
           </div>
           <div class="selection-box-under-buttons">
-            <SimpleButton title="名前変更" @on-click="backToHome" />
+            <SimpleButton title="名前変更" @click="backToHome" />
           </div>
           <div class="selection-box-under-buttons">
-            <SimpleButton title="キャラランダム変更" @on-click="pickRandomCharacter" />
+            <SimpleButton title="キャラランダム変更" @click="pickRandomCharacter" />
           </div>
         </div>
       </div>
