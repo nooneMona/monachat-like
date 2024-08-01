@@ -184,6 +184,7 @@ onUpdated(() => {
     .character-text {
       pointer-events: none;
       line-height: 1;
+      overflow: hidden; // NOTE: 要素から想定外の方向にはみ出る文字を抑制する
     }
   }
 }
