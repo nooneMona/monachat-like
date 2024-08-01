@@ -69,7 +69,7 @@ import axios from "axios";
 import Color from "@/stores/color";
 import SpanText from "@/components/atoms/SpanText.vue";
 import SimpleButton from "@/components/atoms/SimpleButton.vue";
-import CharacterImage from "@/components/organisms/CharacterImage.vue";
+import CharacterImage from "@/components/molecules/CharacterImage.vue";
 import SeekBar from "@/components/molecules/SeekBar.vue";
 import ColorPalette from "@/components/molecules/ColorPalette.vue";
 import MonaDropdown from "@/components/molecules/MonaDropdown.vue";

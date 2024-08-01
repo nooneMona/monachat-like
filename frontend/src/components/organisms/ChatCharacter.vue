@@ -51,7 +51,7 @@
 import { computed, ref, onUpdated, Ref } from "vue";
 import { storeToRefs } from "pinia";
 import BubbleArea from "@/components/organisms/BubbleArea.vue";
-import CharacterImage from "@/components/organisms/CharacterImage.vue";
+import CharacterImage from "@/components/molecules/CharacterImage.vue";
 import SpanText from "@/components/atoms/SpanText.vue";
 import StatPanel from "@/components/molecules/character/StatPanel.vue";
 import { UIColor } from "@/ui/uiColor";
