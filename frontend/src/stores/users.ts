@@ -17,6 +17,7 @@ export const useUsersStore = defineStore("users", () => {
   const ihashsIgnoredByMe = ref<{ [key in string]: boolean }>({});
   const idsIgnoresMe = ref<{ [key in string]: boolean }>({});
   const ihashsSilentIgnoredByMe = ref<{ [key in string]: boolean }>({});
+  const ihashsSecureIgnoredByMe = ref<{ [key in string]: boolean }>({});
 
   // 画面に表示されているユーザー
   const visibleUsers = computed(() => {
@@ -49,6 +50,16 @@ export const useUsersStore = defineStore("users", () => {
   const silentUsers = computed(() => {
     return Object.keys(users.value)
       .filter((id) => ihashsSilentIgnoredByMe.value[users.value[id]!.ihash])
+      .reduce((result, id) => {
+        const currentResult: ChatCharacterUserDict = { ...result };
+        currentResult[id] = users.value[id]!;
+        return currentResult;
+      }, {} as ChatCharacterUserDict);
+  });
+  // セキュア無視したユーザー
+  const secureIgUsers = computed(() => {
+    return Object.keys(users.value)
+      .filter((id) => ihashsSecureIgnoredByMe.value[users.value[id]!.ihash])
       .reduce((result, id) => {
         const currentResult: ChatCharacterUserDict = { ...result };
         currentResult[id] = users.value[id]!;
@@ -206,6 +217,9 @@ export const useUsersStore = defineStore("users", () => {
   const updateUserSilentIgnore = (ihash: string, isActive: boolean) => {
     ihashsSilentIgnoredByMe.value[ihash] = isActive;
   };
+  const updateUserSecureIgnore = (ihash: string, isActive: boolean) => {
+    ihashsSecureIgnoredByMe.value[ihash] = isActive;
+  };
 
   return {
     users,
@@ -216,6 +230,7 @@ export const useUsersStore = defineStore("users", () => {
     visibleUsers,
     manageableUsers,
     silentUsers,
+    secureIgUsers,
     idsByIhash,
     initializeUsers,
     updateUserByEnter,
@@ -231,5 +246,6 @@ export const useUsersStore = defineStore("users", () => {
     updateUserIgnore,
     updateIDsIgnoresMe,
     updateUserSilentIgnore,
+    updateUserSecureIgnore,
   };
 });

@@ -259,6 +259,20 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
+  const toggleSecureIgnorance = (targetIhash: string, isActive: boolean) => {
+    const usersStore = useUsersStore();
+
+    if (targetIhash === ihash.value) {
+      return;
+    }
+    usersStore.updateUserSilentIgnore(targetIhash, isActive);
+    if (isActive) {
+      usersStore.idsByIhash[targetIhash]?.forEach((targetId: string) => {
+        usersStore.removeChatMessages(targetId);
+      });
+    }
+  };
+
   const sendAuth = () => {
     socketIOInstance.emit("AUTH", {
       token: myToken.value,
@@ -296,6 +310,7 @@ export const useUserStore = defineStore("user", () => {
     toggleIgnorance,
     sendIgnorance,
     toggleSilentIgnorance,
+    toggleSecureIgnorance,
     sendAuth,
     sendError,
   };

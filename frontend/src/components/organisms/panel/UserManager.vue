@@ -22,13 +22,18 @@
       </Column>
       <Column>
         <template #header>
-          <SpanText text="無視" :size="16" type="text" />
+          <SpanText text="セキュア無視" :size="16" type="text" />
         </template>
-        <template #body="slotProps">
+        <template #body="silentIgnoreSlotProps">
           <Checkbox
-            v-model="slotProps.data.isIgnored"
+            v-model="silentIgnoreSlotProps.data.isSecureUser"
             binary
-            @click="onClickIgnore(slotProps.data.ihash)"
+            @change="
+              onChangeSecureIgnore(
+                silentIgnoreSlotProps.data.ihash,
+                silentIgnoreSlotProps.data.isSecureUser,
+              )
+            "
           />
         </template>
       </Column>
@@ -46,6 +51,18 @@
                 silentIgnoreSlotProps.data.isSilentUser,
               )
             "
+          />
+        </template>
+      </Column>
+      <Column>
+        <template #header>
+          <SpanText text="無視（レガシー）" :size="16" type="text" />
+        </template>
+        <template #body="slotProps">
+          <Checkbox
+            v-model="slotProps.data.isIgnored"
+            binary
+            @click="onClickIgnore(slotProps.data.ihash)"
           />
         </template>
       </Column>
@@ -80,6 +97,9 @@ const onClickIgnore = (ihash: string) => {
 const onChangeSilentIgnore = (ihash: string, isActive: boolean) => {
   userStore.toggleSilentIgnorance(ihash, isActive);
 };
+const onChangeSecureIgnore = (ihash: string, isActive: boolean) => {
+  userStore.toggleSecureIgnorance(ihash, isActive);
+};
 
 const userDisp = (user: { name: string; trip: string; ihash: string }, id: string) => {
   const character = Character.create({ name: user.name, trip: user.trip, ihash: user.ihash });
@@ -96,6 +116,7 @@ const manageableUsers = computed(() => {
       disp: userDisp(usersObj[id]!, id),
       ihash: usersObj[id]!.ihash,
       isSilentUser: usersStore.silentUsers[id] != undefined,
+      isSecureUser: usersStore.secureIgUsers[id] != undefined,
     };
   });
 });
