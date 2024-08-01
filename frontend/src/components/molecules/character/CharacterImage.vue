@@ -37,9 +37,12 @@ const imageFilePath = computed(() => {
 });
 const characterSVG = computed(() => {
   let text = fetchedSVGText.value;
+  // キャラクターに色を塗る
   text = text.replaceAll(`style="fill:white;"`, `fill="${props.user.hexValue}"`);
+  text = text.replaceAll(`fill="#ffffff"`, `fill="${props.user.hexValue}"`);
+  // クールな美術館のキャラの線を太くする
   text = text.replaceAll(`stroke-width="0.05"`, `stroke-width="0.5"`);
-  return text.replaceAll(`fill="#ffffff"`, `fill="${props.user.hexValue}"`);
+  return text;
 });
 const scale = computed(() => {
   const oneValue = props.depthRate;
