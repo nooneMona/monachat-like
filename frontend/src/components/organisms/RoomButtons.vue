@@ -6,7 +6,7 @@
         <template v-for="room in roomsColumn" :key="room.id">
           <div class="room-cell">
             <div class="room-button-frame">
-              <SimpleButton :title="room.name" :text-size="16" @on-click="onClick(room)" />
+              <SimpleButton :title="room.name" :text-size="16" @click="onClick(room)" />
             </div>
             <SpanText :text="`${roomCount[room.id] ?? 0}人`" :size="18" />
           </div>
@@ -23,12 +23,6 @@ import SpanText from "@/components/atoms/SpanText.vue";
 import { RoomResponse } from "@/infrastructure/api";
 
 type Room = RoomResponse["rooms"][number];
-const chunk = <T,>(array: T[], size: number): T[][] => {
-  return Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
-    array.slice(i * size, (i + 1) * size),
-  );
-};
-
 const props = withDefaults(
   defineProps<{
     rooms: Room[];
@@ -36,12 +30,19 @@ const props = withDefaults(
   }>(),
   {},
 );
-const emits = defineEmits<{ (e: "clickRoom", room: Room): void }>();
+
+const emits = defineEmits<{ (e: "click-room", room: Room): void }>();
+
+const chunk = <T,>(array: T[], size: number): T[][] => {
+  return Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
+    array.slice(i * size, (i + 1) * size),
+  );
+};
 
 const roomsColumns = computed(() => chunk(props.rooms, 10) as Room[][]);
 
 const onClick = (room: Room) => {
-  emits("clickRoom", room);
+  emits("click-room", room);
 };
 </script>
 

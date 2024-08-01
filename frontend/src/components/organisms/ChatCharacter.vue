@@ -63,8 +63,8 @@ const props = withDefaults(
   { bubbleAreaHeight: 300, isDark: undefined },
 );
 const emits = defineEmits<{
-  (e: "sizeUpdated", obj: { id: string; width: number; height: number }): void;
-  (e: "bubbleDeleted", obj: { characterID: string; messageID: string }): void;
+  (e: "size-updated", obj: { id: string; width: number; height: number }): void;
+  (e: "bubble-deleted", obj: { characterID: string; messageID: string }): void;
   (e: "click", obj: { id: string; ihash: string }): void;
   (e: "click-right", obj: { id: string; ihash: string }): void;
 }>();
@@ -123,14 +123,14 @@ const imageUpdated = () => {
   if (rect === undefined) {
     return;
   }
-  emits("sizeUpdated", {
+  emits("size-updated", {
     id: props.user.id,
     width: rect.width,
     height: rect.height,
   });
 };
 const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messageID: string }) => {
-  emits("bubbleDeleted", { characterID, messageID });
+  emits("bubble-deleted", { characterID, messageID });
 };
 
 onUpdated(() => {

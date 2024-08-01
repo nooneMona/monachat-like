@@ -4,7 +4,7 @@
       <TextField ref="inputEl" v-model="model" @typed="onTyped" />
     </div>
     <div class="button">
-      <SimpleButton title="OK" :disabled @on-click="submit" />
+      <SimpleButton title="OK" :disabled @click="submit" />
     </div>
   </form>
 </template>
@@ -13,11 +13,6 @@
 import { Ref, computed, ref, watchEffect } from "vue";
 import TextField from "@/components/atoms/TextField.vue";
 import SimpleButton from "@/components/atoms/SimpleButton.vue";
-
-const inputEl = ref(null);
-const typedInputEl: Ref<HTMLInputElement | undefined> = computed(
-  () => inputEl.value as unknown as HTMLInputElement | undefined,
-);
 
 const props = withDefaults(defineProps<{ allowedEmpty?: boolean; disabled?: boolean }>(), {
   allowedEmpty: true,
@@ -29,6 +24,10 @@ const emits = defineEmits<{
   (e: "delete-all"): void;
 }>();
 const model = defineModel({ type: String });
+const inputEl = ref(null);
+const typedInputEl: Ref<HTMLInputElement | undefined> = computed(
+  () => inputEl.value as unknown as HTMLInputElement | undefined,
+);
 
 const isValidSubmitting = computed(() => props.allowedEmpty || model.value?.length !== 0);
 const submit = (event: Event & { shiftKey: boolean }) => {

@@ -28,6 +28,30 @@ export default [
   },
   {
     files: ["*.vue", "**/*.vue"],
+    rules: {
+      "vue/block-lang": [
+        "error",
+        {
+          script: {
+            lang: "ts",
+          },
+        },
+      ],
+      "vue/component-api-style": ["error", ["script-setup", "composition"]],
+      "vue/component-name-in-template-casing": ["error", "PascalCase"],
+      "vue/custom-event-name-casing": ["error", "kebab-case"],
+      "vue/define-emits-declaration": ["error", "type-based"],
+      "vue/define-macros-order": [
+        "error",
+        {
+          order: ["defineProps", "defineEmits", "defineModel"],
+          defineExposeLast: true,
+        },
+      ],
+      "vue/define-props-declaration": ["error", "type-based"],
+      "vue/html-comment-content-spacing": ["error", "always"],
+      "vue/no-empty-component-block": ["error"],
+    },
     languageOptions: {
       parser: vueParser,
       parserOptions: { parser: tseslint.parser, sourceType: "module" },

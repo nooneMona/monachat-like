@@ -19,13 +19,12 @@ import { MonaHexColor } from "@/stores/color";
 import { useSettingStore } from "@/stores/setting";
 
 export type Color = { id: number; hexColor: MonaHexColor };
-const gridWidth = 4;
-const gridHeight = 16;
-
 const props = withDefaults(defineProps<{ hexColors: Color[]; isDark?: boolean }>(), {
   isDark: undefined,
 });
 const emits = defineEmits<{ (e: "click", hexColor: MonaHexColor): void }>();
+const gridWidth = 4;
+const gridHeight = 16;
 
 const shouldBeDark = computed(() => {
   const isDarkModeFromStore = useSettingStore().isDarkMode;

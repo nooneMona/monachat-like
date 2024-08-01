@@ -64,7 +64,7 @@ describe("SimpleButton", () => {
         ...getCommonMountOption(),
       });
       await wrapper.find("button").trigger("click");
-      expect(wrapper.emitted("onClick")).toHaveLength(1);
+      expect(wrapper.emitted("click")).toHaveLength(1);
     });
   });
 });
