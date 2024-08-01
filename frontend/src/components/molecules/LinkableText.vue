@@ -2,7 +2,13 @@
   <!-- 本文をリンクと通常のテキストで分離 -->
   <template v-for="(content, index) in splitTextByContent" :key="content">
     <SpanText v-if="index % 2 === 0" :text="content" :type="type" :size="size" :is-dark="isDark" />
-    <a v-if="index % 2 === 1" class="link" :href="content" target="_blank">
+    <a
+      v-if="index % 2 === 1"
+      class="link"
+      :href="content"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       <SpanText :text="content" type="link" :size="size" :is-dark="isDark" />
     </a>
   </template>

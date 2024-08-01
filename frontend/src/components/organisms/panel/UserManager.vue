@@ -2,7 +2,7 @@
   <div>
     <DataTable
       :value="manageableUsers"
-      :resizable-columns="true"
+      resizable-columns
       size="small"
       column-resize-mode="fit"
       responsive-layout="scroll"
@@ -27,7 +27,7 @@
         <template #body="slotProps">
           <Checkbox
             v-model="slotProps.data.isIgnored"
-            :binary="true"
+            binary
             @click="onClickIgnore(slotProps.data.ihash)"
           />
         </template>
@@ -39,7 +39,7 @@
         <template #body="silentIgnoreSlotProps">
           <Checkbox
             v-model="silentIgnoreSlotProps.data.isSilentUser"
-            :binary="true"
+            binary
             @change="
               onChangeSilentIgnore(
                 silentIgnoreSlotProps.data.ihash,

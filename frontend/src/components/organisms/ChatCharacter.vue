@@ -1,37 +1,32 @@
 <template>
   <div :class="['character-container', { 'debug-frame': isVisibleFrame }]">
-    <div v-if="isVisibleFrame" class="debug-text character-text">
+    <div v-if="isVisibleFrame" class="character-text debug-text">
       <SpanText :text="`(${user.x}, ${user.y})`" :size="10" />
     </div>
-    <BubbleArea
-      class="bubble-area"
-      :user="user"
-      :messages="messages"
-      :bubble-area-height
-      @bubble-deleted="bubbleDeleted"
-    />
+    <BubbleArea :user :messages :bubble-area-height @bubble-deleted="bubbleDeleted" />
     <div ref="characterEl" class="character">
-      <CharacterImage
-        :class="{
-          'debug-frame': isVisibleFrame,
-          'selected-frame': selectedUsersIhashes[user.ihash],
-        }"
-        :style="{
-          borderStyle: selectedUsersIhashes[user.ihash] ? 'solid' : 'unset',
-          borderColor: selectedBorderColor,
-        }"
-        :user="user"
-        :depth-rate="depthRate"
-        :is-k-b-mode="isKBMode"
-        :is-silent="isSilent"
-        @click="toggleUserSelecting(user.ihash) /* TODO: 親コンポーネントに渡す */"
-        @click.right.prevent="
-          selectedUsersIhashes[user.ihash]
-            ? changeSelectedUsersColor(user.ihash)
-            : '' /* TODO: 親コンポーネントに渡す */
-        "
-        @image-updated="imageUpdated"
-      />
+      <div class="character-image-container">
+        <CharacterImage
+          :class="{
+            'debug-frame': isVisibleFrame,
+            'selected-frame': selectedUsersIhashes[user.ihash],
+          }"
+          :style="{
+            borderStyle: selectedUsersIhashes[user.ihash] ? 'solid' : 'unset',
+            borderColor: selectedBorderColor,
+          }"
+          :user
+          :depth-rate
+          :is-k-b-mode
+          :is-silent
+          @click="emit('click', { id: user.id, ihash: user.ihash })"
+          @click.right.prevent="emit('click-right', { id: user.id, ihash: user.ihash })"
+          @image-updated="imageUpdated"
+        />
+        <div v-show="isVisibleStat" class="stat-panel-frame">
+          <StatPanel :text="user.stat" />
+        </div>
+      </div>
       <div :class="['character-text', { 'debug-frame': isVisibleFrame }]">
         <SpanText :text="user.name" />
       </div>
@@ -44,17 +39,19 @@
 
 <script setup lang="ts">
 import { computed, ref, onUpdated, Ref } from "vue";
-import BubbleArea from "@/components/organisms/BubbleArea.vue";
-import CharacterImage from "@/components/organisms/CharacterImage.vue";
-import SpanText from "@/components/atoms/SpanText.vue";
-import { UIColor } from "../../ui/uiColor";
-import { useUIStore } from "../../stores/ui";
-import { SelectedUserColorType, useSettingStore } from "@/stores/setting";
 import { storeToRefs } from "pinia";
+import BubbleArea from "@/components/organisms/BubbleArea.vue";
+import CharacterImage from "@/components/molecules/character/CharacterImage.vue";
+import SpanText from "@/components/atoms/SpanText.vue";
+import StatPanel from "@/components/molecules/character/StatPanel.vue";
+import { UIColor } from "@/ui/uiColor";
+import { useUIStore } from "@/stores/ui";
+import { SelectedUserColorType, useSettingStore } from "@/stores/setting";
 import { useDevStore } from "@/stores/develop";
-import { Character } from "@/domain/character";
-import { ChatCharacterUser, ChatMessages } from "@/domain/type";
 import { useUsersStore } from "@/stores/users";
+import { Character } from "@/domain/character";
+import { Stat } from "@/domain/stat";
+import { ChatCharacterUser, ChatMessages } from "@/domain/type";
 
 const props = withDefaults(
   defineProps<{
@@ -65,13 +62,15 @@ const props = withDefaults(
   }>(),
   { bubbleAreaHeight: 300, isDark: undefined },
 );
-const emits = defineEmits<{
-  (e: "sizeUpdated", obj: { id: string; width: number; height: number }): void;
-  (e: "bubbleDeleted", obj: { characterID: string; messageID: string }): void;
+const emit = defineEmits<{
+  (e: "size-updated", obj: { id: string; width: number; height: number }): void;
+  (e: "bubble-deleted", obj: { characterID: string; messageID: string }): void;
+  (e: "click", obj: { id: string; ihash: string }): void;
+  (e: "click-right", obj: { id: string; ihash: string }): void;
 }>();
 
 // 要素
-const characterEl = ref(null);
+const characterEl = ref<HTMLDivElement | null>(null);
 const typedCharacterEl: Ref<HTMLDivElement | undefined> = computed(
   () => characterEl.value as unknown as HTMLDivElement | undefined,
 );
@@ -114,26 +113,24 @@ const selectedBorderColor = computed(() => {
   }
   return new UIColor(color).getCSSColorName(shouldBeDark.value);
 });
+const isVisibleStat = computed(() => {
+  const stat = Stat.create(props.user.stat);
+  return stat.isVisible();
+});
 
 const imageUpdated = () => {
   const rect = typedCharacterEl.value?.getBoundingClientRect();
   if (rect === undefined) {
     return;
   }
-  emits("sizeUpdated", {
+  emit("size-updated", {
     id: props.user.id,
     width: rect.width,
     height: rect.height,
   });
 };
-const toggleUserSelecting = (ihash: string) => {
-  settingStore.toggleUserSelecting(ihash);
-};
-const changeSelectedUsersColor = (ihash: string) => {
-  settingStore.changeSelectedUserColor(ihash);
-};
 const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messageID: string }) => {
-  emits("bubbleDeleted", { characterID, messageID });
+  emit("bubble-deleted", { characterID, messageID });
 };
 
 onUpdated(() => {
@@ -145,38 +142,50 @@ onUpdated(() => {
 
 <style lang="scss" scoped>
 .character-container {
+  pointer-events: none;
+  position: relative;
+
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  position: relative;
-
   text-align: center;
-  pointer-events: none;
 
   .debug-text {
     position: absolute;
     top: 0;
   }
 
-  .bubble-area {
-    pointer-events: none;
-    width: 100%;
-  }
-
   .character {
     pointer-events: auto;
 
-    .selected-frame {
-      box-sizing: border-box;
-      border-radius: 5px;
-      border-width: 2px;
-    }
-  }
+    .character-image-container {
+      position: relative;
 
-  .character-text {
-    pointer-events: none;
-    line-height: 1;
+      .selected-frame {
+        box-sizing: border-box;
+        border-radius: 5px;
+        border-width: 2px;
+      }
+
+      .stat-panel-frame {
+        pointer-events: none;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    .character-text {
+      pointer-events: none;
+      line-height: 1;
+      overflow: hidden; // NOTE: 要素から想定外の方向にはみ出る文字を抑制する
+    }
   }
 }
 </style>

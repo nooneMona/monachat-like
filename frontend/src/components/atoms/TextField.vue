@@ -15,12 +15,12 @@ import { useSettingStore } from "@/stores/setting";
 const props = withDefaults(defineProps<{ isDark?: boolean }>(), {
   isDark: undefined,
 });
-const emits = defineEmits<{
+const emit = defineEmits<{
   (e: "typed", value: string): void;
 }>();
 const model = defineModel<string>();
 
-const inputEl = ref(null);
+const inputEl = ref<HTMLInputElement | null>(null);
 const typedInputEl: Ref<HTMLInputElement | undefined> = computed(
   () => inputEl.value as unknown as HTMLInputElement | undefined,
 );
@@ -34,7 +34,7 @@ const shouldBeDark = computed(() => {
 });
 
 const onKeydown = (e: KeyboardEvent) => {
-  emits("typed", e.key);
+  emit("typed", e.key);
 };
 
 const focus = () => {

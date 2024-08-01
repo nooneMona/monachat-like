@@ -57,7 +57,7 @@ const settingStore = useSettingStore();
 const router = useRouter();
 
 // 要素
-const nameField = ref(null);
+const nameField = ref<HTMLInputElement | null>(null);
 const typedNameFieldEl: Ref<HTMLInputElement | undefined> = computed(
   () => nameField.value as unknown as HTMLInputElement | undefined,
 );

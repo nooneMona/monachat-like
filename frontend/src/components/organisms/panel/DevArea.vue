@@ -6,14 +6,14 @@
     <div>
       <PrimeButton
         label="切断／再接続テスト（３秒復帰）"
-        class="p-button-raised p-button-text p-button-sm p-button-danger"
+        class="p-button-danger p-button-raised p-button-sm p-button-text"
         @click="onClickDisconnect"
       />
     </div>
     <div>
       <PrimeButton
         label="サーバーキックテスト"
-        class="p-button-raised p-button-text p-button-sm p-button-danger"
+        class="p-button-danger p-button-raised p-button-sm p-button-text"
         @click="onClickKicked"
       />
     </div>

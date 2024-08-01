@@ -42,7 +42,7 @@ const props = withDefaults(
   }>(),
   { isDark: undefined },
 );
-const emits = defineEmits<{ (e: "select", value: string): void }>();
+const emit = defineEmits<{ (e: "select", value: string): void }>();
 
 const shouldBeDark = computed(() => {
   const isDarkModeFromStore = useSettingStore().isDarkMode;
@@ -68,7 +68,7 @@ const toggleKeepingSelectionBox = () => {
 };
 
 const onSelect = (value: string) => {
-  emits("select", value);
+  emit("select", value);
 };
 </script>
 

@@ -31,6 +31,7 @@ describe("ColorPalette", () => {
   });
 
   it("should render correctly", () => {
+    expect.assertions(4);
     const wrapper = mount(ColorPalette, {
       ...getCommonMountOption(),
     });
@@ -44,6 +45,7 @@ describe("ColorPalette", () => {
   });
 
   it("should change color palette to dark mode", () => {
+    expect.assertions(1);
     const wrapper = mount(ColorPalette, {
       ...getCommonMountOption({ isDark: true }),
     });
@@ -52,6 +54,7 @@ describe("ColorPalette", () => {
   });
 
   it("should change color palette to dark mode by store", () => {
+    expect.assertions(1);
     const wrapper = mount(ColorPalette, {
       ...getCommonMountOption(),
       global: {
@@ -69,14 +72,15 @@ describe("ColorPalette", () => {
   });
 
   it("@click", () => {
+    expect.assertions(2);
     const wrapper = mount(ColorPalette, {
       ...getCommonMountOption(),
     });
     const colorItems = wrapper.findAll(".cell");
 
     colorItems[0]?.trigger("click");
-    expect(wrapper.emitted("click")?.[0]).toEqual(["#FFFFFF"]);
+    expect(wrapper.emitted("click")?.[0]).toStrictEqual(["#FFFFFF"]);
     colorItems[10]?.trigger("click");
-    expect(wrapper.emitted("click")?.[1]).toEqual(["#FFB2B2"]);
+    expect(wrapper.emitted("click")?.[1]).toStrictEqual(["#FFB2B2"]);
   });
 });

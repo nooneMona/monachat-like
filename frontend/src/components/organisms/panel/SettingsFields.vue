@@ -47,7 +47,7 @@
             <PrimeButton
               label="ログを削除する"
               icon="pi pi-trash"
-              class="p-button-raised p-button-sm p-button-warning p-button-text"
+              class="p-button-raised p-button-sm p-button-text p-button-warning"
               @click="deleteLog"
             />
           </div>
