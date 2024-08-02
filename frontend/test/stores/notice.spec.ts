@@ -91,7 +91,8 @@ describe("useNoticeStore", () => {
       }),
     );
 
-    const originalReload = window.location.reload;
+    const { location } = window;
+    delete (window as any).location;
 
     Object.defineProperty(window.location, "reload", {
       configurable: true,
@@ -103,7 +104,7 @@ describe("useNoticeStore", () => {
     expect(window.location.reload).toHaveBeenCalled();
     Object.defineProperty(window.location, "reload", {
       configurable: true,
-      value: originalReload,
+      value: location,
     });
   });
 });
