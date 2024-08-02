@@ -35,13 +35,9 @@ describe("useNoticeStore", () => {
     expect(noticeStore.isRequiredRefresh).toBe(false);
   });
 
-  it.each([
-    { selectedVolume: "on", shouldCall: true },
-    { selectedVolume: "off", shouldCall: false },
-  ])(
+  it.each([{ selectedVolume: "on" }, { selectedVolume: "off" }])(
     "playCOMAudio should be called when selectvolume is $selectedVolume:",
-    ({ selectedVolume, shouldCall }) => {
-      const isShouldbeCalled: boolean = shouldCall;
+    ({ selectedVolume }) => {
       setActivePinia(
         createTestingPinia({
           initialState: { setting: { selectedVolume } },
@@ -56,21 +52,13 @@ describe("useNoticeStore", () => {
 
       noticeStore.playCOMAudio();
 
-      if (isShouldbeCalled) {
-        expect(audioFn).toHaveBeenCalled();
-      } else {
-        expect(audioFn).not.toHaveBeenCalled();
-      }
+      expect(audioFn).toHaveBeenCalledTimes(selectedVolume === "on" ? 1 : 0);
     },
   );
 
-  it.each([
-    { selectedVolume: "on", shouldCall: true },
-    { selectedVolume: "off", shouldCall: false },
-  ])(
-    "playENTERAudio should  be called when selectvolume is $selectedVolume",
-    ({ selectedVolume, shouldCall }) => {
-      const isShouldbeCalled: boolean = shouldCall;
+  it.each([{ selectedVolume: "on" }, { selectedVolume: "off" }])(
+    "playENTERAudio should be called when selectvolume is $selectedVolume:",
+    ({ selectedVolume }) => {
       setActivePinia(
         createTestingPinia({
           initialState: { setting: { selectedVolume } },
@@ -85,11 +73,7 @@ describe("useNoticeStore", () => {
 
       noticeStore.playENTERAudio();
 
-      if (isShouldbeCalled) {
-        expect(audioFn).toHaveBeenCalled();
-      } else {
-        expect(audioFn).not.toHaveBeenCalled();
-      }
+      expect(audioFn).toHaveBeenCalledTimes(selectedVolume === "on" ? 1 : 0);
     },
   );
 
