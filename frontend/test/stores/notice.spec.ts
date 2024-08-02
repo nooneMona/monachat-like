@@ -37,7 +37,8 @@ describe("useNoticeStore", () => {
 
   it.each([{ selectedVolume: "on" }, { selectedVolume: "off" }])(
     "playCOMAudio should be called when selectvolume is $selectedVolume:",
-    ({ selectedVolume }) => {
+    async ({ selectedVolume }) => {
+      expect.assertions(1);
       setActivePinia(
         createTestingPinia({
           initialState: { setting: { selectedVolume } },
@@ -50,7 +51,7 @@ describe("useNoticeStore", () => {
         .spyOn(window.HTMLAudioElement.prototype, "play")
         .mockImplementation(() => Promise.resolve());
 
-      noticeStore.playCOMAudio();
+      await noticeStore.playCOMAudio();
 
       expect(audioFn).toHaveBeenCalledTimes(selectedVolume === "on" ? 1 : 0);
     },
@@ -58,7 +59,8 @@ describe("useNoticeStore", () => {
 
   it.each([{ selectedVolume: "on" }, { selectedVolume: "off" }])(
     "playENTERAudio should be called when selectvolume is $selectedVolume:",
-    ({ selectedVolume }) => {
+    async ({ selectedVolume }) => {
+      expect.assertions(1);
       setActivePinia(
         createTestingPinia({
           initialState: { setting: { selectedVolume } },
@@ -71,7 +73,7 @@ describe("useNoticeStore", () => {
         .spyOn(window.HTMLAudioElement.prototype, "play")
         .mockImplementation(() => Promise.resolve());
 
-      noticeStore.playENTERAudio();
+      await noticeStore.playENTERAudio();
 
       expect(audioFn).toHaveBeenCalledTimes(selectedVolume === "on" ? 1 : 0);
     },
@@ -84,8 +86,16 @@ describe("useNoticeStore", () => {
       }),
     );
     const noticeStore = useNoticeStore();
-    const windowReload = vi.spyOn(window.location, "reload").mockImplementation(() => {});
+    const originalReload = window.location.reload;
+    Object.defineProperty(window.location, "reload", {
+      configurable: true,
+      value: vi.fn(),
+    });
     noticeStore.reloadPage();
-    expect(windowReload).toHaveBeenCalled();
+    expect(window.location.reload).toHaveBeenCalled();
+    Object.defineProperty(window.location, "reload", {
+      configurable: true,
+      value: originalReload,
+    });
   });
 });
