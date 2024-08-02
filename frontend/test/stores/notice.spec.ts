@@ -93,9 +93,19 @@ describe("useNoticeStore", () => {
     );
 
     const reloadFn = vi.fn();
-    vi.stubGlobal("location", { reload: reloadFn });
+    const location: Location = window.location;
+
+    // @ts-ignore
+    delete window.location;
+
+    window.location = {
+      ...location,
+      reload: reloadFn,
+    };
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
     expect(reloadFn).toHaveBeenCalled();
+    vi.resetAllMocks();
+    window.location = location;
   });
 });
