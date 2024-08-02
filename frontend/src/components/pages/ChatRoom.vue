@@ -16,7 +16,7 @@
     </div>
     <div v-if="isLogVisible" class="log-window">
       <div v-for="log in visibleLogMessages" :key="log.head + log.foot">
-        <div><SpanText :text="`${log.head}${log.content}${log.foot}`" /></div>
+        <div class="log-row"><SpanText :text="`${log.head}${log.content}${log.foot}`" /></div>
       </div>
     </div>
     <img
@@ -54,6 +54,8 @@
         @dragstart="dragStart"
         @size-updated="sizeUpdated"
         @bubble-deleted="bubbleDeleted"
+        @click="click"
+        @click-right="clickRight"
       />
     </div>
 
@@ -135,7 +137,7 @@ const commentIntervalMilliSec = 1000;
 const statOptions = Stat.defaultOptions();
 
 // 要素
-const root = ref(null);
+const root = ref<HTMLDivElement | null>(null);
 const chatField = ref<InstanceType<typeof SubmittableField> | null>(null);
 const characterChildren = ref<{ [key: string]: InstanceType<typeof ChatCharacter> }>({});
 
@@ -270,6 +272,15 @@ const clickLogLines = () => {
       break;
   }
 };
+const click = ({ ihash }: { ihash: string }) => {
+  settingStore.toggleUserSelecting(ihash);
+};
+const clickRight = ({ ihash }: { ihash: string }) => {
+  if (settingStore.selectedUsersIhashes[ihash]) {
+    settingStore.changeSelectedUserColor(ihash);
+    return;
+  }
+};
 
 const submitCOM = (param: { text: string; shift: boolean }) => {
   if (param.text.match(/^(状態|stat)(:|：)/)) {
@@ -388,6 +399,10 @@ const bubbleDeleted = ({ characterID, messageID }: { characterID: string; messag
     overflow-wrap: break-word;
     z-index: 10;
     background-color: v-bind(panelBackgroundColor);
+
+    .log-row {
+      overflow: hidden; // NOTE: 要素から想定外の方向にはみ出る文字を抑制する
+    }
   }
 
   .character-frame {

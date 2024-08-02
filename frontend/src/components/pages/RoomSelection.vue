@@ -22,7 +22,7 @@
           </div>
           <div class="character-selection-box-image">
             <CharacterImage
-              :user="{ type: userType, hexValue: userHexColor, stat: '通常', scl: 100 }"
+              :user="{ type: userType, hexValue: userHexColor, scl: 100 }"
               :depth-rate="1.0"
               :is-k-b-mode
               :is-silent="false"
@@ -36,16 +36,14 @@
             <SeekBar v-model:index="currentCharIndex" :sequence="characterSequence" />
           </div>
           <div>
-            <label for="type">
-              <input id="type" v-model="userType" :style="{ width: '100px' }" />タイプ
-            </label>
+            <label for="type"> <input id="type" v-model="userType" />タイプ </label>
             <label for="color"> <input id="color" v-model="userHexColor" type="color" />色 </label>
           </div>
           <div class="selection-box-under-buttons">
-            <SimpleButton title="名前変更" @on-click="backToHome" />
+            <SimpleButton title="名前変更" @click="backToHome" />
           </div>
           <div class="selection-box-under-buttons">
-            <SimpleButton title="キャラランダム変更" @on-click="pickRandomCharacter" />
+            <SimpleButton title="キャラランダム変更" @click="pickRandomCharacter" />
           </div>
         </div>
       </div>
@@ -69,7 +67,7 @@ import axios from "axios";
 import Color from "@/stores/color";
 import SpanText from "@/components/atoms/SpanText.vue";
 import SimpleButton from "@/components/atoms/SimpleButton.vue";
-import CharacterImage from "@/components/organisms/CharacterImage.vue";
+import CharacterImage from "@/components/molecules/character/CharacterImage.vue";
 import SeekBar from "@/components/molecules/SeekBar.vue";
 import ColorPalette from "@/components/molecules/ColorPalette.vue";
 import MonaDropdown from "@/components/molecules/MonaDropdown.vue";
@@ -274,6 +272,10 @@ watch(currentCharIndex, () => {
         .seek-bar-container {
           margin: 10px auto 8px;
           width: 248px;
+        }
+
+        input#type {
+          width: 100px;
         }
 
         .selection-box-under-buttons {

@@ -1,12 +1,12 @@
 <template>
   <div class="frame">
     <SpanText
-      :text="'サーバーが更新されました。最新のクライアントを取得するため、ブラウザの更新をお願いします。'"
+      text="サーバーが更新されました。最新のクライアントを取得するため、ブラウザの更新をお願いします。"
       :size="16"
       type="notice"
     />
     <div class="button">
-      <SimpleButton title="更新" @on-click="onClick" />
+      <SimpleButton title="更新" @click="onClick" />
     </div>
   </div>
 </template>
@@ -15,9 +15,9 @@
 import SpanText from "@/components/atoms/SpanText.vue";
 import SimpleButton from "@/components/atoms/SimpleButton.vue";
 
-const emits = defineEmits<{ (e: "click"): void }>();
+const emit = defineEmits<{ (e: "click"): void }>();
 
-const onClick = () => emits("click");
+const onClick = () => emit("click");
 </script>
 
 <style scoped>

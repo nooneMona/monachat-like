@@ -14,6 +14,7 @@ describe("StatPanel", () => {
   });
 
   it("should render correctly", () => {
+    expect.assertions(2);
     const wrapper = mount(StatPanel, {
       ...getCommonMountOption(),
     });
@@ -24,6 +25,7 @@ describe("StatPanel", () => {
   });
 
   it("should render correctly with dark mode", () => {
+    expect.assertions(2);
     const wrapper = mount(StatPanel, {
       ...getCommonMountOption({ isDark: true }),
     });
@@ -34,6 +36,7 @@ describe("StatPanel", () => {
   });
 
   it("should render correctly with dark by store", () => {
+    expect.assertions(2);
     const wrapper = mount(StatPanel, {
       ...getCommonMountOption(),
       global: {

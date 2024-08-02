@@ -19,6 +19,7 @@ describe("Dev Store", () => {
 
   describe("isVisibleFrame", () => {
     it("should be changed by updateMethod", () => {
+      expect.assertions(2);
       const dev = useDevStore();
       expect(dev.isVisibleFrame).toBe(false);
       dev.updateIsVisibleFrame(true);
@@ -28,6 +29,7 @@ describe("Dev Store", () => {
 
   describe("suicide", () => {
     it("should emit SUICIDE event", () => {
+      expect.assertions(2);
       const dev = useDevStore();
       const user = useUserStore();
       user.$patch({ myToken: "test_token" });
@@ -41,6 +43,7 @@ describe("Dev Store", () => {
 
   describe("simulateReconnection", () => {
     it("should call disconnect and then call connect after 3000 minutes", () => {
+      expect.assertions(4);
       const dev = useDevStore();
 
       dev.simulateReconnection();

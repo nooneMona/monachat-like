@@ -7,6 +7,7 @@
     }"
     >{{ text }}</span
   >
+  <span v-else></span>
 </template>
 
 <script setup lang="ts">
@@ -41,6 +42,5 @@ const fontSize = computed(() => (props.size !== undefined ? `${props.size}px` : 
 span {
   font-size: 14px;
   font-family: "Noto Sans JP", monospace;
-  overflow: "hidden";
 }
 </style>

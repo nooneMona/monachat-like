@@ -1,7 +1,7 @@
 <template>
   <div
     :class="['bubble-area-frame', { 'debug-frame': isVisibleFrame }]"
-    :style="{ bottom: `${bubbleAreaHeight - user.y}`, height: `${bubbleAreaHeight}px` }"
+    :style="{ bottom: `${bubbleAreaHeight - user.y}px`, height: `${bubbleAreaHeight}px` }"
   >
     <div :class="['bubble-area', { 'debug-frame': isVisibleFrame }]">
       <div v-for="msg in messages" :key="msg.messageID" class="bubble-container">
@@ -26,8 +26,8 @@ const props = defineProps<{
   messages: ChatMessages;
   bubbleAreaHeight: number;
 }>();
-const emits = defineEmits<{
-  (e: "bubbleDeleted", obj: { characterID: string; messageID: string }): void;
+const emit = defineEmits<{
+  (e: "bubble-deleted", obj: { characterID: string; messageID: string }): void;
 }>();
 
 const settingStore = useSettingStore();
@@ -55,7 +55,7 @@ const transitionPeriod = computed(() => {
 });
 
 const afterEnter = (_: Element, messageID: string) => {
-  emits("bubbleDeleted", { characterID: props.user.id, messageID });
+  emit("bubble-deleted", { characterID: props.user.id, messageID });
 };
 </script>
 
@@ -63,6 +63,7 @@ const afterEnter = (_: Element, messageID: string) => {
 .bubble-area-frame {
   pointer-events: none;
   user-select: none;
+  width: 100%;
 
   .bubble-area {
     width: 100%;
