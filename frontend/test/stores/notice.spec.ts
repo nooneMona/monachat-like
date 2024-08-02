@@ -92,6 +92,7 @@ describe("useNoticeStore", () => {
       }),
     );
     const reloadFn = vi.fn();
+    global.window ??= Object.create(window);
     const location: Location = window.location;
 
     Object.defineProperty(window, "location", {
