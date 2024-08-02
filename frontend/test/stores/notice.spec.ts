@@ -90,12 +90,15 @@ describe("useNoticeStore", () => {
         stubActions: false,
       }),
     );
-    const noticeStore = useNoticeStore();
+
     const originalReload = window.location.reload;
+
     Object.defineProperty(window.location, "reload", {
       configurable: true,
+      writable: true,
       value: vi.fn(),
     });
+    const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
     expect(window.location.reload).toHaveBeenCalled();
     Object.defineProperty(window.location, "reload", {
