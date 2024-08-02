@@ -24,14 +24,14 @@
         <template #header>
           <SpanText text="セキュア無視" :size="16" type="text" />
         </template>
-        <template #body="silentIgnoreSlotProps">
+        <template #body="secureIgnoreSlotProps">
           <Checkbox
-            v-model="silentIgnoreSlotProps.data.isSecureUser"
+            v-model="secureIgnoreSlotProps.data.isSecureUser"
             binary
             @change="
               onChangeSecureIgnore(
-                silentIgnoreSlotProps.data.ihash,
-                silentIgnoreSlotProps.data.isSecureUser,
+                secureIgnoreSlotProps.data.ihash,
+                secureIgnoreSlotProps.data.isSecureUser,
               )
             "
           />

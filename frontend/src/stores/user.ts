@@ -261,7 +261,7 @@ export const useUserStore = defineStore("user", () => {
     if (targetIhash === ihash.value) {
       return;
     }
-    usersStore.updateUserSilentIgnore(targetIhash, isActive);
+    usersStore.updateUserSecureIgnore(targetIhash, isActive);
     socketIOInstance.emit("SIG", {
       token: myToken.value,
       stat: isActive ? "on" : "off",
