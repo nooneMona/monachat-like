@@ -90,9 +90,10 @@ describe("useNoticeStore", () => {
         stubActions: false,
       }),
     );
-    vi.spyOn(window.location, "reload").mockImplementation(vi.fn());
+    vi.stubGlobal("location", { reload: vi.fn() });
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
     expect(window.location.reload).toHaveBeenCalled();
+    vi.unstubAllGlobals();
   });
 });
