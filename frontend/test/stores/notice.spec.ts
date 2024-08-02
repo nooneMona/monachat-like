@@ -93,10 +93,9 @@ describe("useNoticeStore", () => {
 
     const { reload } = window.location;
 
-    Object.defineProperty(window.location, "reload", {
-      configurable: true,
+    Object.defineProperty(window, "location", {
       writable: true,
-      value: vi.fn(),
+      value: { reload: vi.fn() },
     });
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
