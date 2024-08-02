@@ -93,7 +93,7 @@ describe("useNoticeStore", () => {
     );
     const mockReload = vi.fn();
     const { location } = window;
-    delete (window as any).location;
+    window = Object.create(window);
     window.location = { ...location, reload: mockReload };
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
