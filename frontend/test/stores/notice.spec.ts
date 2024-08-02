@@ -7,7 +7,6 @@ describe("useNoticeStore", () => {
 
   beforeEach(() => {
     setActivePinia(testingPinia);
-    vi.unstubAllGlobals();
   });
 
   it("requiredRefresh should be return false", () => {
@@ -95,7 +94,9 @@ describe("useNoticeStore", () => {
     const reloadFn = vi.fn();
     const location: Location = window.location;
 
-    delete (window as any).location;
+    //@ts-expect-error vi.spyonもvi.stubGlobalもtypeエラーのせいでテストできずこれが唯一のテストできる方法なので
+
+    delete window.location;
 
     window.location = {
       ...location,
