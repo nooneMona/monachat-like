@@ -15,6 +15,7 @@ import { SLEEPResponse } from "../protocol/sleep";
 import { SUICIDERequest } from "../protocol/suicide";
 import { IDGeneratable } from "../domain/idGenerator";
 import { Character } from "../domain/character";
+import { SIGRequest } from "../protocol/sig";
 
 // サーバーのマルチキャスト処理
 export interface IServerCommunicator {
@@ -37,6 +38,7 @@ export interface IEventHandler {
   receivedEXIT(req: EXITRequest, clientInfo: ClientInfo): void;
   receivedSET(req: SETRequest, clientInfo: ClientInfo): void;
   receivedIG(req: IGRequest, clientInfo: ClientInfo): void;
+  receivedSIG(req: SIGRequest, clientInfo: ClientInfo): void;
   receivedAUTH(req: AUTHRequest, clientInfo: ClientInfo): void;
   receivedERROR(req: ERRORRequest, clientInfo: ClientInfo): void;
   receivedSUICIDE(req: SUICIDERequest, clientInfo: ClientInfo): void;
@@ -78,6 +80,7 @@ export interface ISystemReceivedLogger {
   logReceivedEXIT(req: EXITRequest, clientInfo: ClientInfo): void;
   logReceivedSET(req: SETRequest, clientInfo: ClientInfo): void;
   logReceivedIG(req: IGRequest, clientInfo: ClientInfo): void;
+  logReceivedSIG(req: IGRequest, clientInfo: ClientInfo): void;
   logReceivedAUTH(req: AUTHRequest, clientInfo: ClientInfo): void;
   logReceivedERROR(text: string, clientInfo: ClientInfo): void;
   logReceivedSUICIDE(req: SUICIDERequest, clientInfo: ClientInfo): void;

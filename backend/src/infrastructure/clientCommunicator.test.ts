@@ -12,6 +12,7 @@ const PresenterMock = vi.fn().mockImplementation(() => {
     receivedEXIT: vi.fn(),
     receivedSET: vi.fn(),
     receivedIG: vi.fn(),
+    receivedSIG: vi.fn(),
     receivedAUTH: vi.fn(),
     receivedERROR: vi.fn(),
     receivedSUICIDE: vi.fn(),
@@ -167,6 +168,26 @@ describe("ClientCommunicator#init", () => {
     new Promise<void>((done) => {
       clientCommunicator.init();
       socketClient.emit("IG", {});
+      presenter.receivedParseError = vi.fn().mockImplementation(() => {
+        expect(presenter.receivedParseError).toBeCalledTimes(1);
+        done();
+      });
+    }));
+
+  it("should receive SIG event", () =>
+    new Promise<void>((done) => {
+      clientCommunicator.init();
+      socketClient.emit("SIG", { token: "token", stat: "on", ihash: "ihash" });
+      presenter.receivedSIG = vi.fn().mockImplementation(() => {
+        expect(presenter.receivedSIG).toBeCalledTimes(1);
+        done();
+      });
+    }));
+
+  it("should reject SIG event if parameter is insufficient", () =>
+    new Promise<void>((done) => {
+      clientCommunicator.init();
+      socketClient.emit("SIG", {});
       presenter.receivedParseError = vi.fn().mockImplementation(() => {
         expect(presenter.receivedParseError).toBeCalledTimes(1);
         done();

@@ -14,6 +14,7 @@ import { IG, validateIGRequest } from "../protocol/ig";
 import { ERROR, validateERRORRequest } from "../protocol/error";
 import { SUICIDE, validateSUICIDERequest } from "../protocol/suicide";
 import UAParser from "ua-parser-js";
+import { SIG, validateSIGRequest } from "../protocol/sig";
 
 export type ClientCommunicatorOptions = {
   socket: Socket;
@@ -89,6 +90,18 @@ export class ClientCommunicator implements IClientCommunicator {
       } else {
         this.eventHandler?.receivedParseError(
           `IG: ${JSON.stringify(validateIGRequest.errors)}`
+        );
+      }
+    });
+    this.socket.on(SIG, (param: any) => {
+      if (validateSIGRequest(param)) {
+        this.eventHandler?.receivedSIG(
+          param,
+          this.createClientInfo(this.socket)
+        );
+      } else {
+        this.eventHandler?.receivedParseError(
+          `SIG: ${JSON.stringify(validateSIGRequest.errors)}`
         );
       }
     });

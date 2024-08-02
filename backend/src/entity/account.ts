@@ -17,6 +17,8 @@ export class Account {
   socketId: string;
   // アカウントの活性に関するフラグ
   alive: boolean = true;
+  // 無視したユーザーのihash
+  private _ignoresIhashs: string[] = [];
 
   // 操作するキャラクター
   character: Character = new Character();
@@ -40,12 +42,28 @@ export class Account {
     return new Account(id, token, socket);
   }
 
+  get ignoresIhashs() {
+    return [...this._ignoresIhashs];
+  }
+
   updateSocketId(socketId: string) {
     this.socketId = socketId;
   }
 
   updateAlive(alive: boolean) {
     this.alive = alive;
+  }
+
+  appendIgnoresIhashs(ihash: string) {
+    if (!this._ignoresIhashs.includes(ihash)) {
+      this._ignoresIhashs.push(ihash);
+    }
+  }
+
+  removeIgnoresIhashs(ihash: string) {
+    this._ignoresIhashs = this._ignoresIhashs.filter(
+      (ihash_) => ihash_ !== ihash
+    );
   }
 
   speak(now: Date): boolean {

@@ -11,6 +11,7 @@ import { IG, IGRequest, IGResponse } from "../protocol/ig";
 import { SET, SETRequest, SETResponse } from "../protocol/set";
 import { SLEEP, SLEEPResponse } from "../protocol/sleep";
 import { SUICIDE, SUICIDERequest } from "../protocol/suicide";
+import { SIG } from "../protocol/sig";
 
 export type SystemLoggerOptions = {
   logger: Log4JSLogger;
@@ -68,6 +69,15 @@ export class SystemLogger implements ISystemLogger {
     const socketID = this.maskSocketID(clientInfo.socketId);
     this.logger.info(
       `Received <${IG} ${this.getLoggedString(
+        this.hiddenObj(req)
+      )}> socket=${socketID}`
+    );
+  }
+
+  logReceivedSIG(req: IGRequest, clientInfo: ClientInfo): void {
+    const socketID = this.maskSocketID(clientInfo.socketId);
+    this.logger.info(
+      `Received <${SIG} ${this.getLoggedString(
         this.hiddenObj(req)
       )}> socket=${socketID}`
     );

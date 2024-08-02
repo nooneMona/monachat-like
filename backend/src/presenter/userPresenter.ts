@@ -33,6 +33,7 @@ import { CharType } from "../domain/charType";
 import { Color } from "../domain/color";
 import { Name } from "../domain/name";
 import { Speech } from "../domain/speech";
+import { SIGRequest } from "../protocol/sig";
 
 export type PresenterOptions = {
   client: IClientCommunicator;
@@ -88,8 +89,7 @@ export class UserPresenter implements IEventHandler, IServerNotificator {
     };
     req.style != null && (res.style = req.style);
     req.typing != null && (res.typing = { ...req.typing });
-    // TODO: 第三引数にセキュア無視中のソケットIDを渡す
-    this.serverCommunicator.sendCOM(res, currentRoom, []);
+    this.serverCommunicator.sendCOM(res, currentRoom, account.ignoresIhashs);
   }
 
   receivedENTER(req: ENTERRequest, clientInfo: ClientInfo): void {
@@ -206,6 +206,18 @@ export class UserPresenter implements IEventHandler, IServerNotificator {
       ihash: req.ihash,
     };
     this.serverCommunicator.sendIG(res, currentRoom);
+  }
+
+  receivedSIG(req: SIGRequest, clientInfo: ClientInfo): void {
+    this.systemLogger.logReceivedSIG(req, clientInfo);
+    const account = this.authorize(req.token, clientInfo.socketId);
+    if (req.stat === "on") {
+      account.appendIgnoresIhashs(req.ihash);
+    }
+    if (req.stat === "off") {
+      account.removeIgnoresIhashs(req.ihash);
+    }
+    return;
   }
 
   receivedAUTH(req: AUTHRequest, clientInfo: ClientInfo): void {
