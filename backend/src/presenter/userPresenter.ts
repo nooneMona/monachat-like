@@ -89,7 +89,14 @@ export class UserPresenter implements IEventHandler, IServerNotificator {
     };
     req.style != null && (res.style = req.style);
     req.typing != null && (res.typing = { ...req.typing });
-    this.serverCommunicator.sendCOM(res, currentRoom, account.ignoresIhashs);
+    const accounts = this.accountRep.getAccountsByIHashes(
+      account.ignoresIhashs
+    );
+    this.serverCommunicator.sendCOM(
+      res,
+      currentRoom,
+      Array.from(new Set(accounts.map((e) => e.socketId)))
+    );
   }
 
   receivedENTER(req: ENTERRequest, clientInfo: ClientInfo): void {

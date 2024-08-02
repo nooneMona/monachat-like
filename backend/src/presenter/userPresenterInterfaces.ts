@@ -58,6 +58,7 @@ export interface IClientCommunicator {
 export interface IAccountRepository {
   getAccountBySocketId(socketId: string): Account | undefined;
   getAccountByToken(token?: string): Account | undefined;
+  getAccountsByIHashes(ihashes: string[]): Account[];
   fetchUsers(room: string): USER[];
   fetchUser(id: string, room: string): USER | undefined;
   getRooms(): Room[];

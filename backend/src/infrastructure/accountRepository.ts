@@ -35,6 +35,13 @@ export class AccountRepository implements IAccountRepository {
     return account;
   }
 
+  getAccountsByIHashes(ihashes: string[]): Account[] {
+    const account = this.accounts.filter((u) =>
+      ihashes.includes(u.character.avatar.whiteTrip?.value ?? "")
+    );
+    return account;
+  }
+
   // バンされたユーザーのihashを取得する
   getBannedIhashes() {
     if (!process.env.BAN_USER_IHASHS) {
