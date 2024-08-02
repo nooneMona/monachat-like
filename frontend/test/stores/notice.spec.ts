@@ -91,12 +91,23 @@ describe("useNoticeStore", () => {
         stubActions: false,
       }),
     );
-    const mockReload = vi.fn();
-    const { location } = window;
-    window = Object.create(window);
-    window.location = { ...location, reload: mockReload };
+    const reloadFn = vi.fn();
+    const location: Location = window.location;
+
+    Object.defineProperty(window, "location", {
+      value: {
+        reload: reloadFn,
+      },
+    });
+
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
-    expect(mockReload).toHaveBeenCalled();
+    expect(reloadFn).toHaveBeenCalled();
+
+    Object.defineProperty(window, "location", {
+      value: {
+        reload: location,
+      },
+    });
   });
 });
