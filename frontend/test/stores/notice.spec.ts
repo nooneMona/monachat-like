@@ -7,6 +7,7 @@ describe("useNoticeStore", () => {
 
   beforeEach(() => {
     setActivePinia(testingPinia);
+    vi.unstubAllGlobals();
   });
 
   it("requiredRefresh should be return false", () => {
@@ -94,6 +95,5 @@ describe("useNoticeStore", () => {
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
     expect(window.location.reload).toHaveBeenCalled();
-    vi.unstubAllGlobals();
   });
 });
