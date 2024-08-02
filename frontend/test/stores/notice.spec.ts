@@ -91,16 +91,19 @@ describe("useNoticeStore", () => {
       }),
     );
 
-    const { location } = window;
-    delete (window as any).location;
+    const { reload } = window.location;
 
-    window.location = { ...location, reload: vi.fn() };
+    Object.defineProperty(window.location, "reload", {
+      configurable: true,
+      writable: true,
+      value: vi.fn(),
+    });
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
     expect(window.location.reload).toHaveBeenCalled();
     Object.defineProperty(window.location, "reload", {
       configurable: true,
-      value: location,
+      value: reload,
     });
   });
 });
