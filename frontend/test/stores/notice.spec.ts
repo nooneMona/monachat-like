@@ -93,7 +93,7 @@ describe("useNoticeStore", () => {
     );
 
     const reloadFn = vi.fn();
-    vi.spyOn(window.location, "reload").mockImplementation(reloadFn);
+    vi.stubGlobal("location", { reload: reloadFn });
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
     expect(reloadFn).toHaveBeenCalled();
