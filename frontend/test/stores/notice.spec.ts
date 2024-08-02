@@ -10,16 +10,19 @@ describe("useNoticeStore", () => {
   });
 
   it("requiredRefresh should be return false", () => {
+    expect.assertions(1);
     const noticeStore = useNoticeStore();
     expect(noticeStore.requiredRefresh).toBe(false);
   });
 
   it("isRequestRefresh should be return false", () => {
+    expect.assertions(1);
     const noticeStore = useNoticeStore();
     expect(noticeStore.isRequiredRefresh).toBe(false);
   });
 
   it("requestedRefresh should set requestRefresh to true", () => {
+    expect.assertions(1);
     setActivePinia(createTestingPinia({ stubActions: false }));
     const noticeStore = useNoticeStore();
     noticeStore.requestRefresh();
@@ -27,6 +30,7 @@ describe("useNoticeStore", () => {
   });
 
   it("stopRequestRefresh should set requestRefresh to false", () => {
+    expect.assertions(1);
     setActivePinia(
       createTestingPinia({ initialState: { requiredRefresh: true }, stubActions: false }),
     );
@@ -80,6 +84,7 @@ describe("useNoticeStore", () => {
   );
 
   it("reloadpage should be called window.location.reload", () => {
+    expect.assertions(1);
     setActivePinia(
       createTestingPinia({
         stubActions: false,
