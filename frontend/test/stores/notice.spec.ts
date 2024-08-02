@@ -95,7 +95,6 @@ describe("useNoticeStore", () => {
     const location: Location = window.location;
 
     //@ts-expect-error vi.spyonもvi.stubGlobalもtypeエラーのせいでテストできずこれが唯一のテストできる方法なので
-
     delete window.location;
 
     window.location = {
