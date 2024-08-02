@@ -91,9 +91,12 @@ describe("useNoticeStore", () => {
         stubActions: false,
       }),
     );
-    vi.stubGlobal("location", { reload: vi.fn() });
+    const mockReload = vi.fn();
+    const { location } = window;
+    delete (window as any).location;
+    window.location = { ...location, reload: mockReload };
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
-    expect(window.location.reload).toHaveBeenCalled();
+    expect(mockReload).toHaveBeenCalled();
   });
 });
