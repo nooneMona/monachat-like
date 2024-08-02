@@ -90,22 +90,10 @@ describe("useNoticeStore", () => {
         stubActions: false,
       }),
     );
-    window = Object.create(window);
-    const reload = window.location.reload;
-    Object.defineProperty(window.location, "reload", {
-      configurable: true,
-      writable: true,
-      value: vi.fn(),
-    });
+    vi.spyOn(window.location, "reload").mockImplementation(vi.fn());
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
     expect(window.location.reload).toHaveBeenCalled();
-    Object.defineProperty(window.location, "reload", {
-      configurable: true,
-      writable: true,
-      value: reload,
-    });
-    vi.restoreAllMocks();
-    window.location = location;
+    vi.unstubAllGlobals();
   });
 });
