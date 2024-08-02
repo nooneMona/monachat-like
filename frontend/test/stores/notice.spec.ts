@@ -95,7 +95,7 @@ describe("useNoticeStore", () => {
     const reloadFn = vi.fn();
     const location: Location = window.location;
 
-    // @ts-ignore
+    //@ts-expect-error
     delete window.location;
 
     window.location = {
