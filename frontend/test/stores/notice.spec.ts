@@ -83,3 +83,26 @@ describe("useNoticeStore", () => {
     },
   );
 });
+
+describe("reloadTest", () => {
+  it("reloadpage should be called window.location.reload", () => {
+    expect.assertions(1);
+    setActivePinia(
+      createTestingPinia({
+        stubActions: false,
+      }),
+    );
+
+    const reloadFn = vi.fn();
+
+    //@ts-expect-error これ以外のやり方が存在しない
+    delete (window as any).location;
+    Object.defineProperty(window, "location", { value: { reload: reloadFn }, writable: true });
+
+    const noticeStore = useNoticeStore();
+    noticeStore.reloadPage();
+    expect(reloadFn).toHaveBeenCalledWith();
+    vi.resetAllMocks();
+    window.location = location;
+  });
+});
