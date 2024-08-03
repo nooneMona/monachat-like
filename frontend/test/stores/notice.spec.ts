@@ -94,8 +94,7 @@ describe("useNoticeStore", () => {
     const reloadFn = vi.fn();
     const location: Location = window.location;
 
-    //@ts-expect-error vi.spyonもvi.stubGlobalもtypeエラーのせいでテストできずこれが唯一のテストできる方法なので
-    delete window.location;
+    delete (window as any).location;
 
     window.location = {
       ...location,
