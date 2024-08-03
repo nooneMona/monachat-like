@@ -53,7 +53,7 @@ describe("useNoticeStore", () => {
       const noticeStore = useNoticeStore();
       const audioFn = vi
         .spyOn(window.HTMLAudioElement.prototype, "play")
-        .mockImplementation(() => Promise.resolve());
+        .mockResolvedValue(undefined);
 
       await noticeStore.playCOMAudio();
 
@@ -75,11 +75,32 @@ describe("useNoticeStore", () => {
       const noticeStore = useNoticeStore();
       const audioFn = vi
         .spyOn(window.HTMLAudioElement.prototype, "play")
-        .mockImplementation(() => Promise.resolve());
+        .mockResolvedValue(undefined);
 
       await noticeStore.playENTERAudio();
 
       expect(audioFn).toHaveBeenCalledTimes(selectedVolume === "on" ? 1 : 0);
     },
   );
+
+  it("reloadpage should be called window.location.reload", () => {
+    expect.assertions(1);
+    setActivePinia(
+      createTestingPinia({
+        stubActions: false,
+      }),
+    );
+
+    const reloadFn = vi.fn();
+    const location: Location = window.location;
+
+    // @ts-expect-error これ以外の解決方法が今のところないので
+    vi.spyOn(location, "reload").mockImplementation(reloadFn);
+
+    const noticeStore = useNoticeStore();
+    noticeStore.reloadPage();
+    expect(reloadFn).toHaveBeenCalledWith();
+    vi.resetAllMocks();
+    window.location = location;
+  });
 });
