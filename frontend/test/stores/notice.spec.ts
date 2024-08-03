@@ -96,11 +96,10 @@ describe("reloadTest", () => {
     const reloadFn = vi.fn();
     const location: Location = window.location;
 
-    // @ts-expect-error windowのプロパティをいじるとエラーが出るが、これ以外の解決方法が今のところないので
     window.location = {
       ...location,
       reload: reloadFn,
-    };
+    } as any;
 
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
