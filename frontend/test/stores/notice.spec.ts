@@ -86,7 +86,7 @@ describe("useNoticeStore", () => {
 
 describe("reloadTest", () => {
   it("reloadpage should be called window.location.reload", () => {
-    expect.assertions(1);
+    expect.assertions(2);
     setActivePinia(
       createTestingPinia({
         stubActions: false,
