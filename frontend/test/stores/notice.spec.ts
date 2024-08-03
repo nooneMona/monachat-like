@@ -94,13 +94,11 @@ describe("useNoticeStore", () => {
     const reloadFn = vi.fn();
     const location: Location = window.location;
 
-    /*@ts-expect-error これが唯一のテストできる方法なので */
-    delete window.location;
-
     window.location = {
       ...location,
       reload: reloadFn,
     };
+
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
     expect(reloadFn).toHaveBeenCalled();
