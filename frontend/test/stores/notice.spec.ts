@@ -94,10 +94,8 @@ describe("useNoticeStore", () => {
     const reloadFn = vi.fn();
     const location: Location = window.location;
 
-    window.location = {
-      ...location,
-      reload: reloadFn,
-    };
+    /*@ts-expect-error 唯一のテストできる方法なので*/
+    vi.spyOn(location, "reload").mockImplementation(reloadFn);
 
     const noticeStore = useNoticeStore();
     noticeStore.reloadPage();
