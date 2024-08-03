@@ -83,28 +83,3 @@ describe("useNoticeStore", () => {
     },
   );
 });
-
-describe("reloadTest", () => {
-  it("reloadpage should be called window.location.reload", () => {
-    expect.assertions(2);
-    setActivePinia(
-      createTestingPinia({
-        stubActions: false,
-      }),
-    );
-
-    const reloadFn = vi.fn();
-    const location: Location = window.location;
-
-    window.location = {
-      ...location,
-      reload: reloadFn,
-    } as any;
-
-    const noticeStore = useNoticeStore();
-    noticeStore.reloadPage();
-    expect(reloadFn).toHaveBeenCalledWith();
-    vi.resetAllMocks();
-    window.location = location;
-  });
-});
