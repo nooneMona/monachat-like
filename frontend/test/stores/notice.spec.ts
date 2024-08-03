@@ -82,7 +82,9 @@ describe("useNoticeStore", () => {
       expect(audioFn).toHaveBeenCalledTimes(selectedVolume === "on" ? 1 : 0);
     },
   );
+});
 
+describe("reloadTest", () => {
   it("reloadpage should be called window.location.reload", () => {
     expect.assertions(1);
     setActivePinia(
@@ -94,7 +96,7 @@ describe("useNoticeStore", () => {
     const reloadFn = vi.fn();
     const location: Location = window.location;
 
-    // @ts-expect-error これ以外の解決方法が今のところないので
+    // @ts-expect-error windowのプロパティをいじるとエラーが出るが、これ以外の解決方法が今のところないので
     window.location = {
       ...location,
       reload: reloadFn,
