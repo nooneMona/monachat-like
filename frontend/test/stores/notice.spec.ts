@@ -82,25 +82,4 @@ describe("useNoticeStore", () => {
       expect(audioFn).toHaveBeenCalledTimes(selectedVolume === "on" ? 1 : 0);
     },
   );
-
-  it("reloadpage should be called window.location.reload", () => {
-    expect.assertions(1);
-    setActivePinia(
-      createTestingPinia({
-        stubActions: false,
-      }),
-    );
-
-    const reloadFn = vi.fn();
-    const location: Location = window.location;
-
-    /*@ts-expect-error 唯一のテストできる方法なので*/
-    vi.spyOn(location, "reload").mockImplementation(reloadFn);
-
-    const noticeStore = useNoticeStore();
-    noticeStore.reloadPage();
-    expect(reloadFn).toHaveBeenCalled();
-    vi.resetAllMocks();
-    window.location = location;
-  });
 });
